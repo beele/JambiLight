@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="570.0"
+            prefWidth="913.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="be.beeles_place.view.MainViewController">
+    <children>
+        <HBox layoutX="305.0" layoutY="169.0" prefHeight="569.0" prefWidth="753.0" AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.0" minWidth="10.0" prefWidth="142.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="203.0" minWidth="10.0" prefWidth="165.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="257.0" minWidth="10.0" prefWidth="156.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="156.0" minWidth="10.0" prefWidth="149.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="194.0" minHeight="10.0" prefHeight="117.0" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="198.0" minHeight="10.0" prefHeight="160.0" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="503.0" minHeight="10.0" prefHeight="170.0" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="217.0" minHeight="10.0" prefHeight="131.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                </GridPane>
+                <AnchorPane prefHeight="200.0" prefWidth="300.0">
+                    <children>
+                        <VBox layoutX="100.0" layoutY="185.0" prefHeight="200.0" prefWidth="100.0"
+                              AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                              AnchorPane.topAnchor="0.0">
+                            <children>
+                                <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308"
+                                       prefHeight="63.0" prefWidth="186.0" text="Settings" textAlignment="CENTER">
+                                    <font>
+                                        <Font size="25.0"/>
+                                    </font>
+                                </Label>
+                                <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="30.0">
+                                    <children>
+                                        <Label prefWidth="100.0" text="Horizontal regions"/>
+                                        <TextField id="txtHorizontalRegions"/>
+                                    </children>
+                                    <padding>
+                                        <Insets left="15.0"/>
+                                    </padding>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="30.0">
+                                    <children>
+                                        <Label prefWidth="100.0" text="Vertical regions"/>
+                                        <TextField id="txtVerticalRegions"/>
+                                    </children>
+                                    <padding>
+                                        <Insets left="15.0"/>
+                                    </padding>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="30.0">
+                                    <children>
+                                        <Label prefWidth="100.0" text="Margin"/>
+                                        <TextField id="txtMargin"/>
+                                    </children>
+                                    <padding>
+                                        <Insets left="15.0"/>
+                                    </padding>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="30.0">
+                                    <children>
+                                        <Label prefWidth="100.0" text="Pixel stepsize"/>
+                                        <TextField id="txtStepsize"/>
+                                    </children>
+                                    <padding>
+                                        <Insets left="15.0"/>
+                                    </padding>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="30.0">
+                                    <padding>
+                                        <Insets left="15.0"/>
+                                    </padding>
+                                    <children>
+                                        <Label prefWidth="100.0" text="Enhance color"/>
+                                        <CheckBox id="chkEnhanceColor" mnemonicParsing="false"/>
+                                    </children>
+                                </HBox>
+                                <HBox alignment="BOTTOM_CENTER" prefHeight="50.0" prefWidth="200.0">
+                                    <children>
+                                        <Button id="btnApplySettings" mnemonicParsing="false" text="Apply settings"/>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </AnchorPane>
+            </children>
+        </HBox>
+    </children>
+</AnchorPane>
