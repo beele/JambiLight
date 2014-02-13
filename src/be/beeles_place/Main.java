@@ -29,8 +29,8 @@ public class Main extends Application {
 
         SettingsModel settings = new SettingsModel();
         settings.setEnhanceColor(false);
-        settings.setHorizontalRegions(128);
-        settings.setVerticalRegions(80);
+        settings.setHorizontalRegions(16);
+        settings.setVerticalRegions(10);
         settings.setIgnoreCenterRegions(false);
         settings.setPixelIteratorStepSize(2);
         settings.setRegionMargin(2);

@@ -8,9 +8,8 @@ public abstract class AbstractColorMode implements IColorMode, Runnable {
     @Override
     public void run() {
         runNext = true;
-        if(runNext == true && forceQuit == false) {
+        while(runNext && !forceQuit) {
             runNext = start();
-            run();
         }
     }
 
