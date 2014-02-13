@@ -24,7 +24,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/be/beeles_place/view/main.fxml"));
         stage.setTitle("JambiLight 1.0 Alpha");
-        stage.setScene(new Scene(root, 300, 275));
+        stage.setScene(new Scene(root, 800, 600));
         stage.show();
 
         SettingsModel settings = new SettingsModel();

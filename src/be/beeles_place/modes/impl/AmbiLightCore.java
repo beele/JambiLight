@@ -1,7 +1,7 @@
 package be.beeles_place.modes.impl;
 
 import be.beeles_place.model.SettingsModel;
-import be.beeles_place.utils.ColorEnhancer;
+import be.beeles_place.utils.colorTools.ColorEnhancer;
 import be.beeles_place.utils.ScreenCapper;
 import be.beeles_place.view.ScreenGridView;
 

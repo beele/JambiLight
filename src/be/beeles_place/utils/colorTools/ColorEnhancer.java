@@ -1,4 +1,4 @@
-package be.beeles_place.utils;
+package be.beeles_place.utils.colorTools;
 
 public class ColorEnhancer {
 
