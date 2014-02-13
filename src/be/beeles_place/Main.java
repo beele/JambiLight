@@ -18,7 +18,7 @@ public class Main {
         settings.setHorizontalRegions(128);
         settings.setVerticalRegions(80);
         settings.setIgnoreCenterRegions(false);
-        settings.setPixelIteratorStepSize(1);
+        settings.setPixelIteratorStepSize(2);
         settings.setRegionMargin(2);
 
         final ScreenGridView frame = new ScreenGridView(settings);

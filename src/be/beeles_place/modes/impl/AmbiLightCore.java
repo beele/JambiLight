@@ -29,7 +29,6 @@ public class AmbiLightCore {
     private int[][][] regions;
     private float regionWidth;
     private float regionHeight;
-    private int pixelsPerRegion;
 
     private int topMargin;
     private int leftMargin;
@@ -59,11 +58,10 @@ public class AmbiLightCore {
         //Initialize the regions.
         horizontalRegionSize = settings.getHorizontalRegions();
         verticalRegionSize = settings.getVerticalRegions();
-        //There are 100 regions, made by the 10 x 10 dimensions. The last dimension of 3 is to store r/g/b separately.
-        regions = new int[this.horizontalRegionSize][this.verticalRegionSize][3];
+        //There are n*m regions, made by the n x m dimensions. The last dimension of 3 is to store r/g/b/#pixels separately.
+        regions = new int[this.horizontalRegionSize][this.verticalRegionSize][4];
         regionWidth = (float)width / this.horizontalRegionSize;
         regionHeight = (float)height / this.verticalRegionSize;
-        pixelsPerRegion = (int)((regionWidth * regionHeight / stepSize));
 
         if(ignoreCenterRegions) {
             topMargin = margin;
@@ -87,7 +85,7 @@ public class AmbiLightCore {
         //Disabling aero themes in windows can easily double or triple performance!
         pixels = capper.capture();
 
-        for(int i = 0 ; i < pixels.length ; i++) {
+        for(int i = 0 ; i < pixels.length ; i += stepSize) {
             //The pixels in the image are in one long array, we need to get the x and y values of the pixel.
             y = (i / width);        //This is the row the pixel is at.
             x = i - (y * width);    //This is the column the pixel is at.
@@ -104,24 +102,27 @@ public class AmbiLightCore {
                 colors[0] += (tempPixelValue >>> 16) & 0xFF;
                 colors[1] += (tempPixelValue >>> 8) & 0xFF;
                 colors[2] += tempPixelValue & 0xFF;
+                colors[3] += 1;
             } else {
                 i += regionWidth;
             }
         }
 
         //Go over all the regions and calculate the average color.
-        for(int m = 0 ; m < horizontalRegionSize ; m++) {
-            for(int n = 0; n < verticalRegionSize ; n++) {
+        for(int m = 0 ; m < verticalRegionSize ; m++) {
+            for(int n = 0; n < horizontalRegionSize ; n++) {
                 //Get the average color by dividing the total added color int by the number of pixels!
-                int[] colors = regions[m][n];
-                colors[0] /= pixelsPerRegion;
-                colors[1] /= pixelsPerRegion;
-                colors[2] /= pixelsPerRegion;
+                int[] colors = regions[n][m];
+                int numOfPixelsCounted = colors[3];
+                colors[0] /= numOfPixelsCounted;
+                colors[1] /= numOfPixelsCounted;
+                colors[2] /= numOfPixelsCounted;
+                colors[3] = 0;
 
                 //Only process regions that are not ignored or completely black!
                 if(colors[0] != 0 || colors[1] != 0 || colors[2] != 0){
                     if(enhanceColors) {
-                        regions[m][n] = enhancer.processColor(colors[0], colors[1], colors[2]);
+                        regions[n][m] = enhancer.processColor(colors[0], colors[1], colors[2]);
                     } else {
                         //Safety check for color channel values.
                         colors[0] = colors[0] < 256 ? colors[0] : 255;
