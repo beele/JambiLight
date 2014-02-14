@@ -1,6 +1,7 @@
 package be.beeles_place;
 
 import be.beeles_place.controllers.ColorController;
+import be.beeles_place.model.ColorModel;
 import be.beeles_place.model.SettingsModel;
 import be.beeles_place.modes.AbstractColorMode;
 import be.beeles_place.modes.impl.AmbilightMode;
@@ -27,6 +28,7 @@ public class Main extends Application {
         stage.setScene(new Scene(root, 800, 600));
         stage.show();
 
+        //Create settings model!
         SettingsModel settings = new SettingsModel();
         settings.setEnhanceColor(false);
         settings.setHorizontalRegions(16);
@@ -35,6 +37,8 @@ public class Main extends Application {
         settings.setPixelIteratorStepSize(2);
         settings.setRegionMargin(2);
 
+        //Create color model!
+        ColorModel colorModel = new ColorModel();
 
         //Old to be replaced swing UI.
         final ScreenGridView frame = new ScreenGridView(settings);
