@@ -1,7 +1,10 @@
 package be.beeles_place.view;
 
+import be.beeles_place.events.ShutdownEvent;
 import be.beeles_place.model.ColorModel;
 import be.beeles_place.utils.EventbusWrapper;
+import com.google.common.eventbus.EventBus;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.GridPane;
@@ -15,6 +18,7 @@ import java.util.ResourceBundle;
 public class MainViewController implements Initializable {
 
     //Local variables.
+    private EventBus eventBus;
     private ColorModel model;
 
     //FXML items.
@@ -26,7 +30,10 @@ public class MainViewController implements Initializable {
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         //Register this class to receive events from the event bus!
-        EventbusWrapper.getInstance().register(this);
+        eventBus = EventbusWrapper.getInstance();
+        eventBus.register(this);
+
+        //Add the panels to the UI.
         addPanels();
     }
 
@@ -70,6 +77,17 @@ public class MainViewController implements Initializable {
             String values = "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ");";
             panes.get(i).setStyle("-fx-background-color: " + values);
         }
+    }
+
+    //Event handlers.
+    @FXML
+    void onPreferencesClicked(ActionEvent event) {
+
+    }
+
+    @FXML
+    void OnCloseClicked(ActionEvent event) {
+        eventBus.post(new ShutdownEvent());
     }
 
     //Getters & setters.
