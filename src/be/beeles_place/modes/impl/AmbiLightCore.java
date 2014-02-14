@@ -1,11 +1,11 @@
 package be.beeles_place.modes.impl;
 
+import be.beeles_place.model.ColorModel;
 import be.beeles_place.model.SettingsModel;
 import be.beeles_place.utils.colorTools.ColorEnhancer;
 import be.beeles_place.utils.ScreenCapper;
 import be.beeles_place.utils.colorTools.RegionConsolitdator;
 import be.beeles_place.utils.logger.LOGGER;
-import be.beeles_place.view.ScreenGridView;
 
 import java.awt.*;
 import java.util.Date;
@@ -20,8 +20,12 @@ public class AmbiLightCore {
     private boolean enhanceColors;
 
     //Internal variables
+    private LOGGER logger;
     private ScreenCapper capper;
     private ColorEnhancer enhancer;
+    private RegionConsolitdator consolitdator;
+    private ColorModel model;
+
     private final int width;
     private final int height;
     private int[] pixels;
@@ -34,11 +38,8 @@ public class AmbiLightCore {
     private int x, y;
     private int regionX, regionY;
 
-    private RegionConsolitdator consolitdator;
-
-    private LOGGER logger;
-
-    public AmbiLightCore(SettingsModel settings) {
+    public AmbiLightCore(SettingsModel settings, ColorModel colorModel) {
+        model = colorModel;
         //Settings.
         margin = settings.getRegionMargin();
         stepSize = settings.getPixelIteratorStepSize();
@@ -69,7 +70,7 @@ public class AmbiLightCore {
         logger.INFO("Init done! There are " + pixels.length + " pixels in " + horizontalRegionSize * verticalRegionSize + " regions");
     }
 
-    public void calculate(ScreenGridView view) {
+    public void calculate() {
         long startTime = new Date().getTime();
 
         //Make a screen capture.
@@ -118,17 +119,12 @@ public class AmbiLightCore {
             }
         }
 
-        //TODO: tetsing region consolidation!
-        consolitdator.consolidateRegions(regions);
-
         //It's all about tai-ming (not the vases)
         long endTime = new Date().getTime();
         long difference = endTime - startTime;
-        logger.INFO("Pixel processing completed in : " + difference + "ms");
 
-        //TODO: In a real world example it might be better to return the regions.
-        //TODO: these returned regions would need to be consolidated.
-        //Update the view.
-        view.updateView((1000/difference) + " FPS", regions);
+        //Set the consolidated regions with colors on the model.
+        model.setActionDuration(difference);
+        model.setCurrentColors(consolitdator.consolidateRegions(regions));
     }
 }
