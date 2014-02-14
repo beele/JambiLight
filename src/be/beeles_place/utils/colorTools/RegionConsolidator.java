@@ -1,6 +1,6 @@
 package be.beeles_place.utils.colorTools;
 
-public class RegionConsolitdator {
+public class RegionConsolidator {
 
     private int width;
     private int height;
@@ -22,7 +22,7 @@ public class RegionConsolitdator {
      * @param horizontalRegions The number of horizontal regions.
      * @param verticalRegions The number of vertical regions.
      */
-    public RegionConsolitdator(int horizontalRegions, int verticalRegions) {
+    public RegionConsolidator(int horizontalRegions, int verticalRegions) {
         width = horizontalRegions;
         height = verticalRegions;
 
@@ -54,7 +54,7 @@ public class RegionConsolitdator {
             g /= topDepth;
             b /= topDepth;
 
-            for(int j = 0 ; j < bottomDepth ; j++) {
+            for(int j = topDepth ; j < height ; j++) {
                 rr += regions[i][j][0];
                 gg += regions[i][j][1];
                 bb += regions[i][j][2];
@@ -69,7 +69,7 @@ public class RegionConsolitdator {
         }
 
         //Collect all regions per row into one pixel.
-        for(int m = 0 ; m < height - 2 ; m++) {
+        for(int m = 0 ; m < height ; m++) {
             for(int n = 0 ; n < leftDepth ; n++) {
                 r += regions[n][m][0];
                 g += regions[n][m][1];
@@ -79,7 +79,7 @@ public class RegionConsolitdator {
             g /= leftDepth;
             b /= leftDepth;
 
-            for(int n = 0 ; n < rightDepth ; n++) {
+            for(int n = leftDepth ; n < width ; n++) {
                 rr += regions[n][m][0];
                 gg += regions[n][m][1];
                 bb += regions[n][m][2];
