@@ -3,6 +3,8 @@ package be.beeles_place.modes.impl;
 import be.beeles_place.model.SettingsModel;
 import be.beeles_place.utils.colorTools.ColorEnhancer;
 import be.beeles_place.utils.ScreenCapper;
+import be.beeles_place.utils.colorTools.RegionConsolitdator;
+import be.beeles_place.utils.logger.LOGGER;
 import be.beeles_place.view.ScreenGridView;
 
 import java.awt.*;
@@ -16,7 +18,6 @@ public class AmbiLightCore {
     private int horizontalRegionSize;
     private int verticalRegionSize;
     private boolean enhanceColors;
-    private boolean ignoreCenterRegions;
 
     //Internal variables
     private ScreenCapper capper;
@@ -30,20 +31,18 @@ public class AmbiLightCore {
     private float regionWidth;
     private float regionHeight;
 
-    private int topMargin;
-    private int leftMargin;
-    private int bottomMargin;
-    private int rightMargin;
-
     private int x, y;
     private int regionX, regionY;
+
+    private RegionConsolitdator consolitdator;
+
+    private LOGGER logger;
 
     public AmbiLightCore(SettingsModel settings) {
         //Settings.
         margin = settings.getRegionMargin();
         stepSize = settings.getPixelIteratorStepSize();
         enhanceColors = settings.isEnhanceColor();
-        ignoreCenterRegions = settings.isIgnoreCenterRegions();
 
         //Create the required instances.
         capper = new ScreenCapper();
@@ -63,19 +62,11 @@ public class AmbiLightCore {
         regionWidth = (float)width / this.horizontalRegionSize;
         regionHeight = (float)height / this.verticalRegionSize;
 
-        if(ignoreCenterRegions) {
-            topMargin = margin;
-            leftMargin = margin;
-            bottomMargin = verticalRegionSize - (margin + 1);
-            rightMargin = horizontalRegionSize - (margin + 1);
-        } else {
-            topMargin = -1;
-            leftMargin = -1;
-            bottomMargin = -1;
-            rightMargin = -1;
-        }
+        consolitdator = new RegionConsolitdator(this.horizontalRegionSize, this.verticalRegionSize);
 
-        System.out.println("Init done! There are " + pixels.length + " pixels in " + horizontalRegionSize * verticalRegionSize + " regions");
+        //Get the logger innstance only once.
+        logger = LOGGER.getInstance();
+        logger.INFO("Init done! There are " + pixels.length + " pixels in " + horizontalRegionSize * verticalRegionSize + " regions");
     }
 
     public void calculate(ScreenGridView view) {
@@ -94,18 +85,12 @@ public class AmbiLightCore {
             regionX = (int)(x / regionWidth);
             regionY = (int)(y / regionHeight);
 
-            //Only the first and last two rows can have all regions included.
-            //All other rows only have the first and last two regions.
-            if(regionX < leftMargin || regionX > rightMargin || regionY < topMargin || regionY > bottomMargin) {
-                tempPixelValue = pixels[i];
-                int[] colors = regions[regionX][regionY];
-                colors[0] += (tempPixelValue >>> 16) & 0xFF;
-                colors[1] += (tempPixelValue >>> 8) & 0xFF;
-                colors[2] += tempPixelValue & 0xFF;
-                colors[3] += 1;
-            } else {
-                i += regionWidth;
-            }
+            tempPixelValue = pixels[i];
+            int[] colors = regions[regionX][regionY];
+            colors[0] += (tempPixelValue >>> 16) & 0xFF;
+            colors[1] += (tempPixelValue >>> 8) & 0xFF;
+            colors[2] += tempPixelValue & 0xFF;
+            colors[3] += 1;
         }
 
         //Go over all the regions and calculate the average color.
@@ -133,10 +118,13 @@ public class AmbiLightCore {
             }
         }
 
+        //TODO: tetsing region consolidation!
+        consolitdator.consolidateRegions(regions);
+
         //It's all about tai-ming (not the vases)
         long endTime = new Date().getTime();
         long difference = endTime - startTime;
-        System.out.println("Pixel processing completed in : " + difference + "ms");
+        logger.INFO("Pixel processing completed in : " + difference + "ms");
 
         //TODO: In a real world example it might be better to return the regions.
         //TODO: these returned regions would need to be consolidated.

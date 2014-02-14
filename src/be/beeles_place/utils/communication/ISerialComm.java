@@ -10,8 +10,6 @@ public interface ISerialComm {
 
     void setColor(Color color);
 
-    void setSaveToEeprom(boolean doSave);
-
     String getPortName();
 
     void setPortName(String portName);

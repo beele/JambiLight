@@ -9,7 +9,6 @@ public class SettingsModel {
     private int pixelIteratorStepSize;
 
     private boolean enhanceColor;
-    private boolean ignoreCenterRegions;
 
     //Getters & setters.
     public int getHorizontalRegions() {
@@ -50,13 +49,5 @@ public class SettingsModel {
 
     public void setEnhanceColor(boolean enhanceColor) {
         this.enhanceColor = enhanceColor;
-    }
-
-    public boolean isIgnoreCenterRegions() {
-        return ignoreCenterRegions;
-    }
-
-    public void setIgnoreCenterRegions(boolean ignoreCenterRegions) {
-        this.ignoreCenterRegions = ignoreCenterRegions;
     }
 }

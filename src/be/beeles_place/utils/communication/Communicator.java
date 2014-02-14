@@ -11,10 +11,14 @@ public class Communicator {
     ASerialComm comm;
     ColorModel model;
 
-    public Communicator(ColorModel model) {
+    public Communicator(ColorModel model, boolean useMock) {
         this.model = model;
 
-        comm = new SerialCommRXTX();
+        if(useMock) {
+            comm = new SerialCommMock();
+        } else {
+            comm = new SerialCommRXTX();
+        }
     }
 
     public List<String> getPorts() {

@@ -5,6 +5,7 @@ import be.beeles_place.model.ColorModel;
 import be.beeles_place.model.SettingsModel;
 import be.beeles_place.modes.AbstractColorMode;
 import be.beeles_place.modes.impl.AmbilightMode;
+import be.beeles_place.utils.communication.Communicator;
 import be.beeles_place.view.ScreenGridView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +24,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        //Create javafx UI.
         Parent root = FXMLLoader.load(getClass().getResource("/be/beeles_place/view/main.fxml"));
         stage.setTitle("JambiLight 1.0 Alpha");
         stage.setScene(new Scene(root, 800, 600));
@@ -33,12 +35,15 @@ public class Main extends Application {
         settings.setEnhanceColor(false);
         settings.setHorizontalRegions(16);
         settings.setVerticalRegions(10);
-        settings.setIgnoreCenterRegions(false);
         settings.setPixelIteratorStepSize(2);
         settings.setRegionMargin(2);
 
         //Create color model!
         ColorModel colorModel = new ColorModel();
+
+        //Create communicator!
+        Communicator comm = new Communicator(colorModel,true);
+        //comm.open("mock");
 
         //Old to be replaced swing UI.
         final ScreenGridView frame = new ScreenGridView(settings);

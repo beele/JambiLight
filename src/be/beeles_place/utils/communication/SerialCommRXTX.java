@@ -21,15 +21,9 @@ public class SerialCommRXTX extends ASerialComm {
 
     private Color color;
     private boolean updateRequired;
-    private boolean saveToEeprom;
 
     public SerialCommRXTX() {
         LOGGER.getInstance().INFO("initiating serial communication service using RXTX lib");
-    }
-
-    public void setSaveToEeprom(boolean doSave) {
-        saveToEeprom = doSave;
-        updateRequired = true;
     }
 
     public void setColor(Color color) {
@@ -95,11 +89,7 @@ public class SerialCommRXTX extends ASerialComm {
                 if(updateRequired) {
                     //oxee to save the next color, oxff to just display it!
                     LOGGER.getInstance().DEBUG("sending new color over comm! " + color.toString());
-                    if(saveToEeprom) {
-                        output.write(0xee);
-                    } else {
-                        output.write(0xff);
-                    }
+                    output.write(0xff);
 
                     output.write(color.getRed());
                     output.write(color.getGreen());

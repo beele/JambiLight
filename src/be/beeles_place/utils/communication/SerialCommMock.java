@@ -25,10 +25,6 @@ public class SerialCommMock extends ASerialComm {
     }
 
     @Override
-    public void setSaveToEeprom(boolean doSave) {
-    }
-
-    @Override
     public void run() {
         isRunning = true;
         while(isRunning) {
