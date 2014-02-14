@@ -2,6 +2,15 @@ package be.beeles_place.utils.colorTools;
 
 public class ColorEnhancer {
 
+    /**
+     * Enhances the color by checking what type of color it is (8 base types).
+     * The detected color range will then be amplified.
+     *
+     * @param r The red color value from 0 to 255.
+     * @param g The green color value from 0 to 255.
+     * @param b The blue color value from 0 to 255.
+     * @return An array of int containing 4 dimensions r/g/b/unused.
+     */
     public int[] processColor(int r, int g, int b) {
         //Values of 0 are not optimal, and could crash the app (div by zero!)
         r = r != 0 ? r : 1;
@@ -54,6 +63,6 @@ public class ColorEnhancer {
         g = g < 256 ? g : 255;
         b = b < 256 ? b : 255;
 
-        return new int[]{r, g, b};
+        return new int[]{r, g, b, 0};
     }
 }

@@ -2,9 +2,9 @@ package be.beeles_place.modes.impl;
 
 import be.beeles_place.model.ColorModel;
 import be.beeles_place.model.SettingsModel;
-import be.beeles_place.utils.colorTools.ColorEnhancer;
 import be.beeles_place.utils.ScreenCapper;
-import be.beeles_place.utils.colorTools.RegionConsolitdator;
+import be.beeles_place.utils.colorTools.ColorEnhancer;
+import be.beeles_place.utils.colorTools.RegionConsolidator;
 import be.beeles_place.utils.logger.LOGGER;
 
 import java.awt.*;
@@ -12,7 +12,7 @@ import java.util.Date;
 
 public class AmbiLightCore {
 
-    //Settins params
+    //Settings params
     private int stepSize;
     private int margin;
     private int horizontalRegionSize;
@@ -23,7 +23,7 @@ public class AmbiLightCore {
     private LOGGER logger;
     private ScreenCapper capper;
     private ColorEnhancer enhancer;
-    private RegionConsolitdator consolitdator;
+    private RegionConsolidator consolitdator;
     private ColorModel model;
 
     private final int width;
@@ -38,6 +38,12 @@ public class AmbiLightCore {
     private int x, y;
     private int regionX, regionY;
 
+    /**
+     * Creates a new AmbiLightCore instance.
+     *
+     * @param settings   The SettingsModel instance.
+     * @param colorModel The ColorModel instance.
+     */
     public AmbiLightCore(SettingsModel settings, ColorModel colorModel) {
         model = colorModel;
         //Settings.
@@ -60,16 +66,27 @@ public class AmbiLightCore {
         verticalRegionSize = settings.getVerticalRegions();
         //There are n*m regions, made by the n x m dimensions. The last dimension of 3 is to store r/g/b/#pixels separately.
         regions = new int[this.horizontalRegionSize][this.verticalRegionSize][4];
-        regionWidth = (float)width / this.horizontalRegionSize;
-        regionHeight = (float)height / this.verticalRegionSize;
+        regionWidth = (float) width / this.horizontalRegionSize;
+        regionHeight = (float) height / this.verticalRegionSize;
 
-        consolitdator = new RegionConsolitdator(this.horizontalRegionSize, this.verticalRegionSize);
+        consolitdator = new RegionConsolidator(this.horizontalRegionSize, this.verticalRegionSize);
 
-        //Get the logger innstance only once.
+        //Get the logger instance only once.
         logger = LOGGER.getInstance();
-        logger.INFO("Init done! There are " + pixels.length + " pixels in " + horizontalRegionSize * verticalRegionSize + " regions");
+        logger.INFO("======================================================================================================================");
+        logger.INFO("======================================================================================================================");
+        logger.INFO("AMBILIGHT-CORE => Init complete!");
+        logger.INFO("AMBILIGHT-CORE => There are " + pixels.length + " pixels in " + horizontalRegionSize * verticalRegionSize + " regions.");
+        logger.INFO("AMBILIGHT-CORE => There will be " + (horizontalRegionSize * 2 + verticalRegionSize * 2 - 4) + " consolidated regions.");
+        logger.INFO("======================================================================================================================");
+        logger.INFO("======================================================================================================================");
     }
 
+    /**
+     * Will capture the screen and split it up into the predefined region count.
+     * Afterwards it will consolidate the regions into the (to be mapped) pixel regions.
+     * (Each consolidated region will be mapped to a pixel.)
+     */
     public void calculate() {
         long startTime = new Date().getTime();
 
@@ -77,14 +94,14 @@ public class AmbiLightCore {
         //Disabling aero themes in windows can easily double or triple performance!
         pixels = capper.capture();
 
-        for(int i = 0 ; i < pixels.length ; i += stepSize) {
+        for (int i = 0; i < pixels.length; i += stepSize) {
             //The pixels in the image are in one long array, we need to get the x and y values of the pixel.
             y = (i / width);        //This is the row the pixel is at.
             x = i - (y * width);    //This is the column the pixel is at.
 
             //Calculate the correct region for the given x and y coordinate.
-            regionX = (int)(x / regionWidth);
-            regionY = (int)(y / regionHeight);
+            regionX = (int) (x / regionWidth);
+            regionY = (int) (y / regionHeight);
 
             tempPixelValue = pixels[i];
             int[] colors = regions[regionX][regionY];
@@ -95,8 +112,8 @@ public class AmbiLightCore {
         }
 
         //Go over all the regions and calculate the average color.
-        for(int m = 0 ; m < verticalRegionSize ; m++) {
-            for(int n = 0; n < horizontalRegionSize ; n++) {
+        for (int m = 0; m < verticalRegionSize; m++) {
+            for (int n = 0; n < horizontalRegionSize; n++) {
                 //Get the average color by dividing the total added color int by the number of pixels!
                 int[] colors = regions[n][m];
                 int numOfPixelsCounted = colors[3];
@@ -106,8 +123,8 @@ public class AmbiLightCore {
                 colors[3] = 0;
 
                 //Only process regions that are not ignored or completely black!
-                if(colors[0] != 0 || colors[1] != 0 || colors[2] != 0){
-                    if(enhanceColors) {
+                if (colors[0] != 0 || colors[1] != 0 || colors[2] != 0) {
+                    if (enhanceColors) {
                         regions[n][m] = enhancer.processColor(colors[0], colors[1], colors[2]);
                     } else {
                         //Safety check for color channel values.
@@ -118,13 +135,15 @@ public class AmbiLightCore {
                 }
             }
         }
+        //Set the consolidated regions with colors on the model.
+        model.setCurrentColors(consolitdator.consolidateRegions(regions));
 
         //It's all about tai-ming (not the vases)
         long endTime = new Date().getTime();
         long difference = endTime - startTime;
-
-        //Set the consolidated regions with colors on the model.
         model.setActionDuration(difference);
-        model.setCurrentColors(consolitdator.consolidateRegions(regions));
+
+        //Everything has been updated!
+        model.publishModelUpdate();
     }
 }

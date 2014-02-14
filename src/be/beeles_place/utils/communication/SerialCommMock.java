@@ -27,7 +27,7 @@ public class SerialCommMock extends ASerialComm {
     @Override
     public void run() {
         isRunning = true;
-        while(isRunning) {
+        while (isRunning) {
             try {
                 LOGGER.getInstance().INFO("mock color sent!");
                 Thread.sleep(250);

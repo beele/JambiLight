@@ -18,12 +18,17 @@ public class ColorModel {
         eventbus = EventbusWrapper.getInstance();
         eventbus.register(this);
 
-        currentColor = new int[]{0,255,0};
+        currentColor = new int[]{0, 255, 0};
+    }
+
+    public void publishModelUpdate() {
+        //Notify about the updated colors!
+        eventbus.post(new ColorModelUpdatedEvent());
     }
 
     //Getters & setters.
     public Color getCurrentColor() {
-        return new Color(currentColor[0],currentColor[1],currentColor[2]);
+        return new Color(currentColor[0], currentColor[1], currentColor[2]);
     }
 
     public void setCurrentColor(Color color) {
@@ -36,8 +41,6 @@ public class ColorModel {
 
     public void setCurrentColors(int[][] currentColors) {
         this.currentColors = currentColors;
-        //Notify about the updated colors!
-        eventbus.post(new ColorModelUpdatedEvent());
     }
 
     public long getActionDuration() {

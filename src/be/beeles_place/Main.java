@@ -21,8 +21,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import javax.swing.*;
-import java.awt.*;
 import java.net.URL;
 
 public class Main extends Application {
@@ -51,10 +49,11 @@ public class Main extends Application {
         Parent root = (Parent) fxmlLoader.load(location.openStream());
 
         stage.setTitle("JambiLight 1.0 Alpha");
-        stage.setScene(new Scene(root, 800, 500));
+        stage.setScene(new Scene(root, 900, 563));
         stage.show();
         this.stage = stage;
 
+        //TODO: Put this in some sort of application controller!
         //Create settings model!
         settings = new SettingsModel();
         settings.setEnhanceColor(false);
@@ -68,7 +67,7 @@ public class Main extends Application {
         model = new ColorModel();
 
         //Create communicator!
-        comm = new Communicator(model,true);
+        comm = new Communicator(model, true);
         //comm.open("mock");
 
         //New color controller and mode.
@@ -92,7 +91,7 @@ public class Main extends Application {
     @Subscribe
     public void colorsUpdated(ColorModelUpdatedEvent event) {
         LOGGER.getInstance().INFO("Pixel processing completed in : " + model.getActionDuration() + "ms");
-        String title = "JambiLight => running at: " + (1000/model.getActionDuration()) + " FPS";
+        String title = "JambiLight => running at: " + (1000 / model.getActionDuration()) + " FPS";
         stage.setTitle(title);
         viewController.updateColors();
     }

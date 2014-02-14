@@ -13,9 +13,9 @@ public class SerialUtil {
         List<String> devices = getSerialDevicesList();
         for (String deviceName : devices) {
             //TODO: paramterize values!
-            if(deviceName.contains("tty") && deviceName.contains("usbmodem")) {
+            if (deviceName.contains("tty") && deviceName.contains("usbmodem")) {
                 name = deviceName;
-            } else if(deviceName.contains("COM") && Integer.parseInt(deviceName.replace("COM","")) == 3) {
+            } else if (deviceName.contains("COM") && Integer.parseInt(deviceName.replace("COM", "")) == 3) {
                 name = deviceName;
             }
         }
@@ -27,7 +27,7 @@ public class SerialUtil {
         ArrayList<String> deviceList = new ArrayList<String>();
 
         java.util.Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
-        while ( portEnum.hasMoreElements()) {
+        while (portEnum.hasMoreElements()) {
             CommPortIdentifier portIdentifier = portEnum.nextElement();
             deviceList.add(portIdentifier.getName());
         }
@@ -35,8 +35,8 @@ public class SerialUtil {
         return deviceList;
     }
 
-    private static String getPortTypeName ( int portType ) {
-        switch ( portType ) {
+    private static String getPortTypeName(int portType) {
+        switch (portType) {
             case CommPortIdentifier.PORT_I2C:
                 return "I2C";
             case CommPortIdentifier.PORT_PARALLEL:

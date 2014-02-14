@@ -16,35 +16,35 @@ public class ScreenGridView extends JFrame {
         setResizable(true);
 
         this.settings = settings;
-        gLayout = new GridLayout(settings.getVerticalRegions(),settings.getHorizontalRegions());
+        gLayout = new GridLayout(settings.getVerticalRegions(), settings.getHorizontalRegions());
         container = super.getContentPane();
         makeUI();
     }
 
     public void makeUI() {
-        container.setSize(new Dimension(800,600));
+        container.setSize(new Dimension(800, 600));
         container.setLayout(gLayout);
 
         int regions = settings.getHorizontalRegions() * settings.getVerticalRegions();
-        for(int i = 0; i < regions ; i++) {
+        for (int i = 0; i < regions; i++) {
             JPanel pnl = new JPanel();
             pnl.setBackground(Color.BLACK);
             container.add(pnl);
         }
     }
 
-    public void updateView(String title, int[][][]regions) {
+    public void updateView(String title, int[][][] regions) {
         super.setTitle(title);
         final Container cont = super.getContentPane();
 
         int compCount = 0;
-        for(int i = 0 ; i < settings.getVerticalRegions() ; i++) {
-            for(int j = 0 ; j < settings.getHorizontalRegions() ; j++) {
-                JPanel pnl = (JPanel)container.getComponent(compCount++);
-                Color c = new Color(    regions[j][i][0],
-                                        regions[j][i][1],
-                                        regions[j][i][2]);
-                if(pnl.getBackground().equals(c) == false) {
+        for (int i = 0; i < settings.getVerticalRegions(); i++) {
+            for (int j = 0; j < settings.getHorizontalRegions(); j++) {
+                JPanel pnl = (JPanel) container.getComponent(compCount++);
+                Color c = new Color(regions[j][i][0],
+                        regions[j][i][1],
+                        regions[j][i][2]);
+                if (pnl.getBackground().equals(c) == false) {
                     pnl.setBackground(c);
                 }
             }

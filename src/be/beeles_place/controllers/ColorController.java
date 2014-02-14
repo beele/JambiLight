@@ -16,13 +16,13 @@ public class ColorController {
     }
 
     public void setColorMode(AbstractColorMode newColorMode) {
-        if(colorMode != null) {
+        if (colorMode != null) {
             //Before setting the new color mode, stop the current one first!
             colorMode.stop();
         }
 
         //If no new color mode has been set.
-        if(newColorMode == null) {
+        if (newColorMode == null) {
             return;
         } else {
             colorMode = newColorMode;

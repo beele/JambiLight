@@ -14,7 +14,7 @@ public class Communicator {
     public Communicator(ColorModel model, boolean useMock) {
         this.model = model;
 
-        if(useMock) {
+        if (useMock) {
             comm = new SerialCommMock();
         } else {
             comm = new SerialCommRXTX();
@@ -36,7 +36,7 @@ public class Communicator {
         runner = null;
     }
 
-    public void updateColor(){
+    public void updateColor() {
         comm.setColor(model.getCurrentColor());
     }
 }

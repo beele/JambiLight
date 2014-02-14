@@ -33,39 +33,39 @@ public class MainViewController implements Initializable {
     public void addPanels() {
         panes = new ArrayList<>();
 
-        for(int i = 0; i < 16 ; i++) {
+        for (int i = 0; i < 16; i++) {
             Pane pane = new Pane();
-            pane.setStyle("-fx-background-color: #00FF00;");
+            pane.setStyle("-fx-background-color: rgb(0,255," + (i * 10 + 10) + ");");
             panes.add(pane);
-            gridItems.add(pane,i,0);
+            gridItems.add(pane, i, 0);
         }
 
-        for(int i = 0; i < 8 ; i++) {
+        for (int i = 0; i < 8; i++) {
             Pane pane = new Pane();
-            pane.setStyle("-fx-background-color: #00FF00;");
+            pane.setStyle("-fx-background-color: rgb(0,255," + (i * 10 + 10) + ");");
             panes.add(pane);
-            gridItems.add(pane,15,i+1);
+            gridItems.add(pane, 15, i + 1);
         }
 
-        for(int i = 0; i < 16 ; i++) {
+        for (int i = 0; i < 16; i++) {
             Pane pane = new Pane();
-            pane.setStyle("-fx-background-color: #00FF00;");
+            pane.setStyle("-fx-background-color: rgb(0,255," + (i * 10 + 10) + ");");
             panes.add(pane);
-            gridItems.add(pane,15 - i,9);
+            gridItems.add(pane, 15 - i, 9);
         }
 
-        for(int i = 0; i < 8 ; i++) {
+        for (int i = 0; i < 8; i++) {
             Pane pane = new Pane();
-            pane.setStyle("-fx-background-color: #00FF00;");
+            pane.setStyle("-fx-background-color: rgb(0,255," + (i * 10 + 10) + ");");
             panes.add(pane);
-            gridItems.add(pane,0, 8 - i);
+            gridItems.add(pane, 0, 8 - i);
         }
     }
 
     public void updateColors() {
-        int [][] colors = model.getCurrentColors();
+        int[][] colors = model.getCurrentColors();
 
-        for (int i = 0 ; i < panes.size() ; i++) {
+        for (int i = 0; i < panes.size(); i++) {
             int[] rgb = colors[i];
             String values = "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ");";
             panes.get(i).setStyle("-fx-background-color: " + values);
