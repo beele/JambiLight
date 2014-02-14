@@ -1,5 +1,6 @@
 package be.beeles_place.view;
 
+import be.beeles_place.events.ShowPreferencesEvent;
 import be.beeles_place.events.ShutdownEvent;
 import be.beeles_place.model.ColorModel;
 import be.beeles_place.utils.EventbusWrapper;
@@ -82,7 +83,7 @@ public class MainViewController implements Initializable {
     //Event handlers.
     @FXML
     void onPreferencesClicked(ActionEvent event) {
-
+        eventBus.post(new ShowPreferencesEvent());
     }
 
     @FXML

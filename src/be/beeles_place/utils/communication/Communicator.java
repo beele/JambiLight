@@ -32,8 +32,10 @@ public class Communicator {
     }
 
     public void close() {
-        runner.interrupt();
-        runner = null;
+        if(runner != null) {
+            runner.interrupt();
+            runner = null;
+        }
     }
 
     public void updateColor() {

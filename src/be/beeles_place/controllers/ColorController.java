@@ -7,10 +7,18 @@ public class ColorController {
     private AbstractColorMode colorMode;
     private Thread colorThread;
 
+    /**
+     * Creates a ColorController instance.
+     */
     public ColorController() {
 
     }
 
+    public void stopCurrentColorMode() {
+        setColorMode(null);
+    }
+
+    //Getters & setters.
     public String getColorMode() {
         return colorMode.getClass().getName();
     }

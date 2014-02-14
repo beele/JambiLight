@@ -1,6 +1,7 @@
 package be.beeles_place.controllers;
 
 import be.beeles_place.events.ColorModelUpdatedEvent;
+import be.beeles_place.events.ShowPreferencesEvent;
 import be.beeles_place.events.ShutdownEvent;
 import be.beeles_place.model.ColorModel;
 import be.beeles_place.model.SettingsModel;
@@ -18,9 +19,13 @@ public class ApplicationController {
 
     private EventBus eventBus;
 
+    //Models
     private ColorModel model;
     private SettingsModel settings;
-    private Communicator comm;
+
+    //Logic
+    private ColorController colorController;
+    private Communicator serialCommunicator;
 
     //UI vars
     private Stage stage;
@@ -54,17 +59,18 @@ public class ApplicationController {
         viewController.setModel(model);
 
         //Create communicator!
-        comm = new Communicator(model, true);
-        //comm.open("mock");
+        serialCommunicator = new Communicator(model, true);
+        //TODO: improve serial communicator. (both mock and actual implementations)
+        //serialCommunicator.open("mock");
 
         //New color controller and mode.
-        ColorController c = new ColorController();
+        colorController = new ColorController();
         AbstractColorMode mode = new AmbilightMode(settings, model);
-        c.setColorMode(mode);
+        colorController.setColorMode(mode);
     }
 
     @Subscribe
-    public void colorsUpdated(ColorModelUpdatedEvent event) {
+    public void onColorsUpdated(ColorModelUpdatedEvent event) {
         LOGGER.getInstance().INFO("Pixel processing completed in : " + model.getActionDuration() + "ms");
         String title = "JambiLight => running at: " + (1000 / model.getActionDuration()) + " FPS";
         stage.setTitle(title);
@@ -72,8 +78,14 @@ public class ApplicationController {
     }
 
     @Subscribe
-    public void shutdown(ShutdownEvent event) {
-        //TODO: shut down completely!
+    public void ShowPreferencesEvent(ShowPreferencesEvent event) {
+        //TODO: show preferences window!
+    }
+
+    @Subscribe
+    public void onShutdown(ShutdownEvent event) {
+        colorController.stopCurrentColorMode();
+        serialCommunicator.close();
         System.exit(0);
     }
 
