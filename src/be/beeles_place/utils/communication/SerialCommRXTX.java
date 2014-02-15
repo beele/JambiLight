@@ -1,14 +1,10 @@
 package be.beeles_place.utils.communication;
 
+import be.beeles_place.model.ColorModel;
 import be.beeles_place.utils.logger.LOGGER;
-import gnu.io.CommPortIdentifier;
-import gnu.io.PortInUseException;
-import gnu.io.SerialPort;
-import gnu.io.UnsupportedCommOperationException;
+import gnu.io.*;
 
-import java.awt.*;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 
 public class SerialCommRXTX extends ASerialComm {
 
@@ -17,38 +13,30 @@ public class SerialCommRXTX extends ASerialComm {
 
     private CommPortIdentifier portId;
     private SerialPort port;
+    private InputStream input;
     private OutputStream output;
 
-    private Color color;
-    private boolean updateRequired;
+    private ColorModel model;
 
-    public SerialCommRXTX() {
-        LOGGER.getInstance().INFO("initiating serial communication service using RXTX lib");
-    }
-
-    public void setColor(Color color) {
-        if (this.color == null) {
-            this.color = color;
-        }
-
-        if (color.getRGB() != this.color.getRGB()) {
-            this.color = color;
-            updateRequired = true;
-        } else {
-            updateRequired = false;
-        }
+    public SerialCommRXTX(ColorModel model) {
+        this.model = model;
+        LOGGER.getInstance().INFO("Initiating serial communication service using RXTX lib");
     }
 
     public int initCommPort() {
         int status = 0;
 
         try {
-            port = (SerialPort) portId.open("serial talk", 4000);
-            output = port.getOutputStream();
-            port.setSerialPortParams(9600,
+            LOGGER.getInstance().INFO("Opening com port => " + portId.getName());
+            port = (SerialPort) portId.open("serial talk", 2000);
+            port.setSerialPortParams(100000,
                     SerialPort.DATABITS_8,
                     SerialPort.STOPBITS_1,
                     SerialPort.PARITY_NONE);
+            Thread.sleep(5000);
+            input = port.getInputStream();
+            output = port.getOutputStream();
+
         } catch (PortInUseException e) {
             LOGGER.getInstance().ERROR("Serial comm port is already in use!");
             status = -1;
@@ -73,6 +61,9 @@ public class SerialCommRXTX extends ASerialComm {
         port = null;
     }
 
+    boolean canSendNext = true;
+    int currentStep = 0;
+
     @Override
     public void run() {
         isRunning = true;
@@ -85,17 +76,41 @@ public class SerialCommRXTX extends ASerialComm {
 
         while (isRunning) {
             try {
-                Thread.sleep(10);
-                if (updateRequired) {
-                    //oxee to save the next color, oxff to just display it!
-                    LOGGER.getInstance().DEBUG("sending new color over comm! " + color.toString());
-                    output.write(0xff);
+                Thread.sleep(1);
 
-                    output.write(color.getRed());
-                    output.write(color.getGreen());
-                    output.write(color.getBlue());
-                    updateRequired = false;
+                if(input.available() > 0) {
+                    if(input.read() == 50) {
+                        canSendNext = true;
+                        //System.out.println("Send next 48 bytes!");
+                    }
+                } else {
+                    //System.out.println("Cannot send next 48 bytes");
                 }
+
+                if(canSendNext && model.getCurrentColors() != null) {
+                    int[][] colors = model.getCurrentColors();
+                    int totalBytes = colors.length * 3;
+                    int steps = (int)totalBytes / 48;
+
+                    if(currentStep >= steps) {
+                        currentStep = 0;
+                    }
+
+                    if(colors != null) {
+                        for(int i = 0 ; i < 16 ; i++) {
+                            for(int j = 0 ; j < 3 ; j++) {
+                                output.write((byte)colors[(currentStep * 16) + i][j]);
+                            }
+                            /*output.write((byte)255);
+                            output.write((byte)181);
+                            output.write((byte)135);*/
+                        }
+                        //System.out.println("48 bytes sent! (Step " + (currentStep + 1) + " out of " + steps + ")");
+                        currentStep++;
+                        canSendNext = false;
+                    }
+                }
+
             } catch (InterruptedException e) {
                 LOGGER.getInstance().ERROR("Thread interrupted! Aborting thread!");
                 disposeCommPort();
@@ -115,8 +130,6 @@ public class SerialCommRXTX extends ASerialComm {
     public void setPortName(String portName) {
         this.portName = portName;
         isRunning = false;
-        updateRequired = true;
-        color = new Color(255, 255, 255);
 
         try {
             portId = CommPortIdentifier.getPortIdentifier(portName);

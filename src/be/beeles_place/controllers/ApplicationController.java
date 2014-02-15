@@ -59,9 +59,12 @@ public class ApplicationController {
         viewController.setModel(model);
 
         //Create communicator!
-        serialCommunicator = new Communicator(model, true);
+        serialCommunicator = new Communicator(model, false);
+        for (String s : serialCommunicator.getPorts()) {
+            System.out.println(s);
+        }
         //TODO: improve serial communicator. (both mock and actual implementations)
-        //serialCommunicator.open("mock");
+        serialCommunicator.open("COM4");
 
         //New color controller and mode.
         colorController = new ColorController();

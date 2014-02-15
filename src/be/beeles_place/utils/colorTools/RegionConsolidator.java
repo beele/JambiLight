@@ -48,6 +48,12 @@ public class RegionConsolidator {
 
         //Collect all regions per column into one pixel.
         for (int i = 0; i < width; i++) {
+            r = 0;
+            g = 0;
+            b = 0;
+            rr = 0;
+            gg = 0;
+            bb = 0;
             for (int j = 0; j < topDepth; j++) {
                 r += regions[i][j][0];
                 g += regions[i][j][1];
@@ -74,6 +80,12 @@ public class RegionConsolidator {
 
         //Collect all regions per row into one pixel.
         for (int m = 0; m < height; m++) {
+            r = 0;
+            g = 0;
+            b = 0;
+            rr = 0;
+            gg = 0;
+            bb = 0;
             for (int n = 0; n < leftDepth; n++) {
                 r += regions[n][m][0];
                 g += regions[n][m][1];
