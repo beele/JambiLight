@@ -17,7 +17,7 @@ int rgbDivFactor = 2;
 LPD8806 strip = LPD8806(nLEDs, dataPin, clockPin);
 
 /** ========================================
-**  Init block for LPD8806 strips 
+**  Init block for WS2801 strips 
 **  ========================================**/
 /*int dataPin = 2;
 int clockPin = 3;

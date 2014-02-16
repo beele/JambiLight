@@ -8,9 +8,9 @@ import java.awt.*;
 
 public class ColorModel {
 
-    private int[] currentColor;
     private int[][] currentColors;
     private long actionDuration;
+    private boolean newColorsForComm;
 
     private EventBus eventbus;
     private int numberOfColorsProcessed;
@@ -19,7 +19,7 @@ public class ColorModel {
         eventbus = EventbusWrapper.getInstance();
         eventbus.register(this);
 
-        currentColor = new int[]{0, 255, 0};
+        newColorsForComm = false;
     }
 
     public void publishModelUpdate() {
@@ -28,19 +28,17 @@ public class ColorModel {
     }
 
     //Getters & setters.
-    public Color getCurrentColor() {
-        return new Color(currentColor[0], currentColor[1], currentColor[2]);
-    }
-
-    public void setCurrentColor(Color color) {
-        currentColor = new int[]{color.getRed(), color.getGreen(), color.getBlue()};
-    }
-
     public int[][] getCurrentColors() {
         return currentColors;
     }
 
+    public int[][]getCurrentColorsForComm() {
+        newColorsForComm = false;
+        return currentColors;
+    }
+
     public void setCurrentColors(int[][] currentColors) {
+        newColorsForComm = true;
         this.currentColors = currentColors;
     }
 
@@ -58,5 +56,9 @@ public class ColorModel {
 
     public int getNumberOfColorsProcessed() {
         return numberOfColorsProcessed;
+    }
+
+    public boolean hasNewColorsForComm() {
+        return newColorsForComm;
     }
 }
