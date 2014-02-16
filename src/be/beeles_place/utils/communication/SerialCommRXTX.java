@@ -104,11 +104,9 @@ public class SerialCommRXTX extends ASerialComm {
                     int[][] colors = model.getCurrentColors();
                     if(colors != null) {
                         //Sending stepSize bytes per loop means sending stepSize/steps colors (3 bytes per color).
-                        int c = 0;
                         for(int i = 0 ; i < stepSize / 3 ; i++) {
                             //Loop over each color (R/G/B)
                             for(int j = 0 ; j < 3 ; j++) {
-                                c++;
                                 output.write((byte)colors[(currentStep * stepSize / 3) + i][j]);
                             }
                         }

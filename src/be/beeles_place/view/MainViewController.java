@@ -98,6 +98,7 @@ public class MainViewController implements Initializable {
             int[] rgb = colors[i];
             String values = "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ");";
             panes.get(i).setStyle("-fx-background-color: " + values);
+            values = null;
         }
     }
 

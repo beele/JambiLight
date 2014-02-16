@@ -68,7 +68,7 @@ public class ApplicationController {
         }
         //TODO: improve serial communicator. (both mock and actual implementations)
         //TODO: get this port from the UI.
-        serialCommunicator.open("COM4");
+        //serialCommunicator.open("COM4");
 
         //New color controller and mode.
         colorController = new ColorController();
