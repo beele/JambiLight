@@ -4,6 +4,7 @@ public class RegionConsolidator {
 
     private int width;
     private int height;
+    private int finalRegionCount;
 
     private int leftDepth;
     private int rightDepth;
@@ -26,6 +27,8 @@ public class RegionConsolidator {
     public RegionConsolidator(int horizontalRegions, int verticalRegions) {
         width = horizontalRegions;
         height = verticalRegions;
+
+        finalRegionCount = (width * 2) + (height * 2) - 4;
 
         leftDepth = (int) (width / 2);
         rightDepth = width - leftDepth;
@@ -106,7 +109,7 @@ public class RegionConsolidator {
 
             //Left
             int tempIndex = width + (height - 2) + width + (height - 2) - m;
-            tempIndex = tempIndex == 48 ? 0 : tempIndex;
+            tempIndex = tempIndex == finalRegionCount ? 0 : tempIndex;
             cRegions[tempIndex] = new int[]{r, g, b};
             //Right
             cRegions[m + width - 1] = new int[]{rr, gg, bb};

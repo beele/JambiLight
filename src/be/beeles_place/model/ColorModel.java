@@ -13,6 +13,7 @@ public class ColorModel {
     private long actionDuration;
 
     private EventBus eventbus;
+    private int numberOfColorsProcessed;
 
     public ColorModel() {
         eventbus = EventbusWrapper.getInstance();
@@ -49,5 +50,13 @@ public class ColorModel {
 
     public void setActionDuration(long actionDuration) {
         this.actionDuration = actionDuration;
+    }
+
+    public void setNumberOfColorsProcessed(int numberOfColorsProcessed) {
+        this.numberOfColorsProcessed = numberOfColorsProcessed;
+    }
+
+    public int getNumberOfColorsProcessed() {
+        return numberOfColorsProcessed;
     }
 }

@@ -47,16 +47,19 @@ public class ApplicationController {
         settings = new SettingsModel();
         settings.setEnhanceColor(false);
         //TODO: for now keep horizontal and vertical at these values or the UI will break!
-        settings.setHorizontalRegions(16);
-        settings.setVerticalRegions(10);
+        settings.setHorizontalRegions(20);
+        settings.setVerticalRegions(14);
         settings.setPixelIteratorStepSize(2);
         settings.setRegionMargin(2);
 
         //Create color model!
         model = new ColorModel();
+        model.setNumberOfColorsProcessed(settings.getHorizontalRegions() * 2 + (settings.getVerticalRegions() * 2) - 4);
 
         //Set model on view controller.
+        viewController.setSettings(settings);
         viewController.setModel(model);
+        viewController.initUI();
 
         //Create communicator!
         serialCommunicator = new Communicator(model, false);
@@ -64,6 +67,7 @@ public class ApplicationController {
             System.out.println(s);
         }
         //TODO: improve serial communicator. (both mock and actual implementations)
+        //TODO: get this port from the UI.
         serialCommunicator.open("COM4");
 
         //New color controller and mode.

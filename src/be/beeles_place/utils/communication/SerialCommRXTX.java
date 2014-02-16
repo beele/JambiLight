@@ -61,12 +61,23 @@ public class SerialCommRXTX extends ASerialComm {
         port = null;
     }
 
-    boolean canSendNext = true;
-    int currentStep = 0;
+    boolean canSendNext;
+    int currentStep;
+    int stepSize;
+    int totalBytes;
+    int steps;
 
     @Override
     public void run() {
         isRunning = true;
+
+        //Init variables for serial communication loops.
+        totalBytes = model.getNumberOfColorsProcessed() * 3;
+        //TODO: put the stepsize (aka bytes sent per loop) in the settings model.
+        stepSize = 48;
+        steps = (int) totalBytes / stepSize;
+        currentStep = 0;
+        canSendNext = true;
 
         if (initCommPort() != 0) {
             LOGGER.getInstance().ERROR("Cannot start serial communication!");
@@ -76,36 +87,31 @@ public class SerialCommRXTX extends ASerialComm {
 
         while (isRunning) {
             try {
-                Thread.sleep(1);
-
                 if(input.available() > 0) {
                     if(input.read() == 50) {
                         canSendNext = true;
-                        //System.out.println("Send next 48 bytes!");
                     }
                 } else {
-                    //System.out.println("Cannot send next 48 bytes");
+                    Thread.sleep(1);
                 }
 
+                //TODO: add in a system so each color is sent only once!
                 if(canSendNext && model.getCurrentColors() != null) {
-                    int[][] colors = model.getCurrentColors();
-                    int totalBytes = colors.length * 3;
-                    int steps = (int)totalBytes / 48;
-
                     if(currentStep >= steps) {
                         currentStep = 0;
                     }
 
+                    int[][] colors = model.getCurrentColors();
                     if(colors != null) {
-                        for(int i = 0 ; i < 16 ; i++) {
+                        //Sending stepSize bytes per loop means sending stepSize/steps colors (3 bytes per color).
+                        int c = 0;
+                        for(int i = 0 ; i < stepSize / 3 ; i++) {
+                            //Loop over each color (R/G/B)
                             for(int j = 0 ; j < 3 ; j++) {
-                                output.write((byte)colors[(currentStep * 16) + i][j]);
+                                c++;
+                                output.write((byte)colors[(currentStep * stepSize / 3) + i][j]);
                             }
-                            /*output.write((byte)255);
-                            output.write((byte)181);
-                            output.write((byte)135);*/
                         }
-                        //System.out.println("48 bytes sent! (Step " + (currentStep + 1) + " out of " + steps + ")");
                         currentStep++;
                         canSendNext = false;
                     }
