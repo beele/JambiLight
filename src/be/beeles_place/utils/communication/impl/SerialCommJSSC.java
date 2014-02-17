@@ -31,6 +31,7 @@ public class SerialCommJSSC extends ASerialComm {
         try {
             LOGGER.getInstance().INFO("Opening com port => " + portName);
             port = new SerialPort(portName);
+            port.openPort();
             port.setParams( 100000,
                             SerialPort.DATABITS_8,
                             SerialPort.STOPBITS_1,
