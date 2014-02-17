@@ -43,7 +43,7 @@ public class ColorEnhancer {
             r += (int) (r * ratioR * 2.5);
             g += (int) (g * ratioG * 2.5);
         }
-        //Dominant turquiose
+        //Dominant cyan
         else if ((g + b) > ((r * 2) + 20)) {
             g += (int) (g * ratioG * 2.5);
             b += (int) (b * ratioB * 2.5);
