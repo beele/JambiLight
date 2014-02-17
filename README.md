@@ -22,10 +22,10 @@ How to build & run
 ---------------------------------
 - Clone the repo to a folder on your computer.
 - Windows users can simply double click on the build.bat file.
-..* OSX and linux users will have to execute the three maven commands in the bat file separately.
+  * OSX and linux users will have to execute the three maven commands in the bat file separately.
 - When the build has finished go to the /target/ folder that has been created by maven.
 - Open a command prompt and run the following command: java -jar JambiLight.jar
-..* When you have made a build with RXTX enabled use the following command: java -jar JambiLight.jar -Djava.library.path="PATH_TO_FOLDER_WITH_RXTX_SERIAL_DLL"
+  * When you have made a build with RXTX enabled use the following command: java -jar JambiLight.jar -Djava.library.path="PATH_TO_FOLDER_WITH_RXTX_SERIAL_DLL"
 
 Important notes:
 ---------------------------------
@@ -37,5 +37,5 @@ RXTX:
 The dll's and jnilib files can be found in the /lib/rxtx/ folder.
 
 - OSX users must first run the following commands in the terminal application for the rxtx lib to work!
-..* $ sudo mkdir /var/lock
-..* $ sudo chmod 777 /var/lock
+  * $ sudo mkdir /var/lock
+  * $ sudo chmod 777 /var/lock
