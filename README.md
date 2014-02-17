@@ -8,17 +8,22 @@ Java implementation of an abmilight system (as seen in the philips tv sets)
 
 Uses the following libraries:
 ---------------------------------
-- Guava (can be found here => http://code.google.com/p/guava-libraries/)
+- Guava (more information here => http://code.google.com/p/guava-libraries/)
+- JSSP (more information here => https://code.google.com/p/java-simple-serial-connector/wiki/jSSC_examples)
 - RXTX (more information here => http://rxtx.qbang.org/wiki/index.php/Main_Page)
 
 I have included a lib folder in the git project. Link all the jars in this folder when setting up the project in your IDE.
-I have also included the dll files for Windows and the jnilib for OSX (64bit compatible), This will allow you to run the project without much of a hiccup.
+RXTX:
+I have also included the .dll files for Windows and the jnilib for OSX (64bit compatible), This will allow you to run the project without much of a hiccup.
 
+I do suggest you use the JSSC Serial communication implementation, as RXTX required you to put .dll files in certain locations manually.
 
 Important note:
 ---------------------------------
+JAVA:
 - Make sure you use the 1.7 version of the JDK!
 
+RXTX:
 - Place the required dll or jnilib files in the root folder of the project to run it.
 the dll's and jnilib files can be found in the /lib/rxtx/ folder.
 
