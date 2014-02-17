@@ -10,7 +10,6 @@ public class ColorModel {
 
     private int[][] currentColors;
     private long actionDuration;
-    private boolean newColorsForComm;
 
     private EventBus eventbus;
     private int numberOfColorsProcessed;
@@ -18,8 +17,6 @@ public class ColorModel {
     public ColorModel() {
         eventbus = EventbusWrapper.getInstance();
         eventbus.register(this);
-
-        newColorsForComm = false;
     }
 
     public void publishModelUpdate() {
@@ -33,12 +30,10 @@ public class ColorModel {
     }
 
     public int[][]getCurrentColorsForComm() {
-        newColorsForComm = false;
         return currentColors;
     }
 
     public void setCurrentColors(int[][] currentColors) {
-        newColorsForComm = true;
         this.currentColors = currentColors;
     }
 
@@ -56,9 +51,5 @@ public class ColorModel {
 
     public int getNumberOfColorsProcessed() {
         return numberOfColorsProcessed;
-    }
-
-    public boolean hasNewColorsForComm() {
-        return newColorsForComm;
     }
 }

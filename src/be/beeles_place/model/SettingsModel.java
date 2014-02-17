@@ -5,10 +5,28 @@ public class SettingsModel {
     //Below are the setting fields for the ambilight mode!
     private int horizontalRegions;
     private int verticalRegions;
-    private int regionMargin;
+
+    private int horizontalMargin;
+    private int verticalMargin;
+
     private int pixelIteratorStepSize;
 
     private boolean enhanceColor;
+
+    /**
+     * Creates a new SettingsModel instance.
+     * Will set all the values on their defaults.
+     */
+    public SettingsModel() {
+        horizontalRegions = 16;
+        verticalRegions = 9;
+
+        horizontalMargin = 0;
+        verticalMargin = 0;
+
+        pixelIteratorStepSize = 2;
+        enhanceColor = false;
+    }
 
     //Getters & setters.
     public int getHorizontalRegions() {
@@ -27,12 +45,20 @@ public class SettingsModel {
         this.verticalRegions = verticalRegions;
     }
 
-    public int getRegionMargin() {
-        return regionMargin;
+    public int getHorizontalMargin() {
+        return horizontalMargin;
     }
 
-    public void setRegionMargin(int regionMargin) {
-        this.regionMargin = regionMargin;
+    public void setHorizontalMargin(int horizontalMargin) {
+        this.horizontalMargin = horizontalMargin;
+    }
+
+    public int getVerticalMargin() {
+        return verticalMargin;
+    }
+
+    public void setVerticalMargin(int verticalMargin) {
+        this.verticalMargin = verticalMargin;
     }
 
     public int getPixelIteratorStepSize() {

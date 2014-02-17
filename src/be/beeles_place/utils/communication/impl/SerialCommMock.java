@@ -1,8 +1,11 @@
-package be.beeles_place.utils.communication;
+package be.beeles_place.utils.communication.impl;
 
+import be.beeles_place.utils.communication.ASerialComm;
 import be.beeles_place.utils.logger.LOGGER;
 
 import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 public class SerialCommMock extends ASerialComm {
 
@@ -43,6 +46,11 @@ public class SerialCommMock extends ASerialComm {
     }
 
     public void setPortName(String portName) {
+        //Do nothing for now.
+    }
 
+    @Override
+    public List<String> getSerialDevicesList() {
+        return Arrays.asList(new String[]{"COM1","COM2","COM3"});
     }
 }

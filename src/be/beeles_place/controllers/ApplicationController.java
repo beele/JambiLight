@@ -8,6 +8,7 @@ import be.beeles_place.model.SettingsModel;
 import be.beeles_place.modes.AbstractColorMode;
 import be.beeles_place.modes.impl.AmbilightMode;
 import be.beeles_place.utils.EventbusWrapper;
+import be.beeles_place.utils.communication.CommunicationLibraries;
 import be.beeles_place.utils.communication.Communicator;
 import be.beeles_place.utils.logger.LOGGER;
 import be.beeles_place.view.MainViewController;
@@ -46,11 +47,11 @@ public class ApplicationController {
         //Create settings model!
         settings = new SettingsModel();
         settings.setEnhanceColor(false);
-        //TODO: for now keep horizontal and vertical at these values or the UI will break!
         settings.setHorizontalRegions(20);
         settings.setVerticalRegions(14);
         settings.setPixelIteratorStepSize(2);
-        settings.setRegionMargin(2);
+        settings.setHorizontalMargin(0);
+        settings.setVerticalMargin(0);
 
         //Create color model!
         model = new ColorModel();
@@ -62,9 +63,13 @@ public class ApplicationController {
         viewController.initUI();
 
         //Create communicator!
-        serialCommunicator = new Communicator(model, false);
-        for (String s : serialCommunicator.getPorts()) {
-            System.out.println(s);
+        try {
+            serialCommunicator = new Communicator(model, CommunicationLibraries.JSSC);
+            for (String s : serialCommunicator.getPorts()) {
+                System.out.println(s);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
         //TODO: improve serial communicator. (both mock and actual implementations)
         //TODO: get this port from the UI.

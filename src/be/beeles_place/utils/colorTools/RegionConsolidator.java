@@ -12,7 +12,9 @@ public class RegionConsolidator {
     private int topDepth;
     private int bottomDepth;
 
-    private int consolidatedRegionSize;
+    private int horizontalMargin;
+    private int verticalMargin;
+
     private int[][] cRegions;
 
     private int r, g, b;
@@ -24,7 +26,7 @@ public class RegionConsolidator {
      * @param horizontalRegions The number of horizontal regions.
      * @param verticalRegions   The number of vertical regions.
      */
-    public RegionConsolidator(int horizontalRegions, int verticalRegions) {
+    public RegionConsolidator(int horizontalRegions, int verticalRegions, int horizontalMargin, int verticalMargin) {
         width = horizontalRegions;
         height = verticalRegions;
 
@@ -36,18 +38,19 @@ public class RegionConsolidator {
         topDepth = (int) (height / 2);
         bottomDepth = height - topDepth;
 
-        consolidatedRegionSize = ((width + height) * 2 - 4);
+        this.horizontalMargin = horizontalMargin;
+        this.verticalMargin = verticalMargin;
     }
 
     /**
      * Will consolidate all regions in to the wanted amount of pixels.
      *
-     * @param regions The multidimensional regions array containing all calculated regions. The second dimension contains the R/G/B values.
-     * @return An array of int each side of the screen is appended in the array. starting Top (vertical), Right(side), Bottom(vertical) and Left(side).
+     * @param regions The multidimensional regions array containing all calculated regions.
+     * @return An array of int where each side of the screen is appended in the array. starting Top (vertical), Right(side), Bottom(vertical) and Left(side).
+     * The second dimension contains the R/G/B values.
      */
-    //TODO: make it so that the margin setting influences the consolidation.
     public int[][] consolidateRegions(int[][][] regions) {
-        cRegions = new int[consolidatedRegionSize][3];
+        cRegions = new int[finalRegionCount][3];
 
         //Collect all regions per column into one pixel.
         for (int i = 0; i < width; i++) {
@@ -57,23 +60,23 @@ public class RegionConsolidator {
             rr = 0;
             gg = 0;
             bb = 0;
-            for (int j = 0; j < topDepth; j++) {
+            for (int j = horizontalMargin; j < topDepth; j++) {
                 r += regions[i][j][0];
                 g += regions[i][j][1];
                 b += regions[i][j][2];
             }
-            r /= topDepth;
-            g /= topDepth;
-            b /= topDepth;
+            r /= (topDepth - horizontalMargin);
+            g /= (topDepth - horizontalMargin);
+            b /= (topDepth - horizontalMargin);
 
-            for (int j = topDepth; j < height; j++) {
+            for (int j = topDepth; j < (height - horizontalMargin); j++) {
                 rr += regions[i][j][0];
                 gg += regions[i][j][1];
                 bb += regions[i][j][2];
             }
-            rr /= bottomDepth;
-            gg /= bottomDepth;
-            bb /= bottomDepth;
+            rr /= (bottomDepth - horizontalMargin);
+            gg /= (bottomDepth - horizontalMargin);
+            bb /= (bottomDepth - horizontalMargin);
 
             //Top
             cRegions[i] = new int[]{r, g, b};
@@ -89,23 +92,23 @@ public class RegionConsolidator {
             rr = 0;
             gg = 0;
             bb = 0;
-            for (int n = 0; n < leftDepth; n++) {
+            for (int n = verticalMargin; n < leftDepth; n++) {
                 r += regions[n][m][0];
                 g += regions[n][m][1];
                 b += regions[n][m][2];
             }
-            r /= leftDepth;
-            g /= leftDepth;
-            b /= leftDepth;
+            r /= (leftDepth - verticalMargin);
+            g /= (leftDepth - verticalMargin);
+            b /= (leftDepth - verticalMargin);
 
-            for (int n = leftDepth; n < width; n++) {
+            for (int n = leftDepth; n < (width - verticalMargin); n++) {
                 rr += regions[n][m][0];
                 gg += regions[n][m][1];
                 bb += regions[n][m][2];
             }
-            rr /= rightDepth;
-            gg /= rightDepth;
-            bb /= rightDepth;
+            rr /= (rightDepth - verticalMargin);
+            gg /= (rightDepth - verticalMargin);
+            bb /= (rightDepth - verticalMargin);
 
             //Left
             int tempIndex = width + (height - 2) + width + (height - 2) - m;

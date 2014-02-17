@@ -1,10 +1,13 @@
-package be.beeles_place.utils.communication;
+package be.beeles_place.utils.communication.impl;
 
 import be.beeles_place.model.ColorModel;
+import be.beeles_place.utils.communication.ASerialComm;
 import be.beeles_place.utils.logger.LOGGER;
 import gnu.io.*;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SerialCommRXTX extends ASerialComm {
 
@@ -145,5 +148,18 @@ public class SerialCommRXTX extends ASerialComm {
         } catch (Exception exe) {
             LOGGER.getInstance().ERROR("Unexpected error occured \n" + exe.getMessage());
         }
+    }
+
+    //Utils methods
+    public List<String> getSerialDevicesList() {
+        ArrayList<String> deviceList = new ArrayList<String>();
+
+        java.util.Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
+        while (portEnum.hasMoreElements()) {
+            CommPortIdentifier portIdentifier = portEnum.nextElement();
+            deviceList.add(portIdentifier.getName());
+        }
+
+        return deviceList;
     }
 }

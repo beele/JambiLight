@@ -2,7 +2,8 @@ package be.beeles_place.modes.impl;
 
 import be.beeles_place.model.ColorModel;
 import be.beeles_place.model.SettingsModel;
-import be.beeles_place.utils.ScreenCapper;
+import be.beeles_place.utils.screenCapture.IScreenCapper;
+import be.beeles_place.utils.screenCapture.ScreenCapper;
 import be.beeles_place.utils.colorTools.ColorEnhancer;
 import be.beeles_place.utils.colorTools.RegionConsolidator;
 import be.beeles_place.utils.logger.LOGGER;
@@ -14,14 +15,13 @@ public class AmbiLightCore {
 
     //Settings params
     private int stepSize;
-    private int margin;
     private int horizontalRegionSize;
     private int verticalRegionSize;
     private boolean enhanceColors;
 
     //Internal variables
     private LOGGER logger;
-    private ScreenCapper capper;
+    private IScreenCapper capper;
     private ColorEnhancer enhancer;
     private RegionConsolidator consolitdator;
     private ColorModel model;
@@ -44,15 +44,15 @@ public class AmbiLightCore {
      * @param settings   The SettingsModel instance.
      * @param colorModel The ColorModel instance.
      */
-    public AmbiLightCore(SettingsModel settings, ColorModel colorModel) {
+    public AmbiLightCore(SettingsModel settings, ColorModel colorModel, IScreenCapper screenCapper) {
         model = colorModel;
+        capper = screenCapper;
+
         //Settings.
-        margin = settings.getRegionMargin();
         stepSize = settings.getPixelIteratorStepSize();
         enhanceColors = settings.isEnhanceColor();
 
         //Create the required instances.
-        capper = new ScreenCapper();
         enhancer = new ColorEnhancer();
 
         //Get the screen size and calculate the number of pixels required!
@@ -69,7 +69,7 @@ public class AmbiLightCore {
         regionWidth = (float) width / this.horizontalRegionSize;
         regionHeight = (float) height / this.verticalRegionSize;
 
-        consolitdator = new RegionConsolidator(this.horizontalRegionSize, this.verticalRegionSize);
+        consolitdator = new RegionConsolidator(this.horizontalRegionSize, this.verticalRegionSize, settings.getHorizontalMargin(), settings.getVerticalMargin());
 
         //Get the logger instance only once.
         logger = LOGGER.getInstance();
@@ -104,6 +104,7 @@ public class AmbiLightCore {
             regionY = (int) (y / regionHeight);
 
             tempPixelValue = pixels[i];
+            //Add the R/G/B to the current region.
             int[] colors = regions[regionX][regionY];
             colors[0] += (tempPixelValue >>> 16) & 0xFF;
             colors[1] += (tempPixelValue >>> 8) & 0xFF;
