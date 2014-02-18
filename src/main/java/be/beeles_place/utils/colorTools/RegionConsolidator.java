@@ -49,6 +49,8 @@ public class RegionConsolidator {
      * @return An array of int where each side of the screen is appended in the array. starting Top (vertical), Right(side), Bottom(vertical) and Left(side).
      * The second dimension contains the R/G/B values.
      */
+    //TODO: give the closes regions more importance than those that are further away!
+    //TODO: optimize for speed!
     public int[][] consolidateRegions(int[][][] regions) {
         cRegions = new int[finalRegionCount][3];
 
@@ -118,6 +120,31 @@ public class RegionConsolidator {
             cRegions[m + width - 1] = new int[]{rr, gg, bb};
         }
 
+        int[] c1, c2;
+        //TOP-LEFT CORNER
+        c1 = cRegions[1];
+        c2 = cRegions[cRegions.length - 1];
+        cRegions[0] = averageRegions(c1,c2);
+        //TOP-RIGHT CORNER
+        c1 = cRegions[width - 2];
+        c2 = cRegions[width];
+        cRegions[width - 1] = averageRegions(c1,c2);
+        //BOTTOM-RIGHT CORNER
+        c1 = cRegions[width + height - 3];
+        c2 = cRegions[width + height - 1];
+        cRegions[width + height - 2] = averageRegions(c1,c2);
+        //BOTTOM-LEFT CORNER
+        c1 = cRegions[width + height + width - 4];
+        c2 = cRegions[width + height + width - 2];
+        cRegions[width + height + width - 3] = averageRegions(c1,c2);;
+
         return cRegions;
+    }
+
+    private int[] averageRegions(int[] regionA, int[] regionB) {
+        regionA[0] = (regionA[0] + regionB[0]) / 2;
+        regionA[1] = (regionA[1] + regionB[1]) / 2;
+        regionA[2] = (regionA[2] + regionB[2]) / 2;
+        return regionA;
     }
 }

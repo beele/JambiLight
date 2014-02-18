@@ -2,6 +2,7 @@ package be.beeles_place.modes.impl;
 
 import be.beeles_place.model.ColorModel;
 import be.beeles_place.model.SettingsModel;
+import be.beeles_place.utils.colorTools.IntensityCorrector;
 import be.beeles_place.utils.screenCapture.IScreenCapper;
 import be.beeles_place.utils.colorTools.ColorEnhancer;
 import be.beeles_place.utils.colorTools.RegionConsolidator;
@@ -21,8 +22,9 @@ public class AmbiLightCore {
     //Internal variables
     private LOGGER logger;
     private IScreenCapper capper;
-    private ColorEnhancer enhancer;
     private RegionConsolidator consolitdator;
+    private ColorEnhancer enhancer;
+    private IntensityCorrector corrector;
     private ColorModel model;
 
     private final int width;
@@ -51,9 +53,6 @@ public class AmbiLightCore {
         stepSize = settings.getPixelIteratorStepSize();
         enhanceColors = settings.isEnhanceColor();
 
-        //Create the required instances.
-        enhancer = new ColorEnhancer();
-
         //Get the screen size and calculate the number of pixels required!
         Dimension size = capper.getScreenDimensions();
         width = (int) size.getWidth();
@@ -68,6 +67,9 @@ public class AmbiLightCore {
         regionWidth = (float) width / this.horizontalRegionSize;
         regionHeight = (float) height / this.verticalRegionSize;
 
+        //Create the required instances.
+        enhancer = new ColorEnhancer();
+        corrector = new IntensityCorrector();
         consolitdator = new RegionConsolidator(this.horizontalRegionSize, this.verticalRegionSize, settings.getHorizontalMargin(), settings.getVerticalMargin());
 
         //Get the logger instance only once.
@@ -136,7 +138,10 @@ public class AmbiLightCore {
             }
         }
         //Set the consolidated regions with colors on the model.
-        model.setCurrentColors(consolitdator.consolidateRegions(regions));
+        int [][] cRegions = consolitdator.consolidateRegions(regions);
+        //TODO: disabled for now, only use for testing and debugging!
+        //cRegions = corrector.correctIntensity(cRegions);
+        model.setCurrentColors(cRegions);
 
         //It's all about tai-ming (not the vases)
         long endTime = new Date().getTime();
