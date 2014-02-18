@@ -1,5 +1,7 @@
 package be.beeles_place.utils.colorTools;
 
+import be.beeles_place.model.SettingsModel;
+
 public class RegionConsolidator {
 
     private int width;
@@ -20,13 +22,19 @@ public class RegionConsolidator {
     private int r, g, b;
     private int rr, gg, bb;
 
+    private boolean weighColors;
+    private int weight = 1;
+    private int totalWeight = 1;
+
     /**
-     * Creates a new RegionConsolidater instance.
-     *
+     * Creates a new RegionConsolidator instance.
      * @param horizontalRegions The number of horizontal regions.
-     * @param verticalRegions   The number of vertical regions.
+     * @param verticalRegions The number of vertical regions.
+     * @param horizontalMargin An int representing the horizontal margin.
+     * @param verticalMargin An int representing the vertical margin.
+     * @param weighColors The SettingsModel containing the application settings.
      */
-    public RegionConsolidator(int horizontalRegions, int verticalRegions, int horizontalMargin, int verticalMargin) {
+    public RegionConsolidator(int horizontalRegions, int verticalRegions, int horizontalMargin, int verticalMargin, boolean weighColors) {
         width = horizontalRegions;
         height = verticalRegions;
 
@@ -40,6 +48,7 @@ public class RegionConsolidator {
 
         this.horizontalMargin = horizontalMargin;
         this.verticalMargin = verticalMargin;
+        this.weighColors = weighColors;
     }
 
     /**
@@ -49,7 +58,6 @@ public class RegionConsolidator {
      * @return An array of int where each side of the screen is appended in the array. starting Top (vertical), Right(side), Bottom(vertical) and Left(side).
      * The second dimension contains the R/G/B values.
      */
-    //TODO: give the closes regions more importance than those that are further away!
     //TODO: optimize for speed!
     public int[][] consolidateRegions(int[][][] regions) {
         cRegions = new int[finalRegionCount][3];
@@ -57,28 +65,32 @@ public class RegionConsolidator {
         //Collect all regions per column into one pixel.
         for (int i = 0; i < width; i++) {
             //Reset color value variables.
-            r = g =b = rr = gg = bb = 0;
+            r = g = b = rr = gg = bb = 0;
             //Loop from column 0 + margin to half of the columns for the left side. (start column + margin <===> center column)
             for (int j = horizontalMargin; j < topDepth; j++) {
-                r += regions[i][j][0];
-                g += regions[i][j][1];
-                b += regions[i][j][2];
+                weight = getWeight(j - horizontalMargin);
+                r += (regions[i][j][0] * weight);
+                g += (regions[i][j][1] * weight);
+                b += (regions[i][j][2] * weight);
             }
             //Calculate the average color values. (total added color values / number of loops)
-            r /= (topDepth - horizontalMargin);
-            g /= (topDepth - horizontalMargin);
-            b /= (topDepth - horizontalMargin);
+            totalWeight = getTotalWeight(topDepth - horizontalMargin);
+            r /= totalWeight;
+            g /= totalWeight;
+            b /= totalWeight;
 
             //Loop from the center column to the right end column - margin. (center column <===> end column - margin)
             for (int j = topDepth; j < (height - horizontalMargin); j++) {
-                rr += regions[i][j][0];
-                gg += regions[i][j][1];
-                bb += regions[i][j][2];
+                weight = getWeight((height - horizontalMargin) - j - 1);
+                rr += (regions[i][j][0] * weight);
+                gg += (regions[i][j][1] * weight);
+                bb += (regions[i][j][2] * weight);
             }
             //Calculate the average color values. (total added color values / number of loops)
-            rr /= (bottomDepth - horizontalMargin);
-            gg /= (bottomDepth - horizontalMargin);
-            bb /= (bottomDepth - horizontalMargin);
+            totalWeight = getTotalWeight(bottomDepth - horizontalMargin);
+            rr /= totalWeight;
+            gg /= totalWeight;
+            bb /= totalWeight;
 
             //Top consolidated region.
             cRegions[i] = new int[]{r, g, b};
@@ -89,28 +101,32 @@ public class RegionConsolidator {
         //Collect all regions per row into one pixel.
         for (int m = 0; m < height; m++) {
             //Reset color value variables.
-            r = g =b = rr = gg = bb = 0;
+            r = g = b = rr = gg = bb = 0;
             //Loop from row 0 + margin to the half of the rows for the top side. (start row + margin <===> center row)
             for (int n = verticalMargin; n < leftDepth; n++) {
-                r += regions[n][m][0];
-                g += regions[n][m][1];
-                b += regions[n][m][2];
+                weight = getWeight(n - verticalMargin);
+                r += (regions[n][m][0] * weight);
+                g += (regions[n][m][1] * weight);
+                b += (regions[n][m][2] * weight);
             }
             //Calculate the average color values. (total added color values / number of loops)
-            r /= (leftDepth - verticalMargin);
-            g /= (leftDepth - verticalMargin);
-            b /= (leftDepth - verticalMargin);
+            totalWeight = getTotalWeight(leftDepth - verticalMargin);
+            r /= totalWeight;
+            g /= totalWeight;
+            b /= totalWeight;
 
             //Loop from the center row to the bottom end row - margin. (center row <===> end row - margin)
             for (int n = leftDepth; n < (width - verticalMargin); n++) {
-                rr += regions[n][m][0];
-                gg += regions[n][m][1];
-                bb += regions[n][m][2];
+                weight = getWeight((width - verticalMargin) - n - 1);
+                rr += (regions[n][m][0] * weight);
+                gg += (regions[n][m][1] * weight);
+                bb += (regions[n][m][2] * weight);
             }
             //Calculate the average color values. (total added color values / number of loops)
-            rr /= (rightDepth - verticalMargin);
-            gg /= (rightDepth - verticalMargin);
-            bb /= (rightDepth - verticalMargin);
+            totalWeight = getTotalWeight(rightDepth - verticalMargin);
+            rr /= totalWeight;
+            gg /= totalWeight;
+            bb /= totalWeight;
 
             //Left consolidated region.
             int tempIndex = width + (height - 2) + width + (height - 2) - m;
@@ -137,13 +153,13 @@ public class RegionConsolidator {
         //BOTTOM-LEFT CORNER
         c1 = cRegions[width + height + width - 4];
         c2 = cRegions[width + height + width - 2];
-        cRegions[width + height + width - 3] = averageRegions(c1,c2);;
+        cRegions[width + height + width - 3] = averageRegions(c1,c2);
 
         return cRegions;
     }
 
     /**
-     * Calculates the average of two given regions/
+     * Calculates the average of two given regions.
      * @param regionA Array of int containing the R/G/B colors for the first region.
      * @param regionB Array of int containing the R/G/B colors for the second region.
      * @return An array of int containing the averaged R/G/B values.
@@ -153,5 +169,32 @@ public class RegionConsolidator {
         regionA[1] = (regionA[1] + regionB[1]) / 2;
         regionA[2] = (regionA[2] + regionB[2]) / 2;
         return regionA;
+    }
+
+    /**
+     * Gets the weight for the given index. There are n steps in this method. After the first 5 steps (index = 0,1,2,3,4) the minimum weight is reached.
+     * @param index An int that represents the index to be weighed. 0 is maximum weight. n = minimum weight.
+     * @return A weighed int representing the index.
+     */
+    //TODO: use better weighing algorithm (exponential?)
+    private int getWeight(int index) {
+        if(weighColors && index < 5) {
+            return 10 - (index * 2);
+        } else {
+            return 1;
+        }
+    }
+
+    /**
+     * Gets the total weight for n loops.
+     * @param totalLoops The total number of iterations for which to calculate the total weight.
+     * @return An int representing the total calculated weight.
+     */
+    private int getTotalWeight(int totalLoops) {
+        int weight = 0;
+        for(int i = 0; i < totalLoops; i++) {
+            weight += getWeight(i);
+        }
+        return weight;
     }
 }

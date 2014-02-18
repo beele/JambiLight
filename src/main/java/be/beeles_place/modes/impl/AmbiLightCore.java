@@ -70,7 +70,9 @@ public class AmbiLightCore {
         //Create the required instances.
         enhancer = new ColorEnhancer();
         corrector = new IntensityCorrector();
-        consolitdator = new RegionConsolidator(this.horizontalRegionSize, this.verticalRegionSize, settings.getHorizontalMargin(), settings.getVerticalMargin());
+        consolitdator = new RegionConsolidator( this.horizontalRegionSize, this.verticalRegionSize,
+                                                settings.getHorizontalMargin(), settings.getVerticalMargin(),
+                                                settings.isWeighColor());
 
         //Get the logger instance only once.
         logger = LOGGER.getInstance();

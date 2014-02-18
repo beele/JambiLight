@@ -12,6 +12,8 @@ public class SettingsModel {
     private int pixelIteratorStepSize;
 
     private boolean enhanceColor;
+    private boolean correctColor;
+    private boolean weighColor;
 
     /**
      * Creates a new SettingsModel instance.
@@ -26,6 +28,8 @@ public class SettingsModel {
 
         pixelIteratorStepSize = 2;
         enhanceColor = false;
+        correctColor = false;
+        weighColor = true;
     }
 
     //Getters & setters.
@@ -75,5 +79,21 @@ public class SettingsModel {
 
     public void setEnhanceColor(boolean enhanceColor) {
         this.enhanceColor = enhanceColor;
+    }
+
+    public boolean isCorrectColor() {
+        return correctColor;
+    }
+
+    public void setCorrectColor(boolean correctColor) {
+        this.correctColor = correctColor;
+    }
+
+    public boolean isWeighColor() {
+        return weighColor;
+    }
+
+    public void setWeighColor(boolean weighColor) {
+        this.weighColor = weighColor;
     }
 }
