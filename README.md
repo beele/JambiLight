@@ -15,7 +15,7 @@ Uses the following libraries:
 I have included a lib folder in the git project. Link all the jars in this folder when setting up the project in your IDE.
 
 JSSC:  
-No special steps have to main.java.be taken to get the JSSC serial communication working.
+No special steps have to be taken to get the JSSC serial communication working.
 
 RXTX:  
 I have also included the .dll files for Windows and the jnilib for OSX (64bit compatible), This will allow you to run the project without much of a hiccup.  
@@ -38,9 +38,9 @@ JAVA:
 - Make sure you use the 1.7 version of the JDK!
 
 RXTX:
-- Please use the JSSC serial communication implementation! Using the RXTX way can main.java.be tricky to get working correctly!
+- Please use the JSSC serial communication implementation! Using the RXTX way can be tricky to get working correctly!
 - Place the required dll or jnilib files in the root folder of the project to run it.
-The dll's and jnilib files can main.java.be found in the /lib/rxtx/ folder.
+The dll's and jnilib files can be found in the /lib/rxtx/ folder.
 
 - OSX users must first run the following commands in the terminal application for the rxtx lib to work!
   * $ sudo mkdir /var/lock

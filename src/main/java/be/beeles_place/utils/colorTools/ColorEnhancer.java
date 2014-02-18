@@ -4,7 +4,7 @@ public class ColorEnhancer {
 
     /**
      * Enhances the color by checking what type of color it is (8 base types).
-     * The detected color range will then main.java.be amplified.
+     * The detected color range will then be amplified.
      *
      * @param r The red color value from 0 to 255.
      * @param g The green color value from 0 to 255.
@@ -58,7 +58,7 @@ public class ColorEnhancer {
             b += (int) (b * ratioB * 2.5);
         }
 
-        //For safety, values that were amplified too much will main.java.be toned down again!
+        //For safety, values that were amplified too much will be toned down again!
         r = r < 256 ? r : 255;
         g = g < 256 ? g : 255;
         b = b < 256 ? b : 255;
