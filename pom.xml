@@ -72,8 +72,8 @@
 	</dependencies>
 	
 	<build>
-		<sourceDirectory>src/</sourceDirectory>
-		<testSourceDirectory>test/</testSourceDirectory>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<testSourceDirectory>src/main/test</testSourceDirectory>
 
 		<plugins>
 			<plugin>
@@ -103,7 +103,7 @@
 							<outputDirectory>${basedir}/target/classes/be/beeles_place/view/</outputDirectory>
 							<resources>
 								<resource>
-									<directory>src/be/beeles_place/view</directory>
+									<directory>src/main/java/be/beeles_place/view</directory>
 									<excludes>
 										<exclude>**/*.java</exclude>
 									</excludes>
@@ -145,7 +145,7 @@
 							<JavaFX-Version>${javafx.version}+</JavaFX-Version>
 							<Main-Class>be.beeles_place.Main</Main-Class>
 							<implementation-version>1.0</implementation-version>
-							<JavaFX-Application-Class>be.beeles_place.be.Main</JavaFX-Application-Class>
+							<JavaFX-Application-Class>be.beeles_place.main.java.be.Main</JavaFX-Application-Class>
 							<JavaFX-Class-Path>
 								<!-- list all your dependencies here-->
 								dependency/jfxrt.jar

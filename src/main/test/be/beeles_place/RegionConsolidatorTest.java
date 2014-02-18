@@ -1,3 +1,5 @@
+package be.beeles_place;
+
 import be.beeles_place.utils.colorTools.RegionConsolidator;
 import junit.framework.Assert;
 import org.junit.Before;

@@ -41,5 +41,9 @@ public class IntensityCorrector {
 
         }
 
+        //For safety, values that were amplified too much will main.java.be toned down again!
+        r = r < 256 ? r : 255;
+        g = g < 256 ? g : 255;
+        b = b < 256 ? b : 255;
     }
 }

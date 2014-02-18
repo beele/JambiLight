@@ -3,7 +3,6 @@ package be.beeles_place.modes.impl;
 import be.beeles_place.model.ColorModel;
 import be.beeles_place.model.SettingsModel;
 import be.beeles_place.utils.screenCapture.IScreenCapper;
-import be.beeles_place.utils.screenCapture.ScreenCapper;
 import be.beeles_place.utils.colorTools.ColorEnhancer;
 import be.beeles_place.utils.colorTools.RegionConsolidator;
 import be.beeles_place.utils.logger.LOGGER;
@@ -77,15 +76,15 @@ public class AmbiLightCore {
         logger.INFO("======================================================================================================================");
         logger.INFO("AMBILIGHT-CORE => Init complete!");
         logger.INFO("AMBILIGHT-CORE => There are " + pixels.length + " pixels in " + horizontalRegionSize * verticalRegionSize + " regions.");
-        logger.INFO("AMBILIGHT-CORE => There will be " + (horizontalRegionSize * 2 + verticalRegionSize * 2 - 4) + " consolidated regions.");
+        logger.INFO("AMBILIGHT-CORE => There will main.java.be " + (horizontalRegionSize * 2 + verticalRegionSize * 2 - 4) + " consolidated regions.");
         logger.INFO("======================================================================================================================");
         logger.INFO("======================================================================================================================");
     }
 
     /**
      * Will capture the screen and split it up into the predefined region count.
-     * Afterwards it will consolidate the regions into the (to be mapped) pixel regions.
-     * (Each consolidated region will be mapped to a pixel.)
+     * Afterwards it will consolidate the regions into the (to main.java.be mapped) pixel regions.
+     * (Each consolidated region will main.java.be mapped to a pixel.)
      */
     public void calculate() {
         long startTime = new Date().getTime();

@@ -5,7 +5,6 @@ import be.beeles_place.utils.communication.impl.SerialCommJSSC;
 import be.beeles_place.utils.communication.impl.SerialCommMock;
 import be.beeles_place.utils.communication.impl.SerialCommRXTX;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class Communicator {

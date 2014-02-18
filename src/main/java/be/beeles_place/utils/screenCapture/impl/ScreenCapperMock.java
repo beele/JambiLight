@@ -1,4 +1,6 @@
-package be.beeles_place.utils.screenCapture;
+package be.beeles_place.utils.screenCapture.impl;
+
+import be.beeles_place.utils.screenCapture.IScreenCapper;
 
 import java.awt.*;
 

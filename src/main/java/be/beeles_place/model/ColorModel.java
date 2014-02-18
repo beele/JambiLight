@@ -4,8 +4,6 @@ import be.beeles_place.events.ColorModelUpdatedEvent;
 import be.beeles_place.utils.EventbusWrapper;
 import com.google.common.eventbus.EventBus;
 
-import java.awt.*;
-
 public class ColorModel {
 
     private int[][] currentColors;

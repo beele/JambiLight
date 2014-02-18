@@ -63,15 +63,11 @@ public class ApplicationController {
         viewController.initUI();
 
         //Create communicator!
-        try {
-            serialCommunicator = new Communicator(model, CommunicationLibraries.JSSC);
-            for (String s : serialCommunicator.getPorts()) {
-                System.out.println(s);
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        serialCommunicator = new Communicator(model, CommunicationLibraries.JSSC);
+        for (String s : serialCommunicator.getPorts()) {
+            System.out.println(s);
         }
-        //TODO: improve serial communicator. (both mock and actual implementations)
+        //TODO: improve serial communicator. (mock implementation)
         //TODO: get this port from the UI.
         //serialCommunicator.open("COM4");
 
