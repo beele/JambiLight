@@ -2,11 +2,11 @@ package be.beeles_place.modes.impl;
 
 import be.beeles_place.model.ColorModel;
 import be.beeles_place.model.SettingsModel;
-import be.beeles_place.utils.colorTools.IntensityCorrector;
-import be.beeles_place.utils.screenCapture.IScreenCapper;
 import be.beeles_place.utils.colorTools.ColorEnhancer;
+import be.beeles_place.utils.colorTools.IntensityCorrector;
 import be.beeles_place.utils.colorTools.RegionConsolidator;
 import be.beeles_place.utils.logger.LOGGER;
+import be.beeles_place.utils.screenCapture.IScreenCapper;
 
 import java.awt.*;
 import java.util.Date;

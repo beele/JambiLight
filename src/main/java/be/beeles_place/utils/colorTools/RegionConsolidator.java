@@ -1,7 +1,5 @@
 package be.beeles_place.utils.colorTools;
 
-import be.beeles_place.model.SettingsModel;
-
 public class RegionConsolidator {
 
     private int width;
@@ -35,19 +33,26 @@ public class RegionConsolidator {
      * @param weighColors The SettingsModel containing the application settings.
      */
     public RegionConsolidator(int horizontalRegions, int verticalRegions, int horizontalMargin, int verticalMargin, boolean weighColors) {
+        //The number of horizontal and vertical regions so the final amount of consolidated regions can be calculated.
         width = horizontalRegions;
         height = verticalRegions;
 
+        //Calculate the number of consolidated regions.
+        //The minus 4 is because the sides are 2 shorter than the top and bottom (they overlap the sides).
         finalRegionCount = (width * 2) + (height * 2) - 4;
 
+        //Four quadrants are needed.
+        //Left and right.
         leftDepth = (int) (width / 2);
         rightDepth = width - leftDepth;
-
+        //Top and bottom.
         topDepth = (int) (height / 2);
         bottomDepth = height - topDepth;
 
+        //The margins (from 0 to n) are the regions at the outside that will be ignored.
         this.horizontalMargin = horizontalMargin;
         this.verticalMargin = verticalMargin;
+        //Settings value that determines if the regions should we weighed when consolidating.
         this.weighColors = weighColors;
     }
 
@@ -73,7 +78,7 @@ public class RegionConsolidator {
                 g += (regions[i][j][1] * weight);
                 b += (regions[i][j][2] * weight);
             }
-            //Calculate the average color values. (total added color values / number of loops)
+            //Calculate the average color values. (total added color values / calculated total weight)
             totalWeight = getTotalWeight(topDepth - horizontalMargin);
             r /= totalWeight;
             g /= totalWeight;
@@ -86,7 +91,7 @@ public class RegionConsolidator {
                 gg += (regions[i][j][1] * weight);
                 bb += (regions[i][j][2] * weight);
             }
-            //Calculate the average color values. (total added color values / number of loops)
+            //Calculate the average color values. (total added color values / calculated total weight)
             totalWeight = getTotalWeight(bottomDepth - horizontalMargin);
             rr /= totalWeight;
             gg /= totalWeight;
@@ -109,7 +114,7 @@ public class RegionConsolidator {
                 g += (regions[n][m][1] * weight);
                 b += (regions[n][m][2] * weight);
             }
-            //Calculate the average color values. (total added color values / number of loops)
+            //Calculate the average color values. (total added color values / calculated total weight)
             totalWeight = getTotalWeight(leftDepth - verticalMargin);
             r /= totalWeight;
             g /= totalWeight;
@@ -122,7 +127,7 @@ public class RegionConsolidator {
                 gg += (regions[n][m][1] * weight);
                 bb += (regions[n][m][2] * weight);
             }
-            //Calculate the average color values. (total added color values / number of loops)
+            //Calculate the average color values. (total added color values / calculated total weight)
             totalWeight = getTotalWeight(rightDepth - verticalMargin);
             rr /= totalWeight;
             gg /= totalWeight;

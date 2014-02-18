@@ -4,7 +4,7 @@ import be.beeles_place.utils.communication.ASerialComm;
 import be.beeles_place.utils.logger.LOGGER;
 
 import java.awt.*;
-import java.util.*;
+import java.util.Arrays;
 import java.util.List;
 
 public class SerialCommMock extends ASerialComm {
