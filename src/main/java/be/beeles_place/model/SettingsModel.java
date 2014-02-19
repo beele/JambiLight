@@ -47,7 +47,7 @@ public class SettingsModel {
 
         //Intensity correction is disabled by default.
         correctIntensity = false;
-        greyDetectionThreshold = 14;
+        greyDetectionThreshold = 10;
         scaleUpValue = 1.5;
         scaleDownValue = 1.5;
     }

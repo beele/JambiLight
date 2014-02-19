@@ -52,7 +52,7 @@ public class ApplicationController {
         settings.setHorizontalMargin(0);
         settings.setVerticalMargin(0);
         settings.setEnhanceColor(false);
-        settings.setCorrectIntensity(false);
+        settings.setCorrectIntensity(true);
 
         //Create color model!
         model = new ColorModel();

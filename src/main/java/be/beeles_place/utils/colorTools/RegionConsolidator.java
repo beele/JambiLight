@@ -169,10 +169,11 @@ public class RegionConsolidator {
      * @return An array of int containing the averaged R/G/B values.
      */
     private int[] averageRegions(int[] regionA, int[] regionB) {
-        regionA[0] = (regionA[0] + regionB[0]) / 2;
-        regionA[1] = (regionA[1] + regionB[1]) / 2;
-        regionA[2] = (regionA[2] + regionB[2]) / 2;
-        return regionA;
+        int[] newRegion = new int[3];
+        newRegion[0] = (regionA[0] + regionB[0]) / 2;
+        newRegion[1] = (regionA[1] + regionB[1]) / 2;
+        newRegion[2] = (regionA[2] + regionB[2]) / 2;
+        return newRegion;
     }
 
     /**

@@ -2,6 +2,8 @@ package be.beeles_place.utils.colorTools;
 
 import be.beeles_place.model.SettingsModel;
 
+import java.awt.*;
+
 public class IntensityCorrector {
 
     private int greyDetectionThreshold;
@@ -27,15 +29,15 @@ public class IntensityCorrector {
                 g /= scaleDownValue;
                 b /= scaleDownValue;
             } else {
-                //Increase intensity of colors.
-                r *= scaleUpValue;
-                g *= scaleUpValue;
-                b *= scaleUpValue;
-
-                //Safety check!
-                r = r < 256 ? r : 255;
-                g = g < 256 ? g : 255;
-                b = b < 256 ? b : 255;
+                //TODO: find a faster way! This is slower than a slowpoke!
+                float[] hsb = new float[3];
+                Color.RGBtoHSB(r,g,b,hsb);
+                float newSaturation = (float)(hsb[1] + 0.2);
+                newSaturation = newSaturation > 1 ? 1 : newSaturation;
+                Color c = Color.getHSBColor(hsb[0],newSaturation,hsb[2]);
+                r = c.getRed();
+                g = c.getGreen();
+                b = c.getBlue();
             }
 
             //Assign the corrected colors back.
