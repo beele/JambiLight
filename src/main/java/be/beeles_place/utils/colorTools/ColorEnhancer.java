@@ -2,6 +2,8 @@ package be.beeles_place.utils.colorTools;
 
 public class ColorEnhancer {
 
+    //TODO: parametrize
+
     /**
      * Enhances the color by checking what type of color it is (8 base types).
      * The detected color range will then be amplified.

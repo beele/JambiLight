@@ -63,7 +63,6 @@ public class RegionConsolidator {
      * @return An array of int where each side of the screen is appended in the array. starting Top (vertical), Right(side), Bottom(vertical) and Left(side).
      * The second dimension contains the R/G/B values.
      */
-    //TODO: optimize for speed!
     public int[][] consolidateRegions(int[][][] regions) {
         cRegions = new int[finalRegionCount][3];
 
@@ -181,7 +180,7 @@ public class RegionConsolidator {
      * @param index An int that represents the index to be weighed. 0 is maximum weight. n = minimum weight.
      * @return A weighed int representing the index.
      */
-    //TODO: use better weighing algorithm (exponential?)
+    //TODO: parametrize multiplication factor.
     private int getWeight(int index) {
         if(weighColors && index < 5) {
             return 10 - (index * 2);

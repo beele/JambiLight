@@ -18,6 +18,7 @@ public class AmbiLightCore {
     private int horizontalRegionSize;
     private int verticalRegionSize;
     private boolean enhanceColors;
+    private boolean doCorrection;
 
     //Internal variables
     private LOGGER logger;
@@ -52,6 +53,7 @@ public class AmbiLightCore {
         //Settings.
         stepSize = settings.getPixelIteratorStepSize();
         enhanceColors = settings.isEnhanceColor();
+        doCorrection = settings.isCorrectIntensity();
 
         //Get the screen size and calculate the number of pixels required!
         Dimension size = capper.getScreenDimensions();
@@ -69,7 +71,7 @@ public class AmbiLightCore {
 
         //Create the required instances.
         enhancer = new ColorEnhancer();
-        corrector = new IntensityCorrector();
+        corrector = new IntensityCorrector(settings);
         consolitdator = new RegionConsolidator( this.horizontalRegionSize, this.verticalRegionSize,
                                                 settings.getHorizontalMargin(), settings.getVerticalMargin(),
                                                 settings.isWeighColor());
@@ -141,8 +143,10 @@ public class AmbiLightCore {
         }
         //Set the consolidated regions with colors on the model.
         int [][] cRegions = consolitdator.consolidateRegions(regions);
-        //TODO: disabled for now, only use for testing and debugging!
-        //cRegions = corrector.correctIntensity(cRegions);
+        //Correct the intensity if enabled.
+        if(doCorrection) {
+            cRegions = corrector.correctIntensity(cRegions);
+        }
         model.setCurrentColors(cRegions);
 
         //It's all about tai-ming (not the vases)

@@ -1,51 +1,44 @@
 package be.beeles_place.utils.colorTools;
 
+import be.beeles_place.model.SettingsModel;
+
 public class IntensityCorrector {
 
-    public int[][] correctIntensity(int[][] regions) {
+    private int greyDetectionThreshold;
+    private double scaleUpValue;
+    private double scaleDownValue;
 
+    public IntensityCorrector(SettingsModel settingsModel) {
+        this.greyDetectionThreshold = settingsModel.getGreyDetectionThreshold();
+        this.scaleUpValue = settingsModel.getScaleUpValue();
+        this.scaleDownValue = settingsModel.getScaleDownValue();
+    }
+
+    public int[][] correctIntensity(int[][] regions) {
         //Loop over each region.
         for (int[] region : regions) {
             int r = region[0];
             int g = region[1];
             int b = region[2];
 
-            //TODO: tweak and improve color detection!
+            //Main goal is to detect white/grey colors and decrease their intensity.
+            if(Math.abs(r - g) < greyDetectionThreshold  && Math.abs(r - b) < greyDetectionThreshold && Math.abs(g - b) < greyDetectionThreshold) {
+                r /= scaleDownValue;
+                g /= scaleDownValue;
+                b /= scaleDownValue;
+            } else {
+                //Increase intensity of colors.
+                r *= scaleUpValue;
+                g *= scaleUpValue;
+                b *= scaleUpValue;
 
-            //Dominant red
-            if (r > (b + 10) && r > (g + 10)) {
-                g /= 2;
-                b /= 2;
-            }
-            //Dominant green
-            else if (g > (r + 10) && g > (b + 10)) {
-                r /= 2;
-                b /= 2;
-            }
-            //Dominant blue
-            else if (b > (r + 10) && b > (g + 10)) {
-                r /= 2;
-                g /= 2;
-            }
-            //Dominant yellow
-            else if ((r + g) > ((b * 2) + 20)) {
-                b /= 4;
-            }
-            //Dominant cyan
-            else if ((g + b) > ((r * 2) + 20)) {
-                r /= 4;
-            }
-            //Dominant purple
-            else if ((r + b) > ((g * 2) + 20)) {
-                g /= 4;
-            }
-            //Gray, white or black.
-            else {
-                r /= 2;
-                g /= 2;
-                b /= 2;
+                //Safety check!
+                r = r < 256 ? r : 255;
+                g = g < 256 ? g : 255;
+                b = b < 256 ? b : 255;
             }
 
+            //Assign the corrected colors back.
             region[0] = r;
             region[1] = g;
             region[2] = b;

@@ -46,12 +46,13 @@ public class ApplicationController {
 
         //Create settings model!
         settings = new SettingsModel();
-        settings.setEnhanceColor(false);
         settings.setHorizontalRegions(20);
         settings.setVerticalRegions(14);
         settings.setPixelIteratorStepSize(2);
         settings.setHorizontalMargin(0);
         settings.setVerticalMargin(0);
+        settings.setEnhanceColor(false);
+        settings.setCorrectIntensity(false);
 
         //Create color model!
         model = new ColorModel();
