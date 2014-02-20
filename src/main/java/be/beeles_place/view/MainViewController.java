@@ -7,7 +7,6 @@ import be.beeles_place.model.SettingsModel;
 import be.beeles_place.utils.EventbusWrapper;
 import com.google.common.eventbus.EventBus;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,6 +16,7 @@ import javafx.scene.layout.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.ResourceBundle;
 
 public class MainViewController implements Initializable {
@@ -39,11 +39,9 @@ public class MainViewController implements Initializable {
     @FXML
     private TitledPane firstSettingsPane;
 
+    //First settings page
     @FXML
-    private ChoiceBox<String> cmbSerialPort;
-
-    @FXML
-    private Button btnSaveSettingsA;
+    private ComboBox<String> cmbSerialPort;
 
     @FXML
     private CheckBox chkAutoConntect;
@@ -63,6 +61,33 @@ public class MainViewController implements Initializable {
     @FXML
     private Slider sldHorizontalMargin;
 
+    //Second settings page.
+    @FXML
+    private CheckBox chkWeighColors;
+
+    @FXML
+    private TextField txtColorWeight;
+
+    //Third settings page.
+    @FXML
+    private CheckBox chkEnhanceColors;
+
+    @FXML
+    private TextField txtEnhanceFactor;
+
+    @FXML
+    private CheckBox chkIntensifyColors;
+
+    @FXML
+    private TextField txtGreyThreshold;
+
+    @FXML
+    private TextField txtScaleUpValue;
+
+    @FXML
+    private TextField txtScaleDownValue;
+
+    //Local variables
     private List<Pane> panes;
 
     @Override
@@ -74,11 +99,11 @@ public class MainViewController implements Initializable {
 
     public void initUI() {
         //Dynamically generate the columns and rows.
-        for(int i = 0; i < settings.getHorizontalRegions() - 1 ; i++) {
+        for(int i = 0; i < settings.getHorizontalRegions() - 1; i++) {
             ColumnConstraints ccs = new ColumnConstraints(10D,100D,-1D,Priority.SOMETIMES,null,true);
             gridItems.getColumnConstraints().add(ccs);
         }
-        for(int j = 0; j < settings.getVerticalRegions() - 1 ; j++) {
+        for(int j = 0; j < settings.getVerticalRegions() - 1; j++) {
             RowConstraints rcs = new RowConstraints(10D,30D,-1D,Priority.SOMETIMES,null,true);
             gridItems.getRowConstraints().add(rcs);
         }
@@ -90,6 +115,24 @@ public class MainViewController implements Initializable {
 
         //Set the default opened settings panel.
         settingsPanes.expandedPaneProperty().setValue(firstSettingsPane);
+
+        //Add the panels to the UI.
+        addPanels();
+        updateSettingsValues();
+    }
+
+    private void reInitUI() {
+        for(int i = 0; i < settings.getHorizontalRegions(); i++) {
+            ColumnConstraints ccs = new ColumnConstraints(10D,100D,-1D,Priority.SOMETIMES,null,true);
+            gridItems.getColumnConstraints().add(ccs);
+        }
+        for(int j = 0; j < settings.getVerticalRegions(); j++) {
+            RowConstraints rcs = new RowConstraints(10D,30D,-1D,Priority.SOMETIMES,null,true);
+            gridItems.getRowConstraints().add(rcs);
+        }
+
+        GridPane.setColumnSpan(imageContainer, settings.getHorizontalRegions() - 2);
+        GridPane.setRowSpan(imageContainer, settings.getVerticalRegions() - 2);
 
         //Add the panels to the UI.
         addPanels();
@@ -128,6 +171,29 @@ public class MainViewController implements Initializable {
         }
     }
 
+    private void rebuildGrid() {
+        ListIterator iter = gridItems.getChildren().listIterator();
+        while(iter.hasNext()) {
+            Object e = iter.next();
+            if(e instanceof AnchorPane == false) {
+                iter.remove();
+            }
+        }
+        iter = gridItems.getColumnConstraints().listIterator();
+        while(iter.hasNext()) {
+            iter.next();
+            iter.remove();
+        }
+        iter = gridItems.getRowConstraints().listIterator();
+        while(iter.hasNext()) {
+            iter.next();
+            iter.remove();
+        }
+        panes = new ArrayList<>();
+
+        reInitUI();
+    }
+
     public void updateColors() {
         int[][] colors = model.getCurrentColors();
 
@@ -152,12 +218,22 @@ public class MainViewController implements Initializable {
         sldVerticalMargin.setValue(settings.getVerticalMargin());
 
         sldPixelStepSize.setValue(settings.getPixelIteratorStepSize());
+
+        chkWeighColors.setSelected(settings.isWeighColor());
+        //TODO: weight factor
+
+        chkEnhanceColors.setSelected(settings.isEnhanceColor());
+        //TODO: enhance factor
+
+        chkIntensifyColors.setSelected(settings.isCorrectIntensity());
+        txtGreyThreshold.setText(settings.getGreyDetectionThreshold() + "");
+        txtScaleUpValue.setText(settings.getScaleUpValue() + "");
+        txtScaleDownValue.setText(settings.getScaleDownValue() + "");
     }
 
     //Event handlers.
     @FXML
     private void OnSaveSettingsClicked(ActionEvent event) {
-        System.out.println("Save settings clicked!");
         settings.setPort(cmbSerialPort.getSelectionModel().getSelectedItem());
         settings.setAutoConnect(chkAutoConntect.selectedProperty().getValue());
 
@@ -170,7 +246,7 @@ public class MainViewController implements Initializable {
             settings.setHorizontalRegions(hRegions);
             settings.setVerticalRegions(vRegions);
         } catch (Exception e) {
-            System.out.println("invalid input");
+            //TODO: handle this!
         }
 
         settings.setHorizontalMargin((int)sldHorizontalMargin.getValue());
@@ -178,12 +254,40 @@ public class MainViewController implements Initializable {
 
         settings.setPixelIteratorStepSize((int)sldPixelStepSize.getValue());
 
-        //TODO: send out event indicating the settings have been updated!
-        System.out.println("Settings updated!");
         eventBus.post(new SettingsUpdatedEvent());
-
         //Update the view again => recalculate new boundaries.
-        updateSettingsValues();
+        rebuildGrid();
+    }
+
+    @FXML
+    void OnSaveColorWeightSettingsClicked(ActionEvent event) {
+        settings.setWeighColor(chkWeighColors.selectedProperty().getValue());
+        //TODO: color weight.
+
+        eventBus.post(new SettingsUpdatedEvent());
+    }
+
+    @FXML
+    void OnSaveEnhancementSettingsClicked(ActionEvent event) {
+        settings.setEnhanceColor(chkEnhanceColors.selectedProperty().getValue());
+
+        settings.setCorrectIntensity(chkIntensifyColors.selectedProperty().getValue());
+        try {
+            //TODO: enhancement factor.
+            int gThreshold = Integer.parseInt(txtGreyThreshold.getText());
+            float scaleUp = Float.parseFloat(txtScaleUpValue.getText());
+            float scaleDown = Float.parseFloat(txtScaleDownValue.getText());
+            if(gThreshold < 0 || scaleUp < 0 || scaleDown < 0) {
+                throw new Exception("TODO-Exception");
+            }
+            settings.setGreyDetectionThreshold(gThreshold);
+            settings.setScaleUpValue(scaleUp);
+            settings.setScaleDownValue(scaleDown);
+        } catch (Exception e) {
+            //TODO: handle this!
+        }
+
+        eventBus.post(new SettingsUpdatedEvent());
     }
 
     @FXML
