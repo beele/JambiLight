@@ -1,14 +1,17 @@
 package be.beeles_place.view;
 
-import be.beeles_place.events.ShowPreferencesEvent;
+import be.beeles_place.events.SettingsUpdatedEvent;
 import be.beeles_place.events.ShutdownEvent;
 import be.beeles_place.model.ColorModel;
 import be.beeles_place.model.SettingsModel;
 import be.beeles_place.utils.EventbusWrapper;
 import com.google.common.eventbus.EventBus;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
 import java.net.URL;
@@ -29,6 +32,36 @@ public class MainViewController implements Initializable {
 
     @FXML
     private AnchorPane imageContainer;
+
+    @FXML
+    private Accordion settingsPanes;
+
+    @FXML
+    private TitledPane firstSettingsPane;
+
+    @FXML
+    private ChoiceBox<String> cmbSerialPort;
+
+    @FXML
+    private Button btnSaveSettingsA;
+
+    @FXML
+    private CheckBox chkAutoConntect;
+
+    @FXML
+    private Slider sldVerticalMargin;
+
+    @FXML
+    private Slider sldPixelStepSize;
+
+    @FXML
+    private TextField txtHorizontalRegions;
+
+    @FXML
+    private TextField txtVerticalRegions;
+
+    @FXML
+    private Slider sldHorizontalMargin;
 
     private List<Pane> panes;
 
@@ -54,8 +87,13 @@ public class MainViewController implements Initializable {
         GridPane.setRowIndex(imageContainer,1);
         GridPane.setColumnSpan(imageContainer, settings.getHorizontalRegions() - 2);
         GridPane.setRowSpan(imageContainer, settings.getVerticalRegions() - 2);
+
+        //Set the default opened settings panel.
+        settingsPanes.expandedPaneProperty().setValue(firstSettingsPane);
+
         //Add the panels to the UI.
         addPanels();
+        updateSettingsValues();
     }
 
     private void addPanels() {
@@ -101,14 +139,55 @@ public class MainViewController implements Initializable {
         }
     }
 
+    private void updateSettingsValues() {
+        cmbSerialPort.setItems(FXCollections.observableList(settings.getPorts()));
+        chkAutoConntect.setSelected(settings.isAutoConnect());
+
+        txtHorizontalRegions.setText(settings.getHorizontalRegions() + "");
+        txtVerticalRegions.setText(settings.getVerticalRegions() + "");
+
+        sldHorizontalMargin.setMax(settings.getHorizontalRegions() / 2);
+        sldHorizontalMargin.setValue(settings.getHorizontalMargin());
+        sldVerticalMargin.setMax(settings.getVerticalRegions() / 2);
+        sldVerticalMargin.setValue(settings.getVerticalMargin());
+
+        sldPixelStepSize.setValue(settings.getPixelIteratorStepSize());
+    }
+
     //Event handlers.
     @FXML
-    void onPreferencesClicked(ActionEvent event) {
-        eventBus.post(new ShowPreferencesEvent());
+    private void OnSaveSettingsClicked(ActionEvent event) {
+        System.out.println("Save settings clicked!");
+        settings.setPort(cmbSerialPort.getSelectionModel().getSelectedItem());
+        settings.setAutoConnect(chkAutoConntect.selectedProperty().getValue());
+
+        try {
+            int hRegions = Integer.parseInt(txtHorizontalRegions.getText());
+            int vRegions = Integer.parseInt(txtVerticalRegions.getText());
+            if(hRegions < 0 || vRegions < 0) {
+                throw new Exception("TODO-Exception");
+            }
+            settings.setHorizontalRegions(hRegions);
+            settings.setVerticalRegions(vRegions);
+        } catch (Exception e) {
+            System.out.println("invalid input");
+        }
+
+        settings.setHorizontalMargin((int)sldHorizontalMargin.getValue());
+        settings.setVerticalMargin((int)sldVerticalMargin.getValue());
+
+        settings.setPixelIteratorStepSize((int)sldPixelStepSize.getValue());
+
+        //TODO: send out event indicating the settings have been updated!
+        System.out.println("Settings updated!");
+        eventBus.post(new SettingsUpdatedEvent());
+
+        //Update the view again => recalculate new boundaries.
+        updateSettingsValues();
     }
 
     @FXML
-    void OnCloseClicked(ActionEvent event) {
+    private void OnCloseClicked(ActionEvent event) {
         eventBus.post(new ShutdownEvent());
     }
 

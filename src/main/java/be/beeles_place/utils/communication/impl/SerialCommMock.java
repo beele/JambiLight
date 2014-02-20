@@ -9,10 +9,13 @@ import java.util.List;
 
 public class SerialCommMock extends ASerialComm {
 
+    private LOGGER logger;
+
     private boolean isRunning;
 
     public SerialCommMock() {
-        LOGGER.getInstance().INFO("starting serial communication mock service");
+        logger = LOGGER.getInstance();
+        logger.INFO("COMM => starting serial communication mock service");
         isRunning = false;
     }
 
@@ -21,7 +24,7 @@ public class SerialCommMock extends ASerialComm {
     }
 
     public void disposeCommPort() {
-        LOGGER.getInstance().INFO("Disposing mock serialcomm");
+        logger.INFO("COMM => Disposing mock serialcomm");
     }
 
     public void setColor(Color color) {
@@ -32,15 +35,16 @@ public class SerialCommMock extends ASerialComm {
         isRunning = true;
         while (isRunning) {
             try {
-                LOGGER.getInstance().INFO("mock color sent!");
+                logger.INFO("COMM => Mock color sent!");
                 Thread.sleep(250);
             } catch (InterruptedException e) {
-                LOGGER.getInstance().ERROR("Thread interrupted! Aborting thread!");
+                logger.ERROR("COMM => Thread interrupted! Aborting thread!");
                 isRunning = false;
             }
         }
     }
 
+    //Getters & setters.
     public String getPortName() {
         return null;
     }

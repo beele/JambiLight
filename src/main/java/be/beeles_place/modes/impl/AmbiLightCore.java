@@ -78,13 +78,13 @@ public class AmbiLightCore {
 
         //Get the logger instance only once.
         logger = LOGGER.getInstance();
-        logger.INFO("======================================================================================================================");
-        logger.INFO("======================================================================================================================");
+        logger.INFO("==========================================================================");
+        logger.INFO("==========================================================================");
         logger.INFO("AMBILIGHT-CORE => Init complete!");
         logger.INFO("AMBILIGHT-CORE => There are " + pixels.length + " pixels in " + horizontalRegionSize * verticalRegionSize + " regions.");
-        logger.INFO("AMBILIGHT-CORE => There will be " + (horizontalRegionSize * 2 + verticalRegionSize * 2 - 4) + " consolidated regions.");
-        logger.INFO("======================================================================================================================");
-        logger.INFO("======================================================================================================================");
+        logger.INFO("AMBILIGHT-CORE => There will be " + colorModel.getNumberOfConsolidatedRegions() + " consolidated regions.");
+        logger.INFO("==========================================================================");
+        logger.INFO("==========================================================================");
     }
 
     /**
@@ -153,6 +153,7 @@ public class AmbiLightCore {
         long endTime = new Date().getTime();
         long difference = endTime - startTime;
         model.setActionDuration(difference);
+        LOGGER.getInstance().INFO("AMBILIGHT-CORE => Pixel processing completed in : " + model.getActionDuration() + "ms");
 
         //Everything has been updated!
         model.publishModelUpdate();

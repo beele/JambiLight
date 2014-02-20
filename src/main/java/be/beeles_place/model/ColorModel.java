@@ -10,7 +10,7 @@ public class ColorModel {
     private long actionDuration;
 
     private EventBus eventbus;
-    private int numberOfColorsProcessed;
+    private int numberOfConsolidatedRegions;
 
     public ColorModel() {
         eventbus = EventbusWrapper.getInstance();
@@ -43,11 +43,11 @@ public class ColorModel {
         this.actionDuration = actionDuration;
     }
 
-    public void setNumberOfColorsProcessed(int numberOfColorsProcessed) {
-        this.numberOfColorsProcessed = numberOfColorsProcessed;
+    public void setNumberOfConsolidatedRegions(int numberOfConsolidatedRegions) {
+        this.numberOfConsolidatedRegions = numberOfConsolidatedRegions;
     }
 
-    public int getNumberOfColorsProcessed() {
-        return numberOfColorsProcessed;
+    public int getNumberOfConsolidatedRegions() {
+        return numberOfConsolidatedRegions;
     }
 }

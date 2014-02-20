@@ -12,16 +12,19 @@ import java.util.List;
 
 public class SerialCommJSSC extends ASerialComm {
 
+    private LOGGER logger;
+    private ColorModel model;
+
     private boolean isRunning;
     private String portName;
 
     private SerialPort port;
 
-    private ColorModel model;
-
     public SerialCommJSSC(ColorModel model) {
         this.model = model;
-        LOGGER.getInstance().INFO("Initiating serial communication service using JSSC lib");
+
+        logger = LOGGER.getInstance();
+        logger.INFO("COMM => Initiating serial communication service using JSSC lib");
     }
 
     @Override
@@ -29,7 +32,7 @@ public class SerialCommJSSC extends ASerialComm {
         int status = 0;
 
         try {
-            LOGGER.getInstance().INFO("Opening com port => " + portName);
+            logger.INFO("COMM => Opening com port => " + portName);
             port = new SerialPort(portName);
             port.openPort();
             port.setParams( 100000,
@@ -38,7 +41,7 @@ public class SerialCommJSSC extends ASerialComm {
                             SerialPort.PARITY_NONE);
             Thread.sleep(5000);
         } catch (Exception e) {
-            LOGGER.getInstance().ERROR("An unexpected error occured!\n" + e.getLocalizedMessage());
+            logger.ERROR("COMM => An unexpected error occured!\n" + e.getLocalizedMessage());
             status = -1;
         }
 
@@ -47,27 +50,27 @@ public class SerialCommJSSC extends ASerialComm {
 
     @Override
     public void disposeCommPort() {
-        LOGGER.getInstance().INFO("Terminating and cleaning up serial communication!");
+        logger.INFO("COMM => Terminating and cleaning up serial communication!");
         try {
             port.closePort();
             port = null;
         } catch (SerialPortException e) {
-            LOGGER.getInstance().ERROR("Could not close comm port!");
+            logger.ERROR("COMM => Could not close comm port!");
         }
     }
 
-    boolean canSendNext;
-    int currentStep;
-    int stepSize;
-    int totalBytes;
-    int steps;
+    private boolean canSendNext;
+    private int currentStep;
+    private int stepSize;
+    private int totalBytes;
+    private int steps;
 
     @Override
     public void run() {
         isRunning = true;
 
         //Init variables for serial communication loops.
-        totalBytes = model.getNumberOfColorsProcessed() * 3;
+        totalBytes = model.getNumberOfConsolidatedRegions() * 3;
         //TODO: put the stepsize (aka bytes sent per loop) in the settings model.
         stepSize = 48;
         steps = (int) totalBytes / stepSize;
@@ -111,17 +114,18 @@ public class SerialCommJSSC extends ASerialComm {
                 }
 
             } catch (InterruptedException e) {
-                LOGGER.getInstance().ERROR("Thread interrupted! Aborting thread!");
+                logger.ERROR("COMM => Thread interrupted! Aborting thread!");
                 disposeCommPort();
                 isRunning = false;
             } catch (SerialPortException e) {
-                LOGGER.getInstance().ERROR("Error during serial communication!");
+                logger.ERROR("COMM => Error during serial communication!");
                 disposeCommPort();
                 isRunning = false;
             }
         }
     }
 
+    //Getters & setters.
     @Override
     public String getPortName() {
         return portName;

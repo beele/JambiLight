@@ -28,6 +28,8 @@ public class ColorEnhancer {
         ratioG /= ratioTotal;
         ratioB /= ratioTotal;
 
+        //Converting to HSB, increasing the saturation and converting it back to RGB
+        //is way too slow to be used on all regions. The logic below approximates this.
         //Dominant red
         if (r > (b + 10) && r > (g + 10)) {
             r += (int) (r * ratioR * 2.5);

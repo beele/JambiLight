@@ -39,7 +39,7 @@ public class Main extends Application {
         Parent root = (Parent) fxmlLoader.load(location.openStream());
 
         stage.setTitle("JambiLight 1.0 Alpha");
-        stage.setScene(new Scene(root, 950, 594));
+        stage.setScene(new Scene(root, 1150, 650));
         stage.show();
 
         //Set the stage shutdown action.

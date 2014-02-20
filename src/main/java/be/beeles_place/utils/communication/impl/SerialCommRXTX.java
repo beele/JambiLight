@@ -16,6 +16,9 @@ import java.util.List;
 
 public class SerialCommRXTX extends ASerialComm {
 
+    private LOGGER logger;
+    private ColorModel model;
+
     private boolean isRunning;
     private String portName;
 
@@ -24,18 +27,18 @@ public class SerialCommRXTX extends ASerialComm {
     private InputStream input;
     private OutputStream output;
 
-    private ColorModel model;
-
     public SerialCommRXTX(ColorModel model) {
         this.model = model;
-        LOGGER.getInstance().INFO("Initiating serial communication service using RXTX lib");
+
+        logger = LOGGER.getInstance();
+        logger.INFO("COMM => Initiating serial communication service using RXTX lib");
     }
 
     public int initCommPort() {
         int status = 0;
 
         try {
-            LOGGER.getInstance().INFO("Opening com port => " + portId.getName());
+            logger.INFO("COMM => Opening com port => " + portId.getName());
             port = (SerialPort) portId.open("serial talk", 2000);
             port.setSerialPortParams(100000,
                     SerialPort.DATABITS_8,
@@ -46,16 +49,16 @@ public class SerialCommRXTX extends ASerialComm {
             output = port.getOutputStream();
 
         } catch (PortInUseException e) {
-            LOGGER.getInstance().ERROR("Serial comm port is already in use!");
+            logger.ERROR("COMM => Serial comm port is already in use!");
             status = -1;
         } catch (UnsupportedCommOperationException e) {
-            LOGGER.getInstance().ERROR("Unsupported operation on comm port!");
+            logger.ERROR("COMM => Unsupported operation on comm port!");
             status = -1;
         } catch (IOException e) {
-            LOGGER.getInstance().ERROR("General IO comm exception!");
+            logger.ERROR("COMM => General IO comm exception!");
             status = -1;
         } catch (Exception e) {
-            LOGGER.getInstance().ERROR("An unexpected error occured!\n" + e.getLocalizedMessage());
+            logger.ERROR("COMM => An unexpected error occured!\n" + e.getLocalizedMessage());
             status = -1;
         }
 
@@ -63,24 +66,24 @@ public class SerialCommRXTX extends ASerialComm {
     }
 
     public void disposeCommPort() {
-        LOGGER.getInstance().INFO("Terminating and cleaning up serial communication!");
+        logger.INFO("COMM => Terminating and cleaning up serial communication!");
         port.close();
         output = null;
         port = null;
     }
 
-    boolean canSendNext;
-    int currentStep;
-    int stepSize;
-    int totalBytes;
-    int steps;
+    private boolean canSendNext;
+    private int currentStep;
+    private int stepSize;
+    private int totalBytes;
+    private int steps;
 
     @Override
     public void run() {
         isRunning = true;
 
         //Init variables for serial communication loops.
-        totalBytes = model.getNumberOfColorsProcessed() * 3;
+        totalBytes = model.getNumberOfConsolidatedRegions() * 3;
         //TODO: put the stepsize (aka bytes sent per loop) in the settings model.
         stepSize = 48;
         steps = (int) totalBytes / stepSize;
@@ -124,17 +127,18 @@ public class SerialCommRXTX extends ASerialComm {
                 }
 
             } catch (InterruptedException e) {
-                LOGGER.getInstance().ERROR("Thread interrupted! Aborting thread!");
+                logger.ERROR("COMM => Thread interrupted! Aborting thread!");
                 disposeCommPort();
                 isRunning = false;
             } catch (IOException e) {
-                LOGGER.getInstance().ERROR("Error during serial communication!");
+                logger.ERROR("COMM => Error during serial communication!");
                 disposeCommPort();
                 isRunning = false;
             }
         }
     }
 
+    //Getters & setters.
     public String getPortName() {
         return portName;
     }
@@ -149,9 +153,9 @@ public class SerialCommRXTX extends ASerialComm {
             //portId = CommPortIdentifier.getPortIdentifier("/dev/tty.usbmodem1421");
 
         } catch (gnu.io.NoSuchPortException nsp) {
-            LOGGER.getInstance().ERROR(nsp.getMessage());
+            logger.ERROR("COMM => " + nsp.getMessage());
         } catch (Exception exe) {
-            LOGGER.getInstance().ERROR("Unexpected error occured \n" + exe.getMessage());
+            logger.ERROR("COMM => Unexpected error occured \n" + exe.getMessage());
         }
     }
 

@@ -1,27 +1,34 @@
 package be.beeles_place.model;
 
+import java.util.List;
+
 public class SettingsModel {
 
     //JambiLight core settings.
-    private int horizontalRegions;
-    private int verticalRegions;
+    private int horizontalRegions;              //Between 4 and MAX_INT (please lower than 100)
+    private int verticalRegions;                //Between 4 and MAX_INT (please lower than 100)
 
-    private int horizontalMargin;
-    private int verticalMargin;
+    private int horizontalMargin;               //Between 0 and horizontalRegions - 2
+    private int verticalMargin;                 //Between 0 and verticalRegions - 2
 
-    private int pixelIteratorStepSize;
+    private int pixelIteratorStepSize;          //Between 1 and 10 (please lower than 5)
 
     //Color enhancement settings.
-    private boolean enhanceColor;
+    private boolean enhanceColor;               //True or false
 
     //Region consolidation settings.
-    private boolean weighColor;
+    private boolean weighColor;                 //True or false
 
     //Color correction settings.
-    private boolean correctIntensity;
-    private int greyDetectionThreshold;
-    private double scaleUpValue;
-    private double scaleDownValue;
+    private boolean correctIntensity;           //True or false
+    private int greyDetectionThreshold;         //Between 0 and 255 (please lower than 20)
+    private float scaleUpValue;                 //Between 0.0f and 1.0f
+    private float scaleDownValue;               //Between 0.0f and 1.0f
+
+    //Comm port settings.
+    private String port;                        //String that contains the name of the port e.g: COM3
+    private List<String> ports;                 //A list of String objects containing all available comm ports.
+    private boolean autoConnect;                //True or false.
 
     /**
      * Creates a new SettingsModel instance.
@@ -42,14 +49,14 @@ public class SettingsModel {
         //Color enhancement is disabled by default.
         enhanceColor = false;
 
-        //Colors should be wieghed, as it gives a much nicer result.
+        //Colors should be weighed, as it gives a much nicer result.
         weighColor = true;
 
         //Intensity correction is disabled by default.
         correctIntensity = false;
         greyDetectionThreshold = 10;
-        scaleUpValue = 1.5;
-        scaleDownValue = 1.5;
+        scaleUpValue = 0.2f;
+        scaleDownValue = 0.67f;
     }
 
     //Getters & setters.
@@ -125,19 +132,43 @@ public class SettingsModel {
         this.greyDetectionThreshold = greyDetectionThreshold;
     }
 
-    public double getScaleUpValue() {
+    public float getScaleUpValue() {
         return scaleUpValue;
     }
 
-    public void setScaleUpValue(double scaleUpValue) {
+    public void setScaleUpValue(float scaleUpValue) {
         this.scaleUpValue = scaleUpValue;
     }
 
-    public double getScaleDownValue() {
+    public float getScaleDownValue() {
         return scaleDownValue;
     }
 
-    public void setScaleDownValue(double scaleDownValue) {
+    public void setScaleDownValue(float scaleDownValue) {
         this.scaleDownValue = scaleDownValue;
+    }
+
+    public String getPort() {
+        return port;
+    }
+
+    public void setPort(String port) {
+        this.port = port;
+    }
+
+    public List<String> getPorts() {
+        return ports;
+    }
+
+    public void setPorts(List<String> ports) {
+        this.ports = ports;
+    }
+
+    public boolean isAutoConnect() {
+        return autoConnect;
+    }
+
+    public void setAutoConnect(boolean autoConnect) {
+        this.autoConnect = autoConnect;
     }
 }
