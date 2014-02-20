@@ -99,8 +99,9 @@ public class ApplicationController {
         serialCommunicator = new Communicator(model, CommunicationLibraries.JSSC);
         settings.setPorts(serialCommunicator.getPorts());
         //TODO: improve serial communicator. (mock implementation)
-        //TODO: get this port from the UI.
-        //serialCommunicator.open("COM4");
+        if(settings.getPort() != null){
+            serialCommunicator.open(settings.getPort());
+        }
 
         //New color controller and mode.
         colorController = new ColorController();
