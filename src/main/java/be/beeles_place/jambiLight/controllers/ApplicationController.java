@@ -106,7 +106,7 @@ public class ApplicationController {
 
         //New color controller and mode.
         colorController = new ColorController();
-        AbstractColorMode mode = new AmbilightMode(settings, model, new ScreenCapperMock(0,255,255));
+        AbstractColorMode mode = new AmbilightMode(settings, model);
         colorController.setColorMode(mode);
     }
 
