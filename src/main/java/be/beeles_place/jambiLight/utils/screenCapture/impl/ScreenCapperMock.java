@@ -1,13 +1,13 @@
 package be.beeles_place.jambiLight.utils.screenCapture.impl;
 
 import be.beeles_place.jambiLight.utils.screenCapture.IScreenCapper;
+import com.sun.glass.ui.Screen;
 
 import java.awt.*;
 
 public class ScreenCapperMock implements IScreenCapper {
 
     private Dimension size;
-    private Robot robot;
 
     private int r;
     private int g;
@@ -20,16 +20,14 @@ public class ScreenCapperMock implements IScreenCapper {
         r = MockPixelColorR;
         g = MockPixelColorG;
         b = MockPixelColorB;
+
+        int width = Screen.getMainScreen().getWidth();
+        int height = Screen.getMainScreen().getHeight();
+        size = new Dimension(width,height);
     }
 
     @Override
     public Dimension getScreenDimensions() {
-        size = Toolkit.getDefaultToolkit().getScreenSize();
-        try {
-            robot = new Robot();
-        } catch (Exception e) {
-            System.out.println("Cannot create robot!" + e.getMessage());
-        }
         return size;
     }
 
