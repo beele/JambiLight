@@ -27,8 +27,6 @@ public class ScreenCapper implements IScreenCapper {
             int width = Screen.getMainScreen().getWidth();
             int height = Screen.getMainScreen().getHeight();
             size = new Dimension(width,height);
-
-            backupRobot = com.sun.glass.ui.Application.GetApplication().createRobot();
         } else {
             size = Toolkit.getDefaultToolkit().getScreenSize();
             try {
@@ -45,6 +43,8 @@ public class ScreenCapper implements IScreenCapper {
 
     public int[] capture() {
         if(useBackupRobot){
+            System.out.println(Thread.currentThread().getName());
+            //TODO: crashes because of some threading problem ==> investigate!
             Pixels pixelsColl = backupRobot.getScreenCapture(0, 0, size.width, size.height);
             final int[] pixels = (int[]) pixelsColl.getPixels().array();
             return pixels;
