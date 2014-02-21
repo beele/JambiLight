@@ -100,10 +100,10 @@
 							<!-- this is important -->
 							<overwrite>true</overwrite>
 							<!-- this as well (target/ was missing) -->
-							<outputDirectory>${basedir}/target/classes/be/beeles_place/view/</outputDirectory>
+							<outputDirectory>${basedir}/target/classes/be/beeles_place/jambiLight/view/</outputDirectory>
 							<resources>
 								<resource>
-									<directory>src/main/java/be/beeles_place/view</directory>
+									<directory>src/main/java/be/beeles_place/jambiLight/view</directory>
 									<excludes>
 										<exclude>**/*.java</exclude>
 									</excludes>
@@ -143,9 +143,9 @@
 					<archive>
 						<manifestEntries>
 							<JavaFX-Version>${javafx.version}+</JavaFX-Version>
-							<Main-Class>be.beeles_place.Main</Main-Class>
+							<Main-Class>be.beeles_place.jambiLight.Main</Main-Class>
 							<implementation-version>1.0</implementation-version>
-							<JavaFX-Application-Class>be.beeles_place.main.java.be.Main</JavaFX-Application-Class>
+							<JavaFX-Application-Class>be.beeles_place.jambiLight.Main</JavaFX-Application-Class>
 							<JavaFX-Class-Path>
 								<!-- list all your dependencies here-->
 								dependency/jfxrt.jar

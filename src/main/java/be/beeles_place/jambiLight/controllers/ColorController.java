@@ -1,0 +1,43 @@
+package be.beeles_place.jambiLight.controllers;
+
+import be.beeles_place.jambiLight.modes.AbstractColorMode;
+
+public class ColorController {
+
+    private AbstractColorMode colorMode;
+    private Thread colorThread;
+
+    /**
+     * Creates a ColorController instance.
+     */
+    public ColorController() {
+
+    }
+
+    public void stopCurrentColorMode() {
+        setColorMode(null);
+    }
+
+    //Getters & setters.
+    public String getColorMode() {
+        return colorMode.getClass().getName();
+    }
+
+    public void setColorMode(AbstractColorMode newColorMode) {
+        if (colorMode != null) {
+            //Before setting the new color mode, stop the current one first!
+            colorMode.stop();
+        }
+
+        //If no new color mode has been set.
+        if (newColorMode == null) {
+            return;
+        } else {
+            colorMode = newColorMode;
+            colorThread = new Thread(colorMode);
+            colorThread.setPriority(Thread.MAX_PRIORITY);
+            colorThread.setName(newColorMode.getClass().getName());
+            colorThread.start();
+        }
+    }
+}
