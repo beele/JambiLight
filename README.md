@@ -36,7 +36,7 @@ Important notes:
 ---------------------------------
 JAVA:
 - Make sure you use the 1.7 version of the JDK!
-- To run in your IDE (without building) make sure you copy the ScreenCapper.dll from the /lib folder to the main project folder (where the build files are located). 
+- To run in your IDE (without building with maven) make sure you copy the ScreenCapper.dll from the /lib folder to the main project folder (where the build scripts are located). 
 
 RXTX:
 - Please use the JSSC serial communication implementation! Using the RXTX way can be tricky to get working correctly!
