@@ -64,6 +64,13 @@
 		</dependency>
 		
 		<dependency>
+			<groupId>be.beeles_place.code</groupId>
+			<artifactId>JNIscreenCapMock</artifactId>
+			<version>1.0</version>
+			<type>dll</type>
+		</dependency>
+		
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>

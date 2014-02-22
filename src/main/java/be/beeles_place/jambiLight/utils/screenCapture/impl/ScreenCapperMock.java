@@ -15,6 +15,8 @@ public class ScreenCapperMock implements IScreenCapper {
 
     /**
      * Creates a new ScreenCapper mock instance.
+     * The JNI mock will return a full green image if the JNI call succeeds.
+     * It will return a full red image if the JNI call fails.
      */
     public ScreenCapperMock(int MockPixelColorR, int MockPixelColorG, int MockPixelColorB) {
         r = MockPixelColorR;
