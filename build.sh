@@ -7,5 +7,4 @@ mvn install:install-file -Dfile=./lib/jssc.jar -DgroupId=com.google.code -Dartif
 mvn install:install-file -Dfile=./lib/RXTXcomm.jar -DgroupId=com.google.code -DartifactId=RXTX -Dversion=2.2 -Dpackaging=jar
 mvn install:install-file -Dfile=./lib/ScreenCapper.dll -DgroupId=be.beeles_place.code -DartifactId=JNIscreenCapMock -Dversion=1.0 -Dpackaging=dll
 mvn clean install
-mv ./target/dependency/JNIscreenCapMock-1.0.dll ScreenCapper.dll
-mv ./target/dependency/JNIscreenCapMock-1.0.dll ./target
+mv ./target/dependency/JNIscreenCapMock-1.0.dll ./target/ScreenCapper.dll
