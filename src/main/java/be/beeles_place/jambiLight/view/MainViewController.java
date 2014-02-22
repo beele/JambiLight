@@ -207,6 +207,9 @@ public class MainViewController implements Initializable {
 
     private void updateSettingsValues() {
         cmbSerialPort.setItems(FXCollections.observableList(settings.getPorts()));
+        if(settings.getPort() != null) {
+            cmbSerialPort.getSelectionModel().select(settings.getPort());
+        }
         chkAutoConntect.setSelected(settings.isAutoConnect());
 
         txtHorizontalRegions.setText(settings.getHorizontalRegions() + "");
