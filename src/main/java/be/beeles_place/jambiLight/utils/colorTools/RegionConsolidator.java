@@ -140,23 +140,24 @@ public class RegionConsolidator {
             cRegions[m + width - 1] = new int[]{rr, gg, bb};
         }
 
+        //TODO: this does not work correctly with margins enabled!
         //Recalculate the corner regions. The loop logic above have some strange behaviour for the corners.
         int[] c1, c2;
         //TOP-LEFT CORNER
-        c1 = cRegions[1];
-        c2 = cRegions[cRegions.length - 1];
+        c1 = cRegions[1 + horizontalMargin];
+        c2 = cRegions[cRegions.length - 1 - verticalMargin];
         cRegions[0] = averageRegions(c1,c2);
         //TOP-RIGHT CORNER
-        c1 = cRegions[width - 2];
-        c2 = cRegions[width];
+        c1 = cRegions[width - 2 - horizontalMargin];
+        c2 = cRegions[width - verticalMargin];
         cRegions[width - 1] = averageRegions(c1,c2);
         //BOTTOM-RIGHT CORNER
-        c1 = cRegions[width + height - 3];
-        c2 = cRegions[width + height - 1];
+        c1 = cRegions[width + height - 3 - verticalMargin];
+        c2 = cRegions[width + height - 1 + horizontalMargin];
         cRegions[width + height - 2] = averageRegions(c1,c2);
         //BOTTOM-LEFT CORNER
-        c1 = cRegions[width + height + width - 4];
-        c2 = cRegions[width + height + width - 2];
+        c1 = cRegions[width + height + width - 4 - horizontalMargin];
+        c2 = cRegions[width + height + width - 2 + verticalMargin];
         cRegions[width + height + width - 3] = averageRegions(c1,c2);
 
         return cRegions;
@@ -200,6 +201,6 @@ public class RegionConsolidator {
         for(int i = 0; i < totalLoops; i++) {
             weight += getWeight(i);
         }
-        return weight;
+        return weight > 0 ? weight : 1;
     }
 }
