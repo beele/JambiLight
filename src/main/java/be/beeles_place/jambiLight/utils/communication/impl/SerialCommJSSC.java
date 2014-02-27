@@ -66,6 +66,8 @@ public class SerialCommJSSC extends ASerialComm {
             if(port.getInputBufferBytesCount() > 0) {
                 //When the magic continue number has been received from the arduino!
                 if(port.readIntArray(1)[0] == 50) {
+                    port.purgePort(SerialPort.PURGE_TXCLEAR);
+                    port.purgePort(SerialPort.PURGE_RXCLEAR);
                     canSendNext = true;
                 }
             } else {
