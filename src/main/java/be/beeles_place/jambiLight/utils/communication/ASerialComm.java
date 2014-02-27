@@ -6,6 +6,26 @@ import java.util.List;
 
 public abstract class ASerialComm implements Runnable, ISerialComm {
 
+    protected boolean forceQuit = false;
+
+    @Override
+    public void run() {
+        while (!forceQuit) {
+            start();
+        }
+        if(forceQuit) {
+            stop();
+        }
+    }
+
+    @Override
+    public abstract void start();
+
+    public void stop() {
+        forceQuit = true;
+    }
+
+    //Methods available to all implementations.
     public String getArduinoSerialDeviceName() {
         String name = "";
 
@@ -18,7 +38,6 @@ public abstract class ASerialComm implements Runnable, ISerialComm {
                 name = deviceName;
             }
         }
-
         return name;
     }
 

@@ -9,11 +9,8 @@ import be.beeles_place.jambiLight.modes.AbstractColorMode;
 import be.beeles_place.jambiLight.modes.impl.AmbilightMode;
 import be.beeles_place.jambiLight.utils.EventbusWrapper;
 import be.beeles_place.jambiLight.utils.communication.CommunicationLibraries;
-import be.beeles_place.jambiLight.utils.communication.Communicator;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.utils.screenCapture.impl.ScreenCapper;
-import be.beeles_place.jambiLight.utils.screenCapture.impl.ScreenCapperJNIMock;
-import be.beeles_place.jambiLight.utils.screenCapture.impl.ScreenCapperMock;
 import be.beeles_place.jambiLight.view.MainViewController;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -30,7 +27,7 @@ public class ApplicationController {
 
     //Logic
     private ColorController colorController;
-    private Communicator serialCommunicator;
+    private CommunicatorController serialCommunicator;
 
     //UI vars
     private Stage stage;
@@ -99,7 +96,7 @@ public class ApplicationController {
         model.setNumberOfConsolidatedRegions(settings.getHorizontalRegions() * 2 + (settings.getVerticalRegions() * 2) - 4);
 
         //Create communicator!
-        serialCommunicator = new Communicator(model, CommunicationLibraries.JSSC);
+        serialCommunicator = new CommunicatorController(model, CommunicationLibraries.JSSC);
         settings.setPorts(serialCommunicator.getPorts());
         //TODO: improve serial communicator. (mock implementation)
         if(settings.getPort() != null){

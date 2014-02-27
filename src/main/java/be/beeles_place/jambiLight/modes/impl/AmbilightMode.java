@@ -22,7 +22,6 @@ public class AmbilightMode extends AbstractColorMode {
         } else {
             core = new AmbiLightCore(settings, model, new ScreenCapper());
         }
-
     }
 
     public AmbilightMode(SettingsModel settings, ColorModel model, IScreenCapper capper) {
@@ -31,8 +30,7 @@ public class AmbilightMode extends AbstractColorMode {
     }
 
     @Override
-    public boolean start() {
+    public void start() {
         core.calculate();
-        return true;
     }
 }

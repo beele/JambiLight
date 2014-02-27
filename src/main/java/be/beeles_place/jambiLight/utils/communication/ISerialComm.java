@@ -4,15 +4,15 @@ import java.util.List;
 
 public interface ISerialComm {
 
-    int initCommPort();
+    public void setUpCommPort(String portName);
 
-    void disposeCommPort();
+    public void start();
 
-    String getPortName();
+    public void stop();
 
-    void setPortName(String portName);
+    public String getCurrentPortName();
 
-    String getArduinoSerialDeviceName();
+    public String getArduinoSerialDeviceName();
 
-    List<String> getSerialDevicesList();
+    public List<String> getSerialDevicesList();
 }

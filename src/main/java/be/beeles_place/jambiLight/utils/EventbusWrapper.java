@@ -3,7 +3,7 @@ package be.beeles_place.jambiLight.utils;
 import com.google.common.eventbus.EventBus;
 
 /**
- * Simple wrapper for the guava EventBus.
+ * Simple singleton wrapper for the guava EventBus.
  */
 public class EventbusWrapper {
 

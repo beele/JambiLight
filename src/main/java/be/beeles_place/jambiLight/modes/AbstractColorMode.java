@@ -1,23 +1,29 @@
 package be.beeles_place.jambiLight.modes;
 
+import be.beeles_place.jambiLight.utils.logger.LOGGER;
+
 public abstract class AbstractColorMode implements IColorMode, Runnable {
 
-    private boolean runNext = false;
+    private LOGGER logger;
     private boolean forceQuit = false;
+
+    {
+        logger = LOGGER.getInstance();
+    }
 
     @Override
     public void run() {
-        runNext = true;
-        while (runNext && !forceQuit) {
-            runNext = start();
+        while (!forceQuit) {
+            start();
         }
     }
 
     @Override
-    public abstract boolean start();
+    public abstract void start();
 
     @Override
     public void stop() {
+        logger.INFO("MODE => Stopping current color mode!");
         forceQuit = true;
     }
 }

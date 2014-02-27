@@ -11,46 +11,36 @@ public class SerialCommMock extends ASerialComm {
 
     private LOGGER logger;
 
-    private boolean isRunning;
+    private String portName;
 
     public SerialCommMock() {
         logger = LOGGER.getInstance();
         logger.INFO("COMM => starting serial communication mock service");
-        isRunning = false;
-    }
-
-    public int initCommPort() {
-        return 0;
-    }
-
-    public void disposeCommPort() {
-        logger.INFO("COMM => Disposing mock serialcomm");
-    }
-
-    public void setColor(Color color) {
     }
 
     @Override
-    public void run() {
-        isRunning = true;
-        while (isRunning) {
-            try {
-                logger.INFO("COMM => Mock color sent!");
-                Thread.sleep(250);
-            } catch (InterruptedException e) {
-                logger.ERROR("COMM => Thread interrupted! Aborting thread!");
-                isRunning = false;
-            }
+    public void setUpCommPort(String portName) {
+        this.portName = portName;
+    }
+
+    @Override
+    public void start() {
+        try {
+            logger.INFO("COMM => Mock color sent!");
+            Thread.sleep(250);
+        } catch (InterruptedException e) {
+            logger.ERROR("COMM => Communications thread interrupted! Closing comm!");
         }
     }
 
-    //Getters & setters.
-    public String getPortName() {
-        return null;
+    public void stop() {
+        logger.INFO("COMM => Terminating and cleaning up mock serial communication!");
+        super.forceQuit = true;
     }
 
-    public void setPortName(String portName) {
-        //Do nothing for now.
+    //Getters & setters.
+    public String getCurrentPortName() {
+        return portName;
     }
 
     @Override

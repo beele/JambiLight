@@ -8,6 +8,7 @@ public class ColorModel {
 
     private int[][] currentColors;
     private long actionDuration;
+    private boolean colorsAreNew;
 
     private EventBus eventbus;
     private int numberOfConsolidatedRegions;
@@ -28,11 +29,17 @@ public class ColorModel {
     }
 
     public int[][]getCurrentColorsForComm() {
+        colorsAreNew = false;
         return currentColors;
+    }
+
+    public boolean getNewColorsForCommAvailable() {
+        return colorsAreNew;
     }
 
     public void setCurrentColors(int[][] currentColors) {
         this.currentColors = currentColors;
+        colorsAreNew = true;
     }
 
     public long getActionDuration() {

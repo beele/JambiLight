@@ -1,24 +1,29 @@
-package be.beeles_place.jambiLight.utils.communication;
+package be.beeles_place.jambiLight.controllers;
 
 import be.beeles_place.jambiLight.model.ColorModel;
+import be.beeles_place.jambiLight.utils.communication.ASerialComm;
+import be.beeles_place.jambiLight.utils.communication.CommunicationLibraries;
 import be.beeles_place.jambiLight.utils.communication.impl.SerialCommJSSC;
 import be.beeles_place.jambiLight.utils.communication.impl.SerialCommMock;
 import be.beeles_place.jambiLight.utils.communication.impl.SerialCommRXTX;
+import be.beeles_place.jambiLight.utils.logger.LOGGER;
 
 import java.util.List;
 
-public class Communicator {
+public class CommunicatorController {
 
-    private Thread runner;
+    private LOGGER logger;
+
+    private Thread commThread;
 
     private ASerialComm comm;
     private ColorModel model;
 
-    public Communicator(ColorModel model, CommunicationLibraries type) {
+    public CommunicatorController(ColorModel model, CommunicationLibraries type) {
+        logger = LOGGER.getInstance();
         this.model = model;
 
         switch (type) {
-
             case MOCK:
                 comm = new SerialCommMock();
                 break;
@@ -36,15 +41,20 @@ public class Communicator {
     }
 
     public void open(String portName) {
-        comm.setPortName(portName);
-        runner = new Thread(comm);
-        runner.start();
+        if(comm != null) {
+            comm.setUpCommPort(portName);
+            commThread = new Thread(comm);
+            commThread.start();
+        } else {
+            logger.ERROR("COMM => Cannot open comm when no instance has been made!");
+        }
     }
 
     public void close() {
-        if(runner != null) {
-            runner.interrupt();
-            runner = null;
+        if(comm != null) {
+            comm.stop();
+        } else {
+            logger.ERROR("COMM => Cannot close a non existing comm!");
         }
     }
 }

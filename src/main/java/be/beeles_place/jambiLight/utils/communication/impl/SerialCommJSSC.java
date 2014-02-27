@@ -15,9 +15,7 @@ public class SerialCommJSSC extends ASerialComm {
     private LOGGER logger;
     private ColorModel model;
 
-    private boolean isRunning;
     private String portName;
-
     private SerialPort port;
 
     public SerialCommJSSC(ColorModel model) {
@@ -28,29 +26,95 @@ public class SerialCommJSSC extends ASerialComm {
     }
 
     @Override
-    public int initCommPort() {
-        int status = 0;
-
+    public void setUpCommPort(String portName) {
+        this.portName = portName;
         try {
             logger.INFO("COMM => Opening com port => " + portName);
+
             port = new SerialPort(portName);
             port.openPort();
             port.setParams( 100000,
                             SerialPort.DATABITS_8,
                             SerialPort.STOPBITS_1,
                             SerialPort.PARITY_NONE);
+
+            //Initial state setup.
+            totalBytes = model.getNumberOfConsolidatedRegions() * 3;
+            //TODO: put the stepsize (aka bytes sent per loop) in the settings model.
+            stepSize = 48;
+            steps = (int)totalBytes / stepSize;
+            currentStep = 0;
+            canSendNext = true;
+
+            //Wait for 5 seconds to give the Arduino time to reset itself.
             Thread.sleep(5000);
         } catch (Exception e) {
-            logger.ERROR("COMM => An unexpected error occured!\n" + e.getLocalizedMessage());
-            status = -1;
+            logger.ERROR("COMM => Cannot open comport with name: " + portName);
         }
+    }
 
-        return status;
+    //Variables used in the start() method:
+    private boolean canSendNext;
+    private int currentStep;
+    private int stepSize;
+    private int totalBytes;
+    private int steps;
+
+    @Override
+    public void start() {
+        try {
+            if(port.getInputBufferBytesCount() > 0) {
+                //When the magic continue number has been received from the arduino!
+                if(port.readIntArray(1)[0] == 50) {
+                    canSendNext = true;
+                }
+            } else {
+                //As long as nu input has been received from the arduino sleep for 1ms.
+                Thread.sleep(1);
+            }
+
+            int[][] colors = null;
+            if(canSendNext) {
+                if(currentStep >= steps) {
+                    if(model.getNewColorsForCommAvailable()) {
+                        //New colors are available and we can send the next series of colors to the arduino.
+                        //Get the new colors and reset the currentStep counter.
+                        colors = model.getCurrentColorsForComm();
+                        currentStep = 0;
+                    } else {
+                        //No new colors are available to be transmitted to the arduino.
+                        //Wait some more.
+                        return;
+                    }
+                }
+
+                if(colors != null) {
+                    //Sending stepSize bytes per loop means sending stepSize/steps colors (3 bytes per color).
+                    for(int i = 0 ; i < stepSize / 3 ; i++) {
+                        //Send each color (R/G/B)
+                        port.writeByte((byte)colors[(currentStep * stepSize / 3) + i][0]);
+                        port.writeByte((byte)colors[(currentStep * stepSize / 3) + i][1]);
+                        port.writeByte((byte)colors[(currentStep * stepSize / 3) + i][2]);
+                    }
+                    currentStep++;
+                    canSendNext = false;
+                }
+            }
+
+        } catch (InterruptedException e) {
+            logger.ERROR("COMM => Communications thread interrupted! Closing comm!");
+            stop();
+        } catch (SerialPortException e) {
+            logger.ERROR("COMM => Error during serial communication! Closing comm!");
+            stop();
+        }
     }
 
     @Override
-    public void disposeCommPort() {
+    public void stop() {
         logger.INFO("COMM => Terminating and cleaning up serial communication!");
+
+        super.forceQuit = true;
         try {
             port.closePort();
             port = null;
@@ -59,81 +123,9 @@ public class SerialCommJSSC extends ASerialComm {
         }
     }
 
-    private boolean canSendNext;
-    private int currentStep;
-    private int stepSize;
-    private int totalBytes;
-    private int steps;
-
-    @Override
-    public void run() {
-        isRunning = true;
-
-        //Init variables for serial communication loops.
-        totalBytes = model.getNumberOfConsolidatedRegions() * 3;
-        //TODO: put the stepsize (aka bytes sent per loop) in the settings model.
-        stepSize = 48;
-        steps = (int) totalBytes / stepSize;
-        currentStep = 0;
-        canSendNext = true;
-
-        if (initCommPort() != 0) {
-            LOGGER.getInstance().ERROR("Cannot start serial communication!");
-            isRunning = false;
-            return;
-        }
-
-        while (isRunning) {
-            try {
-                if(port.getInputBufferBytesCount() > 0) {
-                    if(port.readIntArray(1)[0] == 50) {
-                        canSendNext = true;
-                    }
-                } else {
-                    Thread.sleep(1);
-                }
-
-                //TODO: add in a system so each color is sent only once!
-                if(canSendNext && model.getCurrentColors() != null) {
-                    if(currentStep >= steps) {
-                        currentStep = 0;
-                    }
-
-                    int[][] colors = model.getCurrentColors();
-                    if(colors != null) {
-                        //Sending stepSize bytes per loop means sending stepSize/steps colors (3 bytes per color).
-                        for(int i = 0 ; i < stepSize / 3 ; i++) {
-                            //Loop over each color (R/G/B)
-                            for(int j = 0 ; j < 3 ; j++) {
-                                port.writeByte((byte)colors[(currentStep * stepSize / 3) + i][j]);
-                            }
-                        }
-                        currentStep++;
-                        canSendNext = false;
-                    }
-                }
-
-            } catch (InterruptedException e) {
-                logger.ERROR("COMM => Thread interrupted! Aborting thread!");
-                disposeCommPort();
-                isRunning = false;
-            } catch (SerialPortException e) {
-                logger.ERROR("COMM => Error during serial communication!");
-                disposeCommPort();
-                isRunning = false;
-            }
-        }
-    }
-
     //Getters & setters.
-    @Override
-    public String getPortName() {
+    public String getCurrentPortName() {
         return portName;
-    }
-
-    @Override
-    public void setPortName(String portName) {
-        this.portName = portName;
     }
 
     @Override
