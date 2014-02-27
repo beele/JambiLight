@@ -98,7 +98,6 @@ public class ApplicationController {
         //Create communicator!
         serialCommunicator = new CommunicatorController(model, CommunicationLibraries.JSSC);
         settings.setPorts(serialCommunicator.getPorts());
-        //TODO: improve serial communicator. (mock implementation)
         if(settings.getPort() != null){
             serialCommunicator.open(settings.getPort());
         }

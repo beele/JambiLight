@@ -26,6 +26,8 @@ public class SerialCommRXTX extends ASerialComm {
     private InputStream input;
     private OutputStream output;
 
+    private boolean started;
+
     public SerialCommRXTX(ColorModel model) {
         this.model = model;
 
@@ -37,7 +39,7 @@ public class SerialCommRXTX extends ASerialComm {
     public void setUpCommPort(String portName) {
         this.portName = portName;
         try {
-            logger.INFO("COMM => Opening com port => " + portId.getName());
+            logger.INFO("COMM => Opening com port => " + portName);
 
             portId = CommPortIdentifier.getPortIdentifier(portName);
             //portId = CommPortIdentifier.getPortIdentifier(SerialUtil.getArduinoSerialDeviceName());
@@ -57,17 +59,10 @@ public class SerialCommRXTX extends ASerialComm {
             currentStep = 0;
             canSendNext = true;
 
-            //Wait for 5 seconds to give the Arduino time to reset itself.
-            Thread.sleep(5000);
-            input = port.getInputStream();
-            output = port.getOutputStream();
-
         } catch (PortInUseException e) {
             logger.ERROR("COMM => Serial comm port is already in use!");
         } catch (UnsupportedCommOperationException e) {
             logger.ERROR("COMM => Unsupported operation on comm port!");
-        } catch (IOException e) {
-            logger.ERROR("COMM => General IO comm exception!");
         } catch (Exception e) {
             logger.ERROR("COMM => An unexpected error occured!\n" + e.getLocalizedMessage());
         }
@@ -76,6 +71,14 @@ public class SerialCommRXTX extends ASerialComm {
     @Override
     public void start() {
         try {
+            if(!started){
+                //Wait for 5 seconds to give the Arduino time to reset itself.
+                Thread.sleep(5000);
+                input = port.getInputStream();
+                output = port.getOutputStream();
+                started = true;
+            }
+
             if(input.available() > 0) {
                 if(input.read() == 50) {
                     canSendNext = true;

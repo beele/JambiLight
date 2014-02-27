@@ -18,6 +18,8 @@ public class SerialCommJSSC extends ASerialComm {
     private String portName;
     private SerialPort port;
 
+    private boolean started;
+
     public SerialCommJSSC(ColorModel model) {
         this.model = model;
 
@@ -34,9 +36,9 @@ public class SerialCommJSSC extends ASerialComm {
             port = new SerialPort(portName);
             port.openPort();
             port.setParams( 100000,
-                            SerialPort.DATABITS_8,
-                            SerialPort.STOPBITS_1,
-                            SerialPort.PARITY_NONE);
+                    SerialPort.DATABITS_8,
+                    SerialPort.STOPBITS_1,
+                    SerialPort.PARITY_NONE);
 
             //Initial state setup.
             totalBytes = model.getNumberOfConsolidatedRegions() * 3;
@@ -46,8 +48,6 @@ public class SerialCommJSSC extends ASerialComm {
             currentStep = 0;
             canSendNext = true;
 
-            //Wait for 5 seconds to give the Arduino time to reset itself.
-            Thread.sleep(5000);
         } catch (Exception e) {
             logger.ERROR("COMM => Cannot open comport with name: " + portName);
         }
@@ -59,23 +59,33 @@ public class SerialCommJSSC extends ASerialComm {
     private int stepSize;
     private int totalBytes;
     private int steps;
+    private int[][] colors = null;
 
     @Override
     public void start() {
         try {
+            if(!started){
+                //Wait for 5 seconds to give the Arduino time to reset itself.
+                Thread.sleep(5000);
+                started = true;
+                //Get the initial colors.
+                colors = model.getCurrentColorsForComm();
+            }
+
             if(port.getInputBufferBytesCount() > 0) {
                 //When the magic continue number has been received from the arduino!
                 if(port.readIntArray(1)[0] == 50) {
                     port.purgePort(SerialPort.PURGE_TXCLEAR);
                     port.purgePort(SerialPort.PURGE_RXCLEAR);
                     canSendNext = true;
+                    //logger.DEBUG("COMM => New colors to send!");
                 }
             } else {
                 //As long as nu input has been received from the arduino sleep for 1ms.
+                //logger.DEBUG("COMM => No new colors to send!");
                 Thread.sleep(1);
             }
 
-            int[][] colors = null;
             if(canSendNext) {
                 if(currentStep >= steps) {
                     if(model.getNewColorsForCommAvailable()) {
@@ -118,8 +128,12 @@ public class SerialCommJSSC extends ASerialComm {
 
         super.forceQuit = true;
         try {
-            port.closePort();
-            port = null;
+            if(port != null) {
+                port.closePort();
+                port = null;
+            } else {
+                logger.INFO("COMM => No port to close!");
+            }
         } catch (SerialPortException e) {
             logger.ERROR("COMM => Could not close comm port!");
         }

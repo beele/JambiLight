@@ -44,6 +44,8 @@ public class CommunicatorController {
         if(comm != null) {
             comm.setUpCommPort(portName);
             commThread = new Thread(comm);
+            commThread.setPriority(Thread.MAX_PRIORITY);
+            commThread.setName(comm.getClass().getName());
             commThread.start();
         } else {
             logger.ERROR("COMM => Cannot open comm when no instance has been made!");
@@ -51,10 +53,10 @@ public class CommunicatorController {
     }
 
     public void close() {
-        if(comm != null) {
-            comm.stop();
-        } else {
+        if(comm == null) {
             logger.ERROR("COMM => Cannot close a non existing comm!");
+        } else {
+            comm.stop();
         }
     }
 }

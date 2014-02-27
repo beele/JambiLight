@@ -13,6 +13,7 @@ public abstract class AbstractColorMode implements IColorMode, Runnable {
 
     @Override
     public void run() {
+        logger.INFO("MODE => Color mode running!");
         while (!forceQuit) {
             start();
         }

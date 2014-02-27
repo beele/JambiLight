@@ -1,12 +1,18 @@
 package be.beeles_place.jambiLight.utils.communication;
 
+import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import gnu.io.CommPortIdentifier;
 
 import java.util.List;
 
-public abstract class ASerialComm implements Runnable, ISerialComm {
+public abstract class ASerialComm implements ISerialComm, Runnable {
 
+    private LOGGER logger;
     protected boolean forceQuit = false;
+
+    {
+        logger = LOGGER.getInstance();
+    }
 
     @Override
     public void run() {
