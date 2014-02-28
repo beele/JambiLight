@@ -16,6 +16,7 @@ public abstract class ASerialComm implements ISerialComm, Runnable {
 
     @Override
     public void run() {
+        forceQuit = false;
         while (!forceQuit) {
             start();
         }

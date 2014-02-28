@@ -2,7 +2,15 @@ package be.beeles_place.jambiLight.utils.colorTools;
 
 public class ColorEnhancer {
 
-    //TODO: parametrize
+    private float enhanceValue = 1f;
+
+    /**
+     * Creates a new ColorEnhancer instance.
+     * @param enhanceValue A float representing the amount of enhancement to apply.
+     */
+    public ColorEnhancer(float enhanceValue) {
+        this.enhanceValue = enhanceValue;
+    }
 
     /**
      * Enhances the color by checking what type of color it is (8 base types).
@@ -32,34 +40,34 @@ public class ColorEnhancer {
         //is way too slow to be used on all regions. The logic below approximates this.
         //Dominant red
         if (r > (b + 10) && r > (g + 10)) {
-            r += (int) (r * ratioR * 2.5);
+            r += (int) (r * ratioR * enhanceValue);
         }
         //Dominant green
         else if (g > (r + 10) && g > (b + 10)) {
-            g += (int) (g * ratioG * 2.5);
+            g += (int) (g * ratioG * enhanceValue);
         }
         //Dominant blue
         else if (b > (r + 10) && b > (g + 10)) {
-            b += (int) (b * ratioB * 2.5);
+            b += (int) (b * ratioB * enhanceValue);
         }
         //Dominant yellow
         else if ((r + g) > ((b * 2) + 20)) {
-            r += (int) (r * ratioR * 2.5);
-            g += (int) (g * ratioG * 2.5);
+            r += (int) (r * ratioR * enhanceValue);
+            g += (int) (g * ratioG * enhanceValue);
         }
         //Dominant cyan
         else if ((g + b) > ((r * 2) + 20)) {
-            g += (int) (g * ratioG * 2.5);
-            b += (int) (b * ratioB * 2.5);
+            g += (int) (g * ratioG * enhanceValue);
+            b += (int) (b * ratioB * enhanceValue);
         }
         //Dominant purple
         else if ((r + b) > ((g * 2) + 20)) {
-            r += (int) (r * ratioR * 2.5);
-            b += (int) (b * ratioB * 2.5);
+            r += (int) (r * ratioR * enhanceValue);
+            b += (int) (b * ratioB * enhanceValue);
         } else {
-            r += (int) (r * ratioR * 2.5);
-            g += (int) (g * ratioG * 2.5);
-            b += (int) (b * ratioB * 2.5);
+            r += (int) (r * ratioR * enhanceValue);
+            g += (int) (g * ratioG * enhanceValue);
+            b += (int) (b * ratioB * enhanceValue);
         }
 
         //For safety, values that were amplified too much will be toned down again!

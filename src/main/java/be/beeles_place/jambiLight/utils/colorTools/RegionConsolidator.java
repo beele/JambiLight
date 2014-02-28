@@ -21,8 +21,10 @@ public class RegionConsolidator {
     private int rr, gg, bb;
 
     private boolean weighColors;
+    private int weighFactor = 2;
     private int weight = 1;
     private int totalWeight = 1;
+    private int tempWeight;
 
     /**
      * Creates a new RegionConsolidator instance.
@@ -31,8 +33,9 @@ public class RegionConsolidator {
      * @param horizontalMargin An int representing the horizontal margin.
      * @param verticalMargin An int representing the vertical margin.
      * @param weighColors The SettingsModel containing the application settings.
+     * @param weighFactor The factor which the weight is calculated with. A higher number will result in bigger weight steps.
      */
-    public RegionConsolidator(int horizontalRegions, int verticalRegions, int horizontalMargin, int verticalMargin, boolean weighColors) {
+    public RegionConsolidator(int horizontalRegions, int verticalRegions, int horizontalMargin, int verticalMargin, boolean weighColors, int weighFactor) {
         //The number of horizontal and vertical regions so the final amount of consolidated regions can be calculated.
         width = horizontalRegions;
         height = verticalRegions;
@@ -54,6 +57,7 @@ public class RegionConsolidator {
         this.verticalMargin = verticalMargin;
         //Settings value that determines if the regions should we weighed when consolidating.
         this.weighColors = weighColors;
+        this.weighFactor = weighFactor;
     }
 
     /**
@@ -182,10 +186,10 @@ public class RegionConsolidator {
      * @param index An int that represents the index to be weighed. 0 is maximum weight. n = minimum weight.
      * @return A weighed int representing the index.
      */
-    //TODO: parametrize multiplication factor.
     private int getWeight(int index) {
         if(weighColors && index < 5) {
-            return 10 - (index * 2);
+            tempWeight = 10 - (index * weighFactor);
+            return tempWeight < 0 ? 1 : tempWeight;
         } else {
             return 1;
         }

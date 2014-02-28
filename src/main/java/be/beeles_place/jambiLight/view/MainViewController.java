@@ -223,10 +223,10 @@ public class MainViewController implements Initializable {
         sldPixelStepSize.setValue(settings.getPixelIteratorStepSize());
 
         chkWeighColors.setSelected(settings.isWeighColor());
-        //TODO: weight factor
+        txtColorWeight.setText(settings.getWeighFactor() + "");
 
         chkEnhanceColors.setSelected(settings.isEnhanceColor());
-        //TODO: enhance factor
+        txtEnhanceFactor.setText(settings.getEnhanceValue() + "");
 
         chkIntensifyColors.setSelected(settings.isCorrectIntensity());
         txtGreyThreshold.setText(settings.getGreyDetectionThreshold() + "");
@@ -265,7 +265,15 @@ public class MainViewController implements Initializable {
     @FXML
     void OnSaveColorWeightSettingsClicked(ActionEvent event) {
         settings.setWeighColor(chkWeighColors.selectedProperty().getValue());
-        //TODO: color weight.
+        try {
+            int weighFactor = Integer.parseInt(txtColorWeight.getText());
+            if(weighFactor < 1 || weighFactor > 5) {
+                throw new Exception("TODO-Exception");
+            }
+            settings.setWeighFactor(weighFactor);
+        } catch (Exception e){
+            //TODO: handle this!
+        }
 
         eventBus.post(new SettingsUpdatedEvent());
     }
@@ -273,10 +281,18 @@ public class MainViewController implements Initializable {
     @FXML
     void OnSaveEnhancementSettingsClicked(ActionEvent event) {
         settings.setEnhanceColor(chkEnhanceColors.selectedProperty().getValue());
+        try {
+            float enhanceValue = Float.parseFloat(txtEnhanceFactor.getText());
+            if(enhanceValue < 1f || enhanceValue > 10f) {
+                throw new Exception("TODO-Exception");
+            }
+            settings.setEnhanceValue(enhanceValue);
+        } catch (Exception e) {
+            //TODO: handle this!
+        }
 
         settings.setCorrectIntensity(chkIntensifyColors.selectedProperty().getValue());
         try {
-            //TODO: enhancement factor.
             int gThreshold = Integer.parseInt(txtGreyThreshold.getText());
             float scaleUp = Float.parseFloat(txtScaleUpValue.getText());
             float scaleDown = Float.parseFloat(txtScaleDownValue.getText());

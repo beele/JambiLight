@@ -22,22 +22,22 @@ public class RegionConsolidatorTest {
     public void testConsolidation() {
         //Without margins
         System.out.println("=> Consolidator, no margins");
-        RegionConsolidator rc = new RegionConsolidator(width,height,0,0,true);
+        RegionConsolidator rc = new RegionConsolidator(width,height,0,0,true,2);
         testColors(rc);
 
         //With horizontal margin
         System.out.println("=> Consolidator, horizontal margin");
-        rc = new RegionConsolidator(width,height,2,0,true);
+        rc = new RegionConsolidator(width,height,2,0,true,2);
         testColors(rc);
 
         //With vertical margin
         System.out.println("=> Consolidator, vertical margin");
-        rc = new RegionConsolidator(width,height,0,2,true);
+        rc = new RegionConsolidator(width,height,0,2,true,2);
         testColors(rc);
 
         //With both margins
         System.out.println("=> Consolidator, both margins");
-        rc = new RegionConsolidator(width,height,2,2,true);
+        rc = new RegionConsolidator(width,height,2,2,true,2);
         testColors(rc);
     }
 

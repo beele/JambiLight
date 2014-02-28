@@ -8,6 +8,7 @@ import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.modes.AbstractColorMode;
 import be.beeles_place.jambiLight.modes.impl.AmbilightMode;
 import be.beeles_place.jambiLight.utils.EventbusWrapper;
+import be.beeles_place.jambiLight.utils.SettingsLoader;
 import be.beeles_place.jambiLight.utils.communication.CommunicationLibraries;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.utils.screenCapture.impl.ScreenCapper;
@@ -20,6 +21,7 @@ public class ApplicationController {
 
     private LOGGER logger;
     private EventBus eventBus;
+    private SettingsLoader settingsLoader;
 
     //Models
     private ColorModel model;
@@ -41,6 +43,8 @@ public class ApplicationController {
 
         eventBus = EventbusWrapper.getInstance();
         eventBus.register(this);
+
+        settingsLoader = new SettingsLoader();
     }
 
     /**
@@ -64,16 +68,8 @@ public class ApplicationController {
         this.stage = stage;
         viewController = mainViewController;
 
-        //TODO: load from file or create a new settings file.
         //Create settings model!
-        settings = new SettingsModel();
-        settings.setHorizontalRegions(20);
-        settings.setVerticalRegions(14);
-        settings.setPixelIteratorStepSize(2);
-        settings.setHorizontalMargin(0);
-        settings.setVerticalMargin(0);
-        settings.setEnhanceColor(false);
-        settings.setCorrectIntensity(true);
+        settings = settingsLoader.loadSettingsModel();
         logger.INFO("INIT => Settings read and applied.");
 
         //Start the actual application core logic.
@@ -98,7 +94,7 @@ public class ApplicationController {
         //Create communicator!
         serialCommunicator = new CommunicatorController(model, CommunicationLibraries.JSSC);
         settings.setPorts(serialCommunicator.getPorts());
-        if(settings.getPort() != null){
+        if(settings.isAutoConnect() && settings.getPort() != null){
             serialCommunicator.open(settings.getPort());
         }
 
@@ -116,7 +112,9 @@ public class ApplicationController {
 
     @Subscribe
     public void onSettingsModelUpdated(SettingsUpdatedEvent event) {
-        //When the settings have been updated restart the system.
+        //When the settings have been updated save them and restart the system.
+        settingsLoader.saveSettingsModel(settings);
+        logger.INFO("INIT => Reloading application after settings change.");
         shutdown();
         startup();
     }
@@ -131,6 +129,7 @@ public class ApplicationController {
     @Subscribe
     public void onApplicationExit(ShutdownEvent event) {
         shutdown();
+        logger.INFO("INIT => Application now shutting down! GOODBYE...");
         System.exit(0);
     }
 
