@@ -164,7 +164,7 @@
 							</JavaFX-Class-Path>
 							<!-- The artifactId (name) of the jfxrt.jar ... see dependency system scope-->
 							<Class-Path>
-								dependency/javafx-${javafx.version}.jar dependency/jfxrt.jar dependency/guava-16.0.1.jar  dependency/jssc-2.6.jar dependency/RXTX-2.2.jar dependency/hamcrest-core-1.3.jar dependency/junit-4.11.jar
+								dependency/javafx-${javafx.version}.jar dependency/jfxrt.jar dependency/guava-16.0.1.jar  dependency/jssc-2.8.0.jar dependency/RXTX-2.2.jar dependency/hamcrest-core-1.3.jar dependency/junit-4.11.jar
 							</Class-Path>
 						</manifestEntries>
 						<manifest>
