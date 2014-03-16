@@ -22,11 +22,10 @@ public class SerialCommJSSC extends ASerialComm {
     private boolean started;
 
     private byte[] buffer;
+    private int regionIndex;
 
     public SerialCommJSSC(ColorModel model) {
         this.model = model;
-
-        buffer = new byte[3];
 
         logger = LOGGER.getInstance();
         logger.INFO("COMM => Initiating serial communication service using JSSC lib");
@@ -47,8 +46,12 @@ public class SerialCommJSSC extends ASerialComm {
 
             //Initial state setup.
             totalBytes = model.getNumberOfConsolidatedRegions() * 3;
+
             stepSize = 48;
+            partialSteps = stepSize / 3;
             steps = (int)totalBytes / stepSize;
+            buffer = new byte[stepSize];
+
             currentStep = 0;
             canSendNext = true;
 
@@ -63,6 +66,7 @@ public class SerialCommJSSC extends ASerialComm {
     private int stepSize;
     private int totalBytes;
     private int steps;
+    private int partialSteps;
     private int[][] colors = null;
 
     @Override
@@ -107,15 +111,19 @@ public class SerialCommJSSC extends ASerialComm {
                     }
                 }
 
+                int bitIndex = 0;
                 if(colors != null) {
                     //Sending stepSize bytes per loop means sending stepSize/steps colors (3 bytes per color).
-                    for(int i = 0 ; i < stepSize / 3 ; i++) {
+                    for(int i = 0 ; i < partialSteps ; i++) {
                         //Send each color (R/G/B)
-                        buffer[0] = (byte)colors[(currentStep * stepSize / 3) + i][0];
-                        buffer[1] = (byte)colors[(currentStep * stepSize / 3) + i][1];
-                        buffer[2] = (byte)colors[(currentStep * stepSize / 3) + i][2];
-                        port.writeBytes(buffer);
+                        regionIndex = (currentStep * partialSteps) + i;
+
+                        buffer[bitIndex++] = (byte)colors[regionIndex][0];
+                        buffer[bitIndex++] = (byte)colors[regionIndex][1];
+                        buffer[bitIndex++] = (byte)colors[regionIndex][2];
                     }
+                    port.writeBytes(buffer);
+
                     currentStep++;
                     canSendNext = false;
                 }
