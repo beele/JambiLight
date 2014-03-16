@@ -21,8 +21,12 @@ public class SerialCommJSSC extends ASerialComm {
 
     private boolean started;
 
+    private byte[] buffer;
+
     public SerialCommJSSC(ColorModel model) {
         this.model = model;
+
+        buffer = new byte[3];
 
         logger = LOGGER.getInstance();
         logger.INFO("COMM => Initiating serial communication service using JSSC lib");
@@ -107,9 +111,10 @@ public class SerialCommJSSC extends ASerialComm {
                     //Sending stepSize bytes per loop means sending stepSize/steps colors (3 bytes per color).
                     for(int i = 0 ; i < stepSize / 3 ; i++) {
                         //Send each color (R/G/B)
-                        port.writeByte((byte)colors[(currentStep * stepSize / 3) + i][0]);
-                        port.writeByte((byte)colors[(currentStep * stepSize / 3) + i][1]);
-                        port.writeByte((byte)colors[(currentStep * stepSize / 3) + i][2]);
+                        buffer[0] = (byte)colors[(currentStep * stepSize / 3) + i][0];
+                        buffer[1] = (byte)colors[(currentStep * stepSize / 3) + i][1];
+                        buffer[2] = (byte)colors[(currentStep * stepSize / 3) + i][2];
+                        port.writeBytes(buffer);
                     }
                     currentStep++;
                     canSendNext = false;
@@ -118,7 +123,7 @@ public class SerialCommJSSC extends ASerialComm {
 
             long endTime = new Date().getTime();
             long difference = endTime - startTime;
-            //LOGGER.getInstance().INFO("COMM => serial comm step (" + currentStep + "/" + steps + ") completed in : " + difference + "ms");
+            LOGGER.getInstance().INFO("COMM => serial comm step (" + currentStep + "/" + steps + ") completed in : " + difference + "ms");
 
         } catch (InterruptedException e) {
             logger.ERROR("COMM => Communications thread interrupted! Closing comm!");
