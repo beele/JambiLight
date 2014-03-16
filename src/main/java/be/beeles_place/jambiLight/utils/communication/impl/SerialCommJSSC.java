@@ -43,7 +43,6 @@ public class SerialCommJSSC extends ASerialComm {
 
             //Initial state setup.
             totalBytes = model.getNumberOfConsolidatedRegions() * 3;
-            //TODO: put the stepsize (aka bytes sent per loop) in the settings model.
             stepSize = 48;
             steps = (int)totalBytes / stepSize;
             currentStep = 0;
@@ -65,10 +64,6 @@ public class SerialCommJSSC extends ASerialComm {
     @Override
     public void start() {
         long startTime = new Date().getTime();
-
-        if(port == null) {
-            return;
-        }
 
         try {
             if(!started){
@@ -123,7 +118,7 @@ public class SerialCommJSSC extends ASerialComm {
 
             long endTime = new Date().getTime();
             long difference = endTime - startTime;
-            LOGGER.getInstance().INFO("COMM => serial comm step (" + currentStep + "/" + steps + ") completed in : " + difference + "ms");
+            //LOGGER.getInstance().INFO("COMM => serial comm step (" + currentStep + "/" + steps + ") completed in : " + difference + "ms");
 
         } catch (InterruptedException e) {
             logger.ERROR("COMM => Communications thread interrupted! Closing comm!");
