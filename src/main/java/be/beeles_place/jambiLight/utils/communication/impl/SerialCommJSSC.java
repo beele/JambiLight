@@ -8,6 +8,7 @@ import jssc.SerialPortException;
 import jssc.SerialPortList;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class SerialCommJSSC extends ASerialComm {
@@ -63,6 +64,12 @@ public class SerialCommJSSC extends ASerialComm {
 
     @Override
     public void start() {
+        long startTime = new Date().getTime();
+
+        if(port == null) {
+            return;
+        }
+
         try {
             if(!started){
                 //Wait for 5 seconds to give the Arduino time to reset itself.
@@ -80,10 +87,11 @@ public class SerialCommJSSC extends ASerialComm {
                     canSendNext = true;
                     //logger.DEBUG("COMM => New colors to send!");
                 }
-            } else {
+            } else if(canSendNext == false) {
                 //As long as nu input has been received from the arduino sleep for 1ms.
                 //logger.DEBUG("COMM => No new colors to send!");
                 Thread.sleep(1);
+                return;
             }
 
             if(canSendNext) {
@@ -112,6 +120,10 @@ public class SerialCommJSSC extends ASerialComm {
                     canSendNext = false;
                 }
             }
+
+            long endTime = new Date().getTime();
+            long difference = endTime - startTime;
+            LOGGER.getInstance().INFO("COMM => serial comm step (" + currentStep + "/" + steps + ") completed in : " + difference + "ms");
 
         } catch (InterruptedException e) {
             logger.ERROR("COMM => Communications thread interrupted! Closing comm!");
