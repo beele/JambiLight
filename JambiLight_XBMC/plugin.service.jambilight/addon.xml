@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.service.jambilight" version="0.0.1" name="JambiLight" provider-name="beele">
+	 <requires>
+		<import addon="xbmc.python" version="2.1.0"/>
+	 </requires>
+	 <extension point="xbmc.service"
+				library="addon.py" 
+				start="[login|startup]">
+	 </extension>
+	 <extension point="xbmc.addon.metadata">
+		<summary>JambiLight XBMC addon</summary>
+		<description>Provides a better JambiLight experience with XBMC!</description>
+		<platform>all</platform>
+		<website>www.beeles-place.be</website>
+		<email>info@beeles-place.be</email>
+	 </extension>
+</addon>
