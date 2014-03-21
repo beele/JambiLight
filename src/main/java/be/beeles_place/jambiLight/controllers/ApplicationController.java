@@ -16,6 +16,7 @@ import be.beeles_place.jambiLight.utils.screenCapture.impl.XbmcScreenCapper;
 import be.beeles_place.jambiLight.view.MainViewController;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 
 public class ApplicationController {
@@ -122,9 +123,16 @@ public class ApplicationController {
 
     @Subscribe
     public void onColorsUpdated(ColorModelUpdatedEvent event) {
-        String title = "JambiLight => running at: " + (1000 / model.getActionDuration()) + " FPS";
-        stage.setTitle(title);
-        viewController.updateColors();
+
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                String title = "JambiLight => running at: " + (1000 / model.getActionDuration()) + " FPS";
+                stage.setTitle(title);
+                viewController.updateColors();
+            }
+        });
     }
 
     @Subscribe
