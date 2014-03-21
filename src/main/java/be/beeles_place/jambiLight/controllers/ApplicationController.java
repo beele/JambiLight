@@ -123,15 +123,10 @@ public class ApplicationController {
 
     @Subscribe
     public void onColorsUpdated(ColorModelUpdatedEvent event) {
-
-
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                String title = "JambiLight => running at: " + (1000 / model.getActionDuration()) + " FPS";
-                stage.setTitle(title);
-                viewController.updateColors();
-            }
+        Platform.runLater(() -> {
+            String title = "JambiLight => running at: " + (1000 / model.getActionDuration()) + " FPS";
+            stage.setTitle(title);
+            viewController.updateColors();
         });
     }
 
