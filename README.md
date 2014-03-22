@@ -9,7 +9,7 @@ A downloadable binary for Windows will be available later from http://www.beeles
 
 How to build & run
 ---------------------------------
-- Have maven and the JRE 1.7 installed.
+- Have maven and the JRE 1.8 installed. (Make sure maven is using java 8 ==> mvn --version)
 - Clone the repo to a folder on your computer.
 - Build the project using maven:
   * Windows users can build by double clicking the build.bat file.
