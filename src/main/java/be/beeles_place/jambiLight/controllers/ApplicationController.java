@@ -102,7 +102,7 @@ public class ApplicationController {
 
         //New color controller and mode.
         colorController = new ColorController();
-        AbstractColorMode mode = new AmbilightMode(settings, model, new XbmcScreenCapper());
+        AbstractColorMode mode = new AmbilightMode(settings, model, new ScreenCapper());
         colorController.setColorMode(mode);
     }
 

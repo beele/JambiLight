@@ -46,4 +46,8 @@ public class ScreenCapperMock implements IScreenCapper {
 
         return pixels;
     }
+
+    public void dispose() {
+
+    }
 }

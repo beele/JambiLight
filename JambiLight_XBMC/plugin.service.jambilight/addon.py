@@ -30,30 +30,33 @@ capture.capture(720, 480, xbmc.CAPTURE_FLAG_CONTINUOUS)
 
 # Enter a loop for sending frames to the server application.
 while ALIVE:
-    xbmc.sleep(50)
+    xbmc.sleep(30)
 
     try:
         if xbmc.Player().isPlaying():
-            log("video playing!")
+            #log("Video playing!")
 
+            log(capture.getImageFormat())
             capture.waitForCaptureStateChangeEvent(100)
             if capture.getCaptureState() == xbmc.CAPTURE_STATE_DONE:
                 #Get frame data, process it and send it!
-                sock.sendall(capture.getImage())
-                log("sending data")
+                pixels = capture.getImage()
+
+                sock.sendall(pixels)
+                #log("Sending data")
             else:
-                log("no image captured!")
+                log("No image captured!")
         else:
-            log("no video playing")
+            log("No video playing")
+            #TODO: Send some static signal!
 
         #data = sock.recv(1024)
     except socket.error, e:
         log("Socket error")
         sock.close()
 
-# check to see if xbmc will shut down!
-if xbmc.abortRequested:
-    ALIVE = False
-    sock.close()
-    log("Socket closed")
-
+        # check to see if xbmc will shut down!
+    if xbmc.abortRequested or ALIVE is False:
+        ALIVE = False
+        sock.close()
+        log("Socket closed")

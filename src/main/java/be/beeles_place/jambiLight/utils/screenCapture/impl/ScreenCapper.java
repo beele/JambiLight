@@ -53,4 +53,8 @@ public class ScreenCapper implements IScreenCapper {
             return ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
         }
     }
+
+    public void dispose() {
+
+    }
 }

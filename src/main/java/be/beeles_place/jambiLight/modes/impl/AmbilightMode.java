@@ -51,4 +51,11 @@ public class AmbilightMode extends AbstractColorMode {
     public void start() {
         core.calculate();
     }
+
+    @Override
+    public void stop() {
+        logger.INFO("MODE => Stopping current color mode.");
+        core.dispose();
+        super.forceQuit = true;
+    }
 }

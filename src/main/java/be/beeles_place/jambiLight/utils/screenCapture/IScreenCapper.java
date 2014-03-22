@@ -15,4 +15,9 @@ public interface IScreenCapper {
      * @return An array of int containing all the pixels that were captured.
      */
     int[] capture();
+
+    /**
+     * This method will cleanup and dispose anything that is needed.
+     */
+    void dispose();
 }

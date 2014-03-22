@@ -63,4 +63,8 @@ public class ScreenCapperJNIMock implements IScreenCapper {
     }
 
     private native int[] captureViaJNI();
+
+    public void dispose() {
+
+    }
 }

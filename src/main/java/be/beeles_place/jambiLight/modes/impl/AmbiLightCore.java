@@ -160,4 +160,11 @@ public class AmbiLightCore {
         //Everything has been updated!
         model.publishModelUpdate();
     }
+
+    /**
+     * Call this method when stopping the AmbiLightMode!
+     */
+    public void dispose() {
+        capper.dispose();
+    }
 }

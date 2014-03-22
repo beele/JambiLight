@@ -4,33 +4,29 @@ import be.beeles_place.jambiLight.utils.screenCapture.IScreenCapper;
 
 import java.awt.*;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 public class XbmcScreenCapper implements IScreenCapper {
 
     private InputStream in;
-    //private PrintWriter out;µ
 
     private byte[] data;
 
     private Date start = null;
     private Date end = null;
 
+    private ServerSocket server;
+    private Socket client;
+
     public XbmcScreenCapper() {
         data = new byte[1382400];
 
         try {
-            ServerSocket server = new ServerSocket(8080);
+            server = new ServerSocket(8080);
             server.setReceiveBufferSize(1382400);
-            System.out.println("waiting for connection on port 8080");
-
-            Socket client = server.accept();
-            System.out.println("got connection on port 8080");
-            InputStream in = client.getInputStream();
-            //PrintWriter out = new PrintWriter(client.getOutputStream(),true);
         } catch (Exception e) {
             System.out.println("CRITICAL ERROR!");
         }
@@ -44,13 +40,25 @@ public class XbmcScreenCapper implements IScreenCapper {
     @Override
     public int[] capture() {
 
+        if(client ==null || in == null) {
+            try {
+                if(client == null) {
+                    System.out.println("waiting for connection on port 8080");
+                    client = server.accept();
+                    System.out.println("got connection on port 8080");
+                }
+                in = client.getInputStream();
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+
         try {
             int read = 0;
             boolean run = true;
             while(run) {
 
-                inner: while(in.available() >= 1382400) {
-                    start = new Date();
+                inner: while(in.available() == 1382400) {
                     read += in.read(data, read, in.available());
 
                     while(read < 1382400) {
@@ -59,31 +67,47 @@ public class XbmcScreenCapper implements IScreenCapper {
                             read += in.read(data, read, toRead);
                         }
                     }
-                    end = new Date();
                     break inner;
                 }
 
-                //Read out some stats!
-                if(read > 1380000) {
-                    long diff = end.getTime() - start.getTime();
-                    System.out.println("bytes read: " + read + " in " + diff +  "ms");
-                    System.out.println("color at 500k = " + data[500000]);
+                //Only continue when the correct amount of pixels has been read!
+                if(read == 1382400) {
                     read = 0;
                     run = false;
                 }
             }
         } catch (Exception e) {
-
+            System.out.println(e.getMessage());
         }
 
-        int [] pixels = new int[1382400];
+        //Convert pixels!
+        int [] pixels = new int[345600];
         int pixelCounter = 0;
-        for(int i = 0; i < data.length ; i+=3) {
-            pixels[pixelCounter++] = data[i];
-            pixels[pixelCounter++] = data[i+1];
-            pixels[pixelCounter++] = data[i+2];
+        for(int i = 0; i < data.length ; i+=4) {
+            int r = data[i+2];
+            int g = data[i+1];
+            int b = data[i];
+
+            r = (r << 16) & 0x00FF0000;
+            g = (g << 8) & 0x0000FF00;
+            b = b & 0x000000FF;
+
+            pixels[pixelCounter++] = (0xFF000000 | r | g | b);
         }
 
         return pixels;
+    }
+
+    public void dispose() {
+        try {
+            if(client != null) {
+                client.close();
+            }
+            if(server != null) {
+                server.close();
+            }
+        } catch (Exception e) {
+            System.out.println("Cannot dispose correctly!");
+        }
     }
 }

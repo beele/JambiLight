@@ -5,7 +5,7 @@ import be.beeles_place.jambiLight.utils.logger.LOGGER;
 public abstract class AbstractColorMode implements IColorMode, Runnable {
 
     private LOGGER logger;
-    private boolean forceQuit = false;
+    protected boolean forceQuit = false;
 
     protected AbstractColorMode() {
         logger = LOGGER.getInstance();
