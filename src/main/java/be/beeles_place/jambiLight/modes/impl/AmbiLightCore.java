@@ -7,6 +7,7 @@ import be.beeles_place.jambiLight.utils.colorTools.IntensityCorrector;
 import be.beeles_place.jambiLight.utils.colorTools.RegionConsolidator;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.utils.screenCapture.IScreenCapper;
+import be.beeles_place.jambiLight.utils.screenCapture.impl.XbmcScreenCapper;
 
 import java.awt.*;
 import java.util.Date;
@@ -59,6 +60,7 @@ public class AmbiLightCore {
         Dimension size = capper.getScreenDimensions();
         width = (int) size.getWidth();
         height = (int) size.getHeight();
+
         pixels = new int[(width * height)];
 
         //Initialize the regions.

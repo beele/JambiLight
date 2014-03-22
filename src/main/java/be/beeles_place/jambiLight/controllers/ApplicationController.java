@@ -12,6 +12,7 @@ import be.beeles_place.jambiLight.utils.SettingsLoader;
 import be.beeles_place.jambiLight.utils.communication.CommunicationLibraries;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.utils.screenCapture.impl.ScreenCapper;
+import be.beeles_place.jambiLight.utils.screenCapture.impl.XbmcScreenCapper;
 import be.beeles_place.jambiLight.view.MainViewController;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -100,7 +101,7 @@ public class ApplicationController {
 
         //New color controller and mode.
         colorController = new ColorController();
-        AbstractColorMode mode = new AmbilightMode(settings, model, new ScreenCapper());
+        AbstractColorMode mode = new AmbilightMode(settings, model, new XbmcScreenCapper());
         colorController.setColorMode(mode);
     }
 
