@@ -33,7 +33,7 @@ XBMC:
 - Included in this project is a custom XBMC plugin that will allow the application to get the media directly from XBMC instead of taking screenshots of the screen.
 - Open the "JambiLight_XBMC" folder in the project root.
 - You should now see a folder named: "plugin.service.jambilight".
-- Compress this folder to a zip file and copy the zip file to an easy to remeber location.
+- Compress this folder to a zip file and copy the zip file to an easy to remember location.
 - In XBMC install the addon by zip file.
 - To use the XBMC plugin you will have to swap out the IScreenCapper implementation on line 105/106 of the ApplicationController.java file and recompile the project.
   * This will later be simplified via the application UI.
