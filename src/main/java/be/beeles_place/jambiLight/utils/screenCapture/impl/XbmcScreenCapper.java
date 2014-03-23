@@ -70,7 +70,7 @@ public class XbmcScreenCapper implements IScreenCapper {
             boolean run = true;
             while(run) {
 
-                inner: while(in.available() == totalBytes) {
+                if(in.available() == totalBytes) {
                     read += in.read(data, read, in.available());
 
                     while(read < totalBytes) {
@@ -79,7 +79,6 @@ public class XbmcScreenCapper implements IScreenCapper {
                             read += in.read(data, read, toRead);
                         }
                     }
-                    break inner;
                 }
 
                 //Only continue when the correct amount of pixels has been read!

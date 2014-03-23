@@ -98,7 +98,7 @@ public class SerialCommJSSC extends ASerialComm {
             }
 
             if(canSendNext) {
-                if(currentStep >= steps) {
+                if(currentStep >= steps || colors == null) {
                     if(model.getNewColorsForCommAvailable()) {
                         //New colors are available and we can send the next series of colors to the arduino.
                         //Get the new colors and reset the currentStep counter.
@@ -106,7 +106,8 @@ public class SerialCommJSSC extends ASerialComm {
                         currentStep = 0;
                     } else {
                         //No new colors are available to be transmitted to the arduino.
-                        //Wait some more.
+                        //Save cpu time by not letting this run without a small sleep!
+                        Thread.sleep(5);
                         return;
                     }
                 }
@@ -126,6 +127,10 @@ public class SerialCommJSSC extends ASerialComm {
 
                     currentStep++;
                     canSendNext = false;
+                } else {
+                    //The colors are still null, the system is still waiting for the screen capture system to produce data.
+                    //The sleep saves cpu cycles!
+                    Thread.sleep(5);
                 }
             }
 

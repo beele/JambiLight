@@ -14,6 +14,11 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Please do not longer use this implementation!
+ * It should still function but the JSSC implementation is better in every way!
+ */
+@Deprecated
 public class SerialCommRXTX extends ASerialComm {
 
     private LOGGER logger;
