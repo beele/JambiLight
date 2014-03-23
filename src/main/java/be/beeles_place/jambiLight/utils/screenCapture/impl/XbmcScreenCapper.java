@@ -1,5 +1,6 @@
 package be.beeles_place.jambiLight.utils.screenCapture.impl;
 
+import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.utils.screenCapture.IScreenCapper;
 
 import java.awt.*;
@@ -11,8 +12,11 @@ import java.util.concurrent.ExecutionException;
 
 public class XbmcScreenCapper implements IScreenCapper {
 
+    private LOGGER logger;
+
     private boolean initDone = false;
 
+    private int port;
     private ServerSocket server;
     private Socket client;
     private InputStream in;
@@ -30,6 +34,9 @@ public class XbmcScreenCapper implements IScreenCapper {
      * Sets and calculates initial values.
      */
     public XbmcScreenCapper() {
+        logger = LOGGER.getInstance();
+
+        port = 1337;
         width = 720;
         height = 480;
 
@@ -51,18 +58,18 @@ public class XbmcScreenCapper implements IScreenCapper {
 
         try {
             if(initDone == false) {
-                server = new ServerSocket(1337);
+                server = new ServerSocket(port);
                 server.setReceiveBufferSize(totalBytes);
 
-                System.out.println("waiting for connection on port 8080");
+                logger.INFO("IScreenCapper => Waiting for XBMC connection on port " + port + "!");
                 client = server.accept();
-                System.out.println("got connection on port 8080");
+                logger.INFO("IScreenCapper => XBMC client connected on port " + port + "!");
 
                 in = client.getInputStream();
                 initDone = true;
             }
         } catch (Exception e) {
-            System.out.println("XBMC init failed!: " + e.getMessage());
+            logger.ERROR("IScreenCapper => XBMC communication init failed!: " + e.getMessage());
         }
 
         try {
@@ -90,7 +97,7 @@ public class XbmcScreenCapper implements IScreenCapper {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Socket error: " +  e.getMessage());
+            logger.ERROR("IScreenCapper => XBMC connection error: " +  e.getMessage());
         }
 
         //Convert bytes to integer values!
@@ -119,7 +126,7 @@ public class XbmcScreenCapper implements IScreenCapper {
                 server.close();
             }
         } catch (Exception e) {
-            System.out.println("Cannot dispose correctly!");
+            logger.ERROR("IScreenCapper => Cannot dispose correctly!");
         }
     }
 }

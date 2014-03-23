@@ -5,7 +5,7 @@ Java implementation of an abmilight system (as seen in the philips tv sets)
 JambiLight can be used to supercharge your media viewing experience.
 
 JambiLight supports a fully dynamical region system with optional margins and various enhancements for color detection.
-A downloadable binary for Windows will be available later from http://www.beeles-place.be
+A downloadable binary for Windows is available from http://www.beeles-place.be/wordpress/?p=687 Remember that the project it currently in beta and might not function as expected sometimes.
 
 How to build & run
 ---------------------------------
@@ -17,19 +17,30 @@ How to build & run
 - When the build has finished go to the /target/ folder that has been created by maven.
 - Open a command prompt and run the following command: java -jar JambiLight.jar
   * When you have made a build with RXTX enabled use the following command: java -jar JambiLight.jar -Djava.library.path="PATH_TO_FOLDER_WITH_RXTX_SERIAL_DLL"
+- XBMC support is forthcoming, read the XBMC section below for full details!
 
   
 Important notes:
 ---------------------------------RUNNING:
-- The application currently only supports screen capture on Windows platforms. (Code for OSX/Linux is broken because of javaFX threading problems. This should be fixed with Java 8)
-- It will run under OSX/Linux but will only return a static color.
+- Java Robot screen capture now works on both Windows and OSX (Linux is untested but should work).
 - JNI Test classes and files included in the project are not used by default when building the checked out code. This is for testing purposes only and will later be used. JNI implementation only supports Windows for now.
 
 JAVA:
-- Make sure you use the 1.7 version of the JDK if developing or JRE 1.7 when only running!
+- Make sure you use the 1.8 version of the JDK if developing or JRE 1.8 when running and not developing!
 - To run in your IDE (without building with maven) make sure you copy the ScreenCapper.dll from the /lib folder to the main project folder (where the build scripts are located). 
 
+XBMC:
+- Included in this project is a custom XBMC plugin that will allow the application to get the media directly from XBMC instead of taking screenshots of the screen.
+- Open the "JambiLight_XBMC" folder in the project root.
+- You should now see a folder named: "plugin.service.jambilight".
+- Compress this folder to a zip file and copy the zip file to an easy to remeber location.
+- In XBMC install the addon by zip file.
+- To use the XBMC plugin you will have to swap out the IScreenCapper implementation on line 105/106 of the ApplicationController.java file and recompile the project.
+  * This will later be simplified via the application UI.
+- First start the java application and then start XBMC!
+
 RXTX:
+- RXTX is now deprecated, and will no longer be maintained!
 - Please use the JSSC serial communication implementation! Using the RXTX way can be tricky to get working correctly!
 - Place the required dll or jnilib files in the root folder of the project to run it.
 - The dll's and jnilib files can be found in the /lib/rxtx/ folder.
