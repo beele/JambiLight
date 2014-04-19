@@ -1,5 +1,7 @@
 package be.beeles_place.jambiLight.model;
 
+import be.beeles_place.jambiLight.utils.screenCapture.ScreenCapperMode;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -35,6 +37,8 @@ public class SettingsModel {
     private String port;                        //String that contains the name of the port e.g: COM3.
     private List<String> ports;                 //A list of String objects containing all available comm ports.
     private boolean autoConnect;                //True or false.
+
+    private ScreenCapperMode captureMode;       //Enum value of type ScreenCapperMode, containing the active capture strategy.
 
     /**
      * Creates a new SettingsModel instance.
@@ -177,6 +181,15 @@ public class SettingsModel {
     @XmlElement
     public void setAutoConnect(boolean autoConnect) {
         this.autoConnect = autoConnect;
+    }
+
+    public ScreenCapperMode getCaptureMode() {
+        return captureMode;
+    }
+
+    @XmlElement
+    public void setCaptureMode(ScreenCapperMode captureMode) {
+        this.captureMode = captureMode;
     }
 
     //Getters & setters for fields not in xml

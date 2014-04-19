@@ -5,6 +5,7 @@ import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.modes.AbstractColorMode;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.utils.screenCapture.IScreenCapper;
+import be.beeles_place.jambiLight.utils.screenCapture.ScreenCapperMode;
 import be.beeles_place.jambiLight.utils.screenCapture.impl.ScreenCapper;
 import be.beeles_place.jambiLight.utils.screenCapture.impl.ScreenCapperMock;
 
@@ -39,9 +40,9 @@ public class AmbilightMode extends AbstractColorMode {
 
         if(capper == null) {
             if(GraphicsEnvironment.isHeadless()){
-                capper = new ScreenCapperMock(0,255,0);
+                capper = ScreenCapperMode.MOCK_RAINBOW.getCaptureLogic();
             } else {
-                capper = new ScreenCapper();
+                capper = ScreenCapperMode.JAVA_SCREENSHOT.getCaptureLogic();
             }
         }
         core = new AmbiLightCore(settings, model, capper);

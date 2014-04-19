@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="594.0" prefWidth="1082.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.beeles_place.jambiLight.view.MainViewController">
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="1082.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.beeles_place.jambiLight.view.MainViewController">
     <children>
         <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
@@ -49,7 +50,7 @@
                         </AnchorPane>
                     </children>
                 </VBox>
-                <Accordion fx:id="settingsPanes" minWidth="300.0">
+                <Accordion fx:id="settingsPanes" minWidth="320.0">
                     <panes>
                         <TitledPane fx:id="firstSettingsPane" animated="false" text="General settings">
                             <content>
@@ -59,7 +60,7 @@
                                         <Label layoutX="32.0048828125" layoutY="47.5" text="Comm port:" />
                                         <Label layoutX="32.009765625" layoutY="78.5" text="Auto-connect:" />
                                         <CheckBox fx:id="chkAutoConntect" layoutX="139.2890625" layoutY="78.5" mnemonicParsing="false" />
-                                        <Line endX="167.0" layoutX="115.0" layoutY="128.0" startX="-100.0" />
+                                        <Line endX="190.0" layoutX="115.0" layoutY="128.0" startX="-100.0" />
                                         <Label layoutX="14.0048828125" layoutY="155.5" text="Region settings" />
                                         <Label layoutX="32.009765625" layoutY="189.5" text="Horizontal regions:" />
                                         <Label layoutX="32.0" layoutY="225.0" text="Vertical regions:" />
@@ -71,7 +72,7 @@
                                         <Slider fx:id="sldHorizontalMargin" blockIncrement="1.0" layoutX="139.0" layoutY="284.0" majorTickUnit="2.0" max="10.0" minorTickCount="1" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
                                         <Slider fx:id="sldVerticalMargin" blockIncrement="1.0" layoutX="139.0" layoutY="327.0" majorTickUnit="2.0" max="10.0" minorTickCount="1" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
                                         <Slider fx:id="sldPixelStepSize" blockIncrement="1.0" layoutX="139.0" layoutY="391.0" majorTickUnit="2.0" max="10.0" min="1.0" minorTickCount="1" showTickLabels="true" showTickMarks="true" value="2.0" />
-                                        <Line endX="167.0" layoutX="115.0" layoutY="449.0" startX="-100.0" />
+                                        <Line endX="190.0" layoutX="115.0" layoutY="449.0" startX="-100.0" />
                                         <Button fx:id="btnSaveSettingsA" layoutX="107.0" layoutY="470.0" mnemonicParsing="false" onAction="#OnSaveSettingsClicked" text="Save settings" /><ComboBox fx:id="cmbSerialPort" layoutX="140.0" layoutY="44.0" prefWidth="150.0" />
                                     </children>
                                 </AnchorPane>
@@ -80,17 +81,23 @@
                         <TitledPane animated="false" text="Color weighing">
                             <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-<children><Label layoutX="14.0" layoutY="14.0" prefHeight="17.0" prefWidth="265.0" text="Color weighing settings:" /><Label layoutX="32.009765625" layoutY="84.5" text="Weight factor:" /><Button fx:id="btnSaveSettingsB" layoutX="107.0" layoutY="470.0" mnemonicParsing="false" onAction="#OnSaveColorWeightSettingsClicked" text="Save settings" /><TextField fx:id="txtColorWeight" layoutX="135.24609375" layoutY="80.5" /><CheckBox fx:id="chkWeighColors" layoutX="139.2890625" layoutY="49.5" mnemonicParsing="false" /><Label layoutX="32.009765625" layoutY="49.5" text="Weigh colors:" /><Line endX="167.0" layoutX="115.0" layoutY="449.0" startX="-100.0" />
+<children><Label layoutX="14.0" layoutY="14.0" prefHeight="17.0" prefWidth="265.0" text="Color weighing settings:" /><Label layoutX="32.009765625" layoutY="84.5" text="Weight factor:" /><Button fx:id="btnSaveSettingsB" layoutX="107.0" layoutY="470.0" mnemonicParsing="false" onAction="#OnSaveColorWeightSettingsClicked" text="Save settings" /><TextField fx:id="txtColorWeight" layoutX="135.24609375" layoutY="80.5" /><CheckBox fx:id="chkWeighColors" layoutX="139.2890625" layoutY="49.5" mnemonicParsing="false" /><Label layoutX="32.009765625" layoutY="49.5" text="Weigh colors:" /><Line endX="190.0" layoutX="115.0" layoutY="449.0" startX="-100.0" />
 </children></AnchorPane>
                             </content>
                         </TitledPane>
                         <TitledPane animated="false" text="Color enhancement &amp; correction">
                             <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-<children><Line endX="167.0" layoutX="115.0" layoutY="449.0" startX="-100.0" /><Button fx:id="btnSaveSettingsC" layoutX="107.0" layoutY="470.0" mnemonicParsing="false" onAction="#OnSaveEnhancementSettingsClicked" text="Save settings" /><Label layoutX="32.009765625" layoutY="49.5" text="Enhance colors:" /><CheckBox fx:id="chkEnhanceColors" layoutX="139.2890625" layoutY="49.5" mnemonicParsing="false" /><TextField fx:id="txtEnhanceFactor" layoutX="135.24609375" layoutY="80.5" /><Label layoutX="32.009765625" layoutY="84.5" text="Enhance factor:" /><Label layoutX="14.0" layoutY="14.0" prefHeight="17.0" prefWidth="265.0" text="Color enhancement settings:" /><Line endX="167.0" layoutX="115.0" layoutY="141.0" startX="-100.0" /><Label layoutX="14.0" layoutY="171.0" prefHeight="17.0" prefWidth="265.0" text="Color intensity settings:" /><Label layoutX="32.009765625" layoutY="241.5" text="Grey threshold:" /><TextField fx:id="txtGreyThreshold" layoutX="135.24609375" layoutY="237.5" /><CheckBox fx:id="chkIntensifyColors" layoutX="139.2890625" layoutY="206.5" mnemonicParsing="false" /><Label layoutX="32.009765625" layoutY="206.5" text="Intensify colors:" /><TextField fx:id="txtScaleUpValue" layoutX="135.24609375" layoutY="272.5" /><Label layoutX="32.009765625" layoutY="276.5" text="Scale up value:" /><Label layoutX="32.009765625" layoutY="311.5" text="Scale down value:" /><TextField fx:id="txtScaleDownValue" layoutX="135.24609375" layoutY="307.5" />
+<children><Line endX="190.0" layoutX="115.0" layoutY="449.0" startX="-100.0" /><Button fx:id="btnSaveSettingsC" layoutX="107.0" layoutY="470.0" mnemonicParsing="false" onAction="#OnSaveEnhancementSettingsClicked" text="Save settings" /><Label layoutX="32.009765625" layoutY="49.5" text="Enhance colors:" /><CheckBox fx:id="chkEnhanceColors" layoutX="139.2890625" layoutY="49.5" mnemonicParsing="false" /><TextField fx:id="txtEnhanceFactor" layoutX="135.24609375" layoutY="80.5" /><Label layoutX="32.009765625" layoutY="84.5" text="Enhance factor:" /><Label layoutX="14.0" layoutY="14.0" prefHeight="17.0" prefWidth="265.0" text="Color enhancement settings:" /><Line endX="190.0" layoutX="115.0" layoutY="141.0" startX="-100.0" /><Label layoutX="14.0" layoutY="171.0" prefHeight="17.0" prefWidth="265.0" text="Color intensity settings:" /><Label layoutX="32.009765625" layoutY="241.5" text="Grey threshold:" /><TextField fx:id="txtGreyThreshold" layoutX="135.24609375" layoutY="237.5" /><CheckBox fx:id="chkIntensifyColors" layoutX="139.2890625" layoutY="206.5" mnemonicParsing="false" /><Label layoutX="32.009765625" layoutY="206.5" text="Intensify colors:" /><TextField fx:id="txtScaleUpValue" layoutX="135.24609375" layoutY="272.5" /><Label layoutX="32.009765625" layoutY="276.5" text="Scale up value:" /><Label layoutX="32.009765625" layoutY="311.5" text="Scale down value:" /><TextField fx:id="txtScaleDownValue" layoutX="135.24609375" layoutY="307.5" />
 </children></AnchorPane>
                             </content>
-                        </TitledPane>
+                        </TitledPane><TitledPane animated="false" text="Advanced">
+  <content>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+<children><ComboBox fx:id="cmbColorMode" layoutX="140.0" layoutY="44.0" prefWidth="150.0" /><Button layoutX="107.0" layoutY="470.0" mnemonicParsing="false" onAction="#OnSaveAdvancedSettingsClicked" text="Save settings" /><Line endX="190.0" layoutX="115.0" layoutY="449.0" startX="-100.0" /><Label layoutX="32.0048828125" layoutY="47.5" text="Capture strategy:" /><Label layoutX="14.0" layoutY="14.0" prefHeight="17.0" prefWidth="265.0" text="Active capture strategy" />
+</children></AnchorPane>
+  </content>
+</TitledPane>
                     </panes>
                 </Accordion>
             </children>

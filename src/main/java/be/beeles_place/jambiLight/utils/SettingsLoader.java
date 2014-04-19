@@ -2,6 +2,7 @@ package be.beeles_place.jambiLight.utils;
 
 import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
+import be.beeles_place.jambiLight.utils.screenCapture.ScreenCapperMode;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -80,6 +81,9 @@ public class SettingsLoader {
             settings.setGreyDetectionThreshold(10);
             settings.setScaleUpValue(0.2f);
             settings.setScaleDownValue(0.67f);
+
+            //Set the default screen capture method to JAVA_SCREENSHOT
+            settings.setCaptureMode(ScreenCapperMode.JAVA_SCREENSHOT);
 
             //Save the new settings to disk!
             saveSettingsModel(settings);

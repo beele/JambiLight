@@ -5,6 +5,7 @@ import be.beeles_place.jambiLight.events.ShutdownEvent;
 import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.utils.EventbusWrapper;
+import be.beeles_place.jambiLight.utils.screenCapture.ScreenCapperMode;
 import com.google.common.eventbus.EventBus;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -14,10 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class MainViewController implements Initializable {
 
@@ -86,6 +84,9 @@ public class MainViewController implements Initializable {
 
     @FXML
     private TextField txtScaleDownValue;
+
+    @FXML
+    private ComboBox<ScreenCapperMode> cmbColorMode;
 
     //Local variables
     private List<Pane> panes;
@@ -232,11 +233,16 @@ public class MainViewController implements Initializable {
         txtGreyThreshold.setText(settings.getGreyDetectionThreshold() + "");
         txtScaleUpValue.setText(settings.getScaleUpValue() + "");
         txtScaleDownValue.setText(settings.getScaleDownValue() + "");
+
+        cmbColorMode.setItems(FXCollections.observableArrayList(new ArrayList<ScreenCapperMode>(Arrays.asList(ScreenCapperMode.values()))));
+        if(settings.getCaptureMode() != null) {
+            cmbColorMode.getSelectionModel().select(settings.getCaptureMode());
+        }
     }
 
     //Event handlers.
     @FXML
-    private void OnSaveSettingsClicked(ActionEvent event) {
+    void OnSaveSettingsClicked(ActionEvent event) {
         settings.setPort(cmbSerialPort.getSelectionModel().getSelectedItem());
         settings.setAutoConnect(chkAutoConntect.selectedProperty().getValue());
 
@@ -305,6 +311,13 @@ public class MainViewController implements Initializable {
         } catch (Exception e) {
             //TODO: handle this!
         }
+
+        eventBus.post(new SettingsUpdatedEvent());
+    }
+
+    @FXML
+    void OnSaveAdvancedSettingsClicked(ActionEvent event) {
+        settings.setCaptureMode(cmbColorMode.getValue());
 
         eventBus.post(new SettingsUpdatedEvent());
     }
