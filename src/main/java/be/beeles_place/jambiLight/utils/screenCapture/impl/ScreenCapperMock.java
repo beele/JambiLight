@@ -1,5 +1,6 @@
 package be.beeles_place.jambiLight.utils.screenCapture.impl;
 
+import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.utils.screenCapture.IScreenCapper;
 import com.sun.glass.ui.Screen;
 
@@ -7,6 +8,7 @@ import java.awt.*;
 
 public class ScreenCapperMock implements IScreenCapper {
 
+    private LOGGER logger;
     private Dimension size;
 
     private int r;
@@ -19,11 +21,20 @@ public class ScreenCapperMock implements IScreenCapper {
     private int delay = 0;
 
     /**
+     * Default no argument constructor.
+     */
+    public ScreenCapperMock() {
+        this(20);
+    }
+
+    /**
      * Creates a new ScreenCapper mock instance.
      * The JNI mock will return a full green image if the JNI call succeeds.
      * It will return a full red image if the JNI call fails.
      */
     public ScreenCapperMock(int delay) {
+        logger = LOGGER.getInstance();
+
         this.delay = delay;
 
         int width = Screen.getMainScreen().getWidth();
@@ -60,7 +71,7 @@ public class ScreenCapperMock implements IScreenCapper {
         try {
             Thread.sleep(delay);
         } catch (InterruptedException e) {
-            System.out.println("Thread error in ScreenCapperMock!");
+            logger.ERROR("IScreenCapper => RAINBOW-MOCK: Thread error in ScreenCapperMock!");
         }
         return pixels;
     }

@@ -7,7 +7,6 @@ import be.beeles_place.jambiLight.utils.colorTools.IntensityCorrector;
 import be.beeles_place.jambiLight.utils.colorTools.RegionConsolidator;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.utils.screenCapture.IScreenCapper;
-import be.beeles_place.jambiLight.utils.screenCapture.impl.XbmcScreenCapper;
 
 import java.awt.*;
 import java.util.Date;
@@ -24,7 +23,7 @@ public class AmbiLightCore {
     //Internal variables
     private LOGGER logger;
     private IScreenCapper capper;
-    private RegionConsolidator consolitdator;
+    private RegionConsolidator consolidator;
     private ColorEnhancer enhancer;
     private IntensityCorrector corrector;
     private ColorModel model;
@@ -74,7 +73,7 @@ public class AmbiLightCore {
         //Create the required instances.
         enhancer = new ColorEnhancer(settings.getEnhanceValue());
         corrector = new IntensityCorrector(settings);
-        consolitdator = new RegionConsolidator( this.horizontalRegionSize, this.verticalRegionSize,
+        consolidator = new RegionConsolidator( this.horizontalRegionSize, this.verticalRegionSize,
                                                 settings.getHorizontalMargin(), settings.getVerticalMargin(),
                                                 settings.isWeighColor(), settings.getWeighFactor());
 
@@ -144,7 +143,7 @@ public class AmbiLightCore {
             }
         }
         //Set the consolidated regions with colors on the model.
-        int [][] cRegions = consolitdator.consolidateRegions(regions);
+        int [][] cRegions = consolidator.consolidateRegions(regions);
         //Correct the intensity if enabled.
         if(doCorrection) {
             cRegions = corrector.correctIntensity(cRegions);
