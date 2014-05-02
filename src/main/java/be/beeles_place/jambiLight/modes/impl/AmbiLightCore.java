@@ -165,5 +165,6 @@ public class AmbiLightCore {
      */
     public void dispose() {
         capper.dispose();
+        capper = null;
     }
 }

@@ -41,7 +41,7 @@ public enum ScreenCapperMode {
             Constructor<?> conz = clazz.getConstructor();
             temp = (IScreenCapper) conz.newInstance();
         } catch (Exception e) {
-            LOGGER.getInstance().ERROR("MODE => Fatal error instantiating requested IScreenCapture mode!");
+            LOGGER.getInstance().ERROR("MODE => Fatal error instantiating requested IScreenCapture logic!");
         } finally {
             return temp;
         }
