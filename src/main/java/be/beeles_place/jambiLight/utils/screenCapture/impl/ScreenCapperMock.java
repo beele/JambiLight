@@ -19,6 +19,8 @@ public class ScreenCapperMock implements IScreenCapper {
     private int rbCount = 0;
 
     private int delay = 0;
+    private int[] pixels;
+    private int pixelCount;
 
     /**
      * Default no argument constructor.
@@ -39,7 +41,9 @@ public class ScreenCapperMock implements IScreenCapper {
 
         int width = Screen.getMainScreen().getWidth();
         int height = Screen.getMainScreen().getHeight();
-        size = new Dimension(width,height);
+        size = new Dimension(width, height);
+        pixelCount = width * height;
+        pixels = new int[(int) (pixelCount)];
     }
 
     @Override
@@ -49,9 +53,8 @@ public class ScreenCapperMock implements IScreenCapper {
 
     @Override
     public int[] capture() {
-        int[] pixels = new int[(int)(size.getWidth() * size.getHeight())];
-
         //Rainbows!
+<<<<<<< HEAD
         r = (int)(Math.sin(frequency * rbCount + 0) * 127 + 128);
         g = (int)(Math.sin(frequency * rbCount + 2) * 127 + 128);
         b = (int)(Math.sin(frequency * rbCount + 4) * 127 + 128);
@@ -63,6 +66,18 @@ public class ScreenCapperMock implements IScreenCapper {
 
         int totalPixels = pixels.length;
         for(int i = 0; i < totalPixels; i++) {
+=======
+        r = (int) (Math.sin(frequency * rbCount + 0) * 127 + 128);
+        g = (int) (Math.sin(frequency * rbCount + 2) * 127 + 128);
+        b = (int) (Math.sin(frequency * rbCount + 4) * 127 + 128);
+        if (rbCount < 32) {
+            rbCount++;
+        } else {
+            rbCount = 0;
+        }
+
+        for (int i = 0; i < pixelCount; i++) {
+>>>>>>> 0369934... Fixed memory leak in ScreenCapperMock
             int pixel = r;
             pixel = (pixel << 8) + g;
             pixel = (pixel << 8) + b;
@@ -78,6 +93,7 @@ public class ScreenCapperMock implements IScreenCapper {
     }
 
     public void dispose() {
+        pixels = null;
         size = null;
         logger = null; 
     }

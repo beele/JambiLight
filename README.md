@@ -21,7 +21,8 @@ How to build & run
 
   
 Important notes:
----------------------------------RUNNING:
+---------------------------------
+RUNNING:
 - Java Robot screen capture now works on both Windows and OSX (Linux is untested but should work).
 - JNI Test classes and files included in the project are not used by default when building the checked out code. This is for testing purposes only and will later be used. JNI implementation only supports Windows for now.
 
@@ -35,9 +36,7 @@ XBMC:
 - You should now see a folder named: "plugin.service.jambilight".
 - Compress this folder to a zip file and copy the zip file to an easy to remember location.
 - In XBMC install the addon by zip file.
-- To use the XBMC plugin you will have to swap out the IScreenCapper implementation on line 105/106 of the ApplicationController.java file and recompile the project.
-  * This will later be simplified via the application UI.
-- First start the java application and then start XBMC!
+- Select the XBMC screencapture method in the advanced tab.
 
 RXTX:
 - RXTX is now deprecated, and will no longer be maintained!
