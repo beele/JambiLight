@@ -30,7 +30,6 @@ public class AmbiLightCore {
 
     private final int width;
     private final int height;
-    private int[] pixels;
     private int tempPixelValue;
 
     private int[][][] regions;
@@ -60,8 +59,6 @@ public class AmbiLightCore {
         width = (int) size.getWidth();
         height = (int) size.getHeight();
 
-        pixels = new int[(width * height)];
-
         //Initialize the regions.
         horizontalRegionSize = settings.getHorizontalRegions();
         verticalRegionSize = settings.getVerticalRegions();
@@ -82,7 +79,7 @@ public class AmbiLightCore {
         logger.INFO("==========================================================================");
         logger.INFO("==========================================================================");
         logger.INFO("AMBILIGHT-CORE => Init complete!");
-        logger.INFO("AMBILIGHT-CORE => There are " + pixels.length + " pixels in " + horizontalRegionSize * verticalRegionSize + " regions.");
+        logger.INFO("AMBILIGHT-CORE => There are " + (width * height) + " pixels in " + horizontalRegionSize * verticalRegionSize + " regions.");
         logger.INFO("AMBILIGHT-CORE => There will be " + colorModel.getNumberOfConsolidatedRegions() + " consolidated regions.");
         logger.INFO("==========================================================================");
         logger.INFO("==========================================================================");
@@ -98,7 +95,7 @@ public class AmbiLightCore {
 
         //Make a screen capture.
         //Disabling aero themes in windows can easily double or triple performance!
-        pixels = capper.capture();
+        int[] pixels = capper.capture();
 
         for (int i = 0; i < pixels.length; i += stepSize) {
             //The pixels in the image are in one long array, we need to get the x and y values of the pixel.
@@ -143,7 +140,7 @@ public class AmbiLightCore {
             }
         }
         //Set the consolidated regions with colors on the model.
-        int [][] cRegions = consolidator.consolidateRegions(regions);
+        int[][] cRegions = consolidator.consolidateRegions(regions);
         //Correct the intensity if enabled.
         if(doCorrection) {
             cRegions = corrector.correctIntensity(cRegions);
@@ -158,6 +155,9 @@ public class AmbiLightCore {
 
         //Everything has been updated!
         model.publishModelUpdate();
+        
+        cRegions = null;
+        pixels = null;
     }
 
     /**

@@ -14,7 +14,7 @@ public class ScreenCapperMock implements IScreenCapper {
     private int r;
     private int g;
     private int b;
-
+    
     private float frequency = 0.3f;
     private int rbCount = 0;
 
@@ -61,7 +61,8 @@ public class ScreenCapperMock implements IScreenCapper {
            rbCount = 0;
        }
 
-        for(int i = 0; i < pixels.length; i++) {
+        int totalPixels = pixels.length;
+        for(int i = 0; i < totalPixels; i++) {
             int pixel = r;
             pixel = (pixel << 8) + g;
             pixel = (pixel << 8) + b;
@@ -78,5 +79,6 @@ public class ScreenCapperMock implements IScreenCapper {
 
     public void dispose() {
         size = null;
+        logger = null; 
     }
 }

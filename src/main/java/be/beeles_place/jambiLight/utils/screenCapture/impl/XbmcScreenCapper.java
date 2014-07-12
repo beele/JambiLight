@@ -7,12 +7,10 @@ import java.awt.*;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Date;
-import java.util.concurrent.ExecutionException;
 
 public class XbmcScreenCapper implements IScreenCapper {
 
-    private LOGGER logger;
+    private final LOGGER logger;
 
     private boolean initDone = false;
 
@@ -70,6 +68,7 @@ public class XbmcScreenCapper implements IScreenCapper {
             }
         } catch (Exception e) {
             logger.ERROR("IScreenCapper => XBMC communication init failed!: " + e.getMessage());
+            return null;
         }
 
         try {
@@ -98,6 +97,7 @@ public class XbmcScreenCapper implements IScreenCapper {
             }
         } catch (Exception e) {
             logger.ERROR("IScreenCapper => XBMC connection error: " +  e.getMessage());
+            return null;
         }
 
         //Convert bytes to integer values!
@@ -119,12 +119,21 @@ public class XbmcScreenCapper implements IScreenCapper {
 
     public void dispose() {
         try {
+            if(in != null) {
+                in.close();
+            }
             if(client != null) {
                 client.close();
             }
             if(server != null) {
                 server.close();
             }
+            in = null;
+            client = null;
+            server = null;
+            
+            data = null;
+            pixels = null;
         } catch (Exception e) {
             logger.ERROR("IScreenCapper => Cannot dispose correctly!");
         }

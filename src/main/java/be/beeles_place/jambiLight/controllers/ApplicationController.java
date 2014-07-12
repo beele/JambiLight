@@ -124,6 +124,16 @@ public class ApplicationController {
 
     @Subscribe
     public void onColorsUpdated(ColorModelUpdatedEvent event) {
+        
+        //Testing only:
+        /*int mb = 1048576;
+        Runtime rt = Runtime.getRuntime();
+        logger.DEBUG("#### HEAP USAGE ####");
+        logger.DEBUG("Used mem: " + (rt.totalMemory()- rt.freeMemory() )/ mb);
+        logger.DEBUG("Free mem: " + rt.freeMemory() / mb);
+        logger.DEBUG("All  mem: " +  rt.totalMemory() / mb);
+        logger.DEBUG("Max  mem: " + rt.maxMemory() / mb);*/
+        
         Platform.runLater(() -> {
             String title = "JambiLight => running at: " + (1000 / model.getActionDuration()) + " FPS";
             stage.setTitle(title);

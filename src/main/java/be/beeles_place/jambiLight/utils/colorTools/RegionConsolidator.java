@@ -15,8 +15,6 @@ public class RegionConsolidator {
     private int horizontalMargin;
     private int verticalMargin;
 
-    private int[][] cRegions;
-
     private int r, g, b;
     private int rr, gg, bb;
 
@@ -25,7 +23,7 @@ public class RegionConsolidator {
     private int weight = 1;
     private int totalWeight = 1;
     private int tempWeight;
-
+    
     /**
      * Creates a new RegionConsolidator instance.
      * @param horizontalRegions The number of horizontal regions.
@@ -68,7 +66,7 @@ public class RegionConsolidator {
      * The second dimension contains the R/G/B values.
      */
     public int[][] consolidateRegions(int[][][] regions) {
-        cRegions = new int[finalRegionCount][3];
+        int[][] cRegions = new int[finalRegionCount][3];
 
         //Collect all regions per column into one pixel.
         for (int i = 0; i < width; i++) {
@@ -164,6 +162,8 @@ public class RegionConsolidator {
         c2 = cRegions[width + height + width - 2 + verticalMargin];
         cRegions[width + height + width - 3] = averageRegions(c1,c2);
 
+        c1 = null;
+        c2 = null;
         return cRegions;
     }
 
@@ -178,6 +178,7 @@ public class RegionConsolidator {
         newRegion[0] = (regionA[0] + regionB[0]) / 2;
         newRegion[1] = (regionA[1] + regionB[1]) / 2;
         newRegion[2] = (regionA[2] + regionB[2]) / 2;
+        
         return newRegion;
     }
 

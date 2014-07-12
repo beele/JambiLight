@@ -6,8 +6,6 @@ import be.beeles_place.jambiLight.modes.AbstractColorMode;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.utils.screenCapture.IScreenCapper;
 import be.beeles_place.jambiLight.utils.screenCapture.ScreenCapperMode;
-import be.beeles_place.jambiLight.utils.screenCapture.impl.ScreenCapper;
-import be.beeles_place.jambiLight.utils.screenCapture.impl.ScreenCapperMock;
 
 import java.awt.*;
 
