@@ -11,7 +11,6 @@ import be.beeles_place.jambiLight.utils.EventbusWrapper;
 import be.beeles_place.jambiLight.utils.SettingsLoader;
 import be.beeles_place.jambiLight.utils.communication.CommunicationLibraries;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
-import be.beeles_place.jambiLight.utils.screenCapture.ScreenCapperMode;
 import be.beeles_place.jambiLight.view.MainViewController;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -126,13 +125,13 @@ public class ApplicationController {
     public void onColorsUpdated(ColorModelUpdatedEvent event) {
         
         //Testing only:
-        /*int mb = 1048576;
+        int mb = 1048576;
         Runtime rt = Runtime.getRuntime();
         logger.DEBUG("#### HEAP USAGE ####");
         logger.DEBUG("Used mem: " + (rt.totalMemory()- rt.freeMemory() )/ mb);
         logger.DEBUG("Free mem: " + rt.freeMemory() / mb);
         logger.DEBUG("All  mem: " +  rt.totalMemory() / mb);
-        logger.DEBUG("Max  mem: " + rt.maxMemory() / mb);*/
+        logger.DEBUG("Max  mem: " + rt.maxMemory() / mb);
         
         Platform.runLater(() -> {
             String title = "JambiLight => running at: " + (1000 / model.getActionDuration()) + " FPS";

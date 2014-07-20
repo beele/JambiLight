@@ -3,7 +3,6 @@ package be.beeles_place.jambiLight.utils.communication.impl;
 import be.beeles_place.jambiLight.utils.communication.ASerialComm;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
 
-import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 

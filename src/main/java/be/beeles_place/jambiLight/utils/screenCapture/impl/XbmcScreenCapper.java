@@ -21,11 +21,12 @@ public class XbmcScreenCapper implements IScreenCapper {
 
     private byte[] data;
     private int[] pixels;
+    private Dimension dimensions;
 
+    private final int totalPixels;
     private final int width;
     private final int height;
     private final int totalBytes;
-    private final int totalPixels;
 
     /**
      * Constructor for XbmcScreenCapper.
@@ -38,44 +39,38 @@ public class XbmcScreenCapper implements IScreenCapper {
         width = 720;
         height = 480;
 
-        //XBMC sends the pixel data as BGRA.
+        //XBMC sends the pixel data as BGRA (4 bytes per pixel).
         totalPixels = width * height;
         totalBytes = totalPixels * 4;
 
         data = new byte[totalBytes];
         pixels = new int[totalPixels];
+        dimensions = new Dimension(width,height);
     }
 
     @Override
     public Dimension getScreenDimensions() {
-        return new Dimension(width,height);
+        return dimensions;
     }
 
     @Override
     public int[] capture() {
-
-        try {
-            if(initDone == false) {
-                server = new ServerSocket(port);
-                server.setReceiveBufferSize(totalBytes);
-
-                logger.INFO("IScreenCapper => Waiting for XBMC connection on port " + port + "!");
-                client = server.accept();
-                logger.INFO("IScreenCapper => XBMC client connected on port " + port + "!");
-
-                in = client.getInputStream();
-                initDone = true;
+        //Perform startup, this should only be done once, hence the if statement!
+        if(initDone == false) {
+            try {
+                init();
+            } catch (Exception e) {
+                logger.ERROR("IScreenCapper => XBMC communication init failed!: " + e.getMessage());
+                return null;
             }
-        } catch (Exception e) {
-            logger.ERROR("IScreenCapper => XBMC communication init failed!: " + e.getMessage());
-            return null;
         }
 
-        try {
-            int read = 0;
-            boolean run = true;
-            while(run) {
-
+        //Try to receive data.
+        int read = 0;
+        boolean run = true;
+        while(run) {
+            try {
+                //If enough data is in the buffer, read it out.
                 if(in.available() == totalBytes) {
                     read += in.read(data, read, in.available());
 
@@ -89,17 +84,41 @@ public class XbmcScreenCapper implements IScreenCapper {
 
                 //Only continue when the correct amount of pixels has been read!
                 if(read == totalBytes) {
-                    read = 0;
-                    run = false;
+                    //Process the data and return the pixels.
+                    processData();
+                    return pixels;
                 } else {
+                    //Saves CPU, waits for the next loop to see if all the data has been received.
                     Thread.sleep(1);
                 }
+            } catch (Exception e) {
+                logger.ERROR("IScreenCapper => XBMC connection error: " +  e.getMessage());
+                return null;
             }
-        } catch (Exception e) {
-            logger.ERROR("IScreenCapper => XBMC connection error: " +  e.getMessage());
-            return null;
         }
 
+        //If you get here, something went wrong!
+        return null;
+    }
+
+    /**
+     * Sets up a new socket connection with both client and server.
+     * @throws Exception When the socket cannot be started!
+     */
+    private void init() throws Exception{
+        server = new ServerSocket(port);
+        server.setReceiveBufferSize(totalBytes);
+
+        logger.INFO("IScreenCapper => Waiting for XBMC connection on port " + port + "!");
+        //This call is blocking and stops code execution until the connection has been made!
+        client = server.accept();
+        logger.INFO("IScreenCapper => XBMC client connected on port " + port + "!");
+
+        in = client.getInputStream();
+        initDone = true;
+    }
+
+    private void processData() {
         //Convert bytes to integer values!
         int pixelCounter = 0;
         for(int i = 0; i < data.length ; i+=4) {
@@ -113,8 +132,6 @@ public class XbmcScreenCapper implements IScreenCapper {
 
             pixels[pixelCounter++] = (0xFF000000 | r | g | b);
         }
-
-        return pixels;
     }
 
     public void dispose() {
@@ -134,6 +151,7 @@ public class XbmcScreenCapper implements IScreenCapper {
             
             data = null;
             pixels = null;
+            dimensions = null;
         } catch (Exception e) {
             logger.ERROR("IScreenCapper => Cannot dispose correctly!");
         }

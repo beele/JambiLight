@@ -89,7 +89,9 @@ public class MainViewController implements Initializable {
     private ComboBox<ScreenCapperMode> cmbColorMode;
 
     //Local variables
-    private List<Pane> panes;
+    private final List<Pane> panes = new ArrayList<>();
+    private final ColumnConstraints ccs = new ColumnConstraints(10D,100D,-1D,Priority.SOMETIMES,null,true);
+    private final RowConstraints rcs = new RowConstraints(10D,30D,-1D,Priority.SOMETIMES,null,true);
 
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
@@ -101,11 +103,9 @@ public class MainViewController implements Initializable {
     public void initUI() {
         //Dynamically generate the columns and rows.
         for(int i = 0; i < settings.getHorizontalRegions() - 1; i++) {
-            ColumnConstraints ccs = new ColumnConstraints(10D,100D,-1D,Priority.SOMETIMES,null,true);
             gridItems.getColumnConstraints().add(ccs);
         }
         for(int j = 0; j < settings.getVerticalRegions() - 1; j++) {
-            RowConstraints rcs = new RowConstraints(10D,30D,-1D,Priority.SOMETIMES,null,true);
             gridItems.getRowConstraints().add(rcs);
         }
         //Set the imageContainer to the correct position.
@@ -124,11 +124,9 @@ public class MainViewController implements Initializable {
 
     private void reInitUI() {
         for(int i = 0; i < settings.getHorizontalRegions(); i++) {
-            ColumnConstraints ccs = new ColumnConstraints(10D,100D,-1D,Priority.SOMETIMES,null,true);
             gridItems.getColumnConstraints().add(ccs);
         }
         for(int j = 0; j < settings.getVerticalRegions(); j++) {
-            RowConstraints rcs = new RowConstraints(10D,30D,-1D,Priority.SOMETIMES,null,true);
             gridItems.getRowConstraints().add(rcs);
         }
 
@@ -141,7 +139,7 @@ public class MainViewController implements Initializable {
     }
 
     private void addPanels() {
-        panes = new ArrayList<>();
+        panes.removeAll(panes);
 
         for (int i = 0; i < settings.getHorizontalRegions(); i++) {
             Pane pane = new Pane();
@@ -190,7 +188,7 @@ public class MainViewController implements Initializable {
             iter.next();
             iter.remove();
         }
-        panes = new ArrayList<>();
+        panes.removeAll(panes);
 
         reInitUI();
     }
@@ -198,12 +196,18 @@ public class MainViewController implements Initializable {
     public void updateColors() {
         int[][] colors = model.getCurrentColors();
 
-        for (int i = 0; i < panes.size(); i++) {
-            int[] rgb = colors[i];
-            String values = "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ");";
-            panes.get(i).setStyle("-fx-background-color: " + values);
-            values = null;
+        //This prevents an ArrayIndexOutOfBoundsException when the size of the regions has just been changed!
+        if(colors.length == panes.size()) {
+            for (int i = 0; i < panes.size(); i++) {
+                int[] rgb = colors[i];
+                String values = "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ");";
+                panes.get(i).setStyle("-fx-background-color: " + values);
+                rgb = null;
+                values = null;
+            }
         }
+
+        colors = null;
     }
 
     private void updateSettingsValues() {
