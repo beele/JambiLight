@@ -15,7 +15,8 @@ How to build & run
   * Windows users can build by double clicking the build.bat file.
   * OSX and linux can build by executing the build.sh file.
 - When the build has finished go to the /target/ folder that has been created by maven.
-- Open a command prompt and run the following command: java -jar JambiLight.jar
+- Run the application by executing the run.bat or run.sh file. (This will set some java environment variables, to keep the memory usage in check!)
+  * You can also double click the jar file or manually start the program through the command prompt. This however could lead to high memory usage!
   * When you have made a build with RXTX enabled use the following command: java -jar JambiLight.jar -Djava.library.path="PATH_TO_FOLDER_WITH_RXTX_SERIAL_DLL"
 - XBMC support is forthcoming, read the XBMC section below for full details!
 
