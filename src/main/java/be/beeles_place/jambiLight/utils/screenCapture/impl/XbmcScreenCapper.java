@@ -114,7 +114,9 @@ public class XbmcScreenCapper implements IScreenCapper {
         client = server.accept();
         logger.INFO("IScreenCapper => XBMC client connected on port " + port + "!");
 
+        //Get the inputstream.
         in = client.getInputStream();
+
         initDone = true;
     }
 
