@@ -9,6 +9,7 @@ import java.util.Date;
 
 public class ScreenCapperJNIMock implements IScreenCapper {
 
+    private LOGGER logger;
     private Dimension size;
 
     private static boolean linkError = false;
@@ -26,6 +27,7 @@ public class ScreenCapperJNIMock implements IScreenCapper {
      * Creates a new ScreenCapperJNIMock instance.
      */
     public ScreenCapperJNIMock() {
+        logger = LOGGER.getInstance();
         int width = Screen.getMainScreen().getWidth();
         int height = Screen.getMainScreen().getHeight();
         size = new Dimension(width,height);
@@ -49,14 +51,14 @@ public class ScreenCapperJNIMock implements IScreenCapper {
                 pixel = (pixel << 8);
                 temp[i] = pixel;
             }
-            LOGGER.getInstance().ERROR("JNI Link not satisfied! Please correct DLL location!");
+            logger.ERROR("JNI Link not satisfied! Please correct DLL location!");
         } else {
             //Do JNI call!
             long startTime = new Date().getTime();
             temp = captureViaJNI();
             long endTime = new Date().getTime();
             long difference = endTime - startTime;
-            LOGGER.getInstance().INFO("SCREENCAPPER => JNI call took : " + difference + "ms");
+            logger.INFO("SCREENCAPPER => JNI call took : " + difference + "ms");
         }
 
         return temp;
