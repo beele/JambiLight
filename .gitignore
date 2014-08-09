@@ -220,6 +220,6 @@ pip-log.txt
 .mr.developer.cfg
 rxtxSerial.dll
 run.bat
-ScreenCapper.dll
+/JambiLight_JAVA/ScreenCapper.dll
 settings.xml
 JambiLight_JNI/ScreenCapper/ScreenCapper/ReadMe.txt
