@@ -1,0 +1,181 @@
+<project 	xmlns="http://maven.apache.org/POM/4.0.0" 
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>be.beeles_place</groupId>
+	<artifactId>JambiLight</artifactId>
+	<packaging>jar</packaging>
+	<version>0.91-Beta</version>
+	<name>JambiLight</name>
+	
+	<url>https://github.com/beele/JambiLight</url>
+	
+	<repositories>
+		<repository>
+		<id>central</id>
+		<name>Maven Repository Switchboard</name>
+		<layout>default</layout>
+		<url>http://repo1.maven.org/maven2/</url>
+		<snapshots>
+			<enabled>false</enabled>
+		</snapshots>
+		</repository>
+	</repositories>
+	
+	<developers>
+		<developer>
+			<id>beele</id>
+			<name>Kevin Van den Abeele</name>
+			<email>info@beeles-place.be</email>
+		</developer>
+	</developers>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<javafx.version>2.2</javafx.version>
+	</properties>
+	
+	<dependencies>
+		<!--<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>javafx</artifactId>
+			<version>${javafx.version}</version>
+			<systemPath>${java.home}/lib/jfxrt.jar</systemPath>
+			<scope>system</scope>
+		</dependency>-->
+		
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>16.0.1</version>
+		</dependency>
+		
+		<!--<dependency>
+			<groupId>com.google.code</groupId>
+			<artifactId>jssc</artifactId>
+			<version>2.6</version>
+		</dependency>-->
+        <dependency>
+            <groupId>org.scream3r</groupId>
+            <artifactId>jssc</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+		
+		<dependency>
+			<groupId>com.google.code</groupId>
+			<artifactId>RXTX</artifactId>
+			<version>2.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>be.beeles_place.code</groupId>
+			<artifactId>JNIscreenCapMock</artifactId>
+			<version>1.0</version>
+			<type>dll</type>
+		</dependency>
+		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<testSourceDirectory>src/main/test</testSourceDirectory>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+					<execution>
+						<id>copy-prod-resources</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<!-- this is important -->
+							<overwrite>true</overwrite>
+							<!-- this as well (target/ was missing) -->
+							<outputDirectory>${basedir}/target/classes/be/beeles_place/jambiLight/view/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/java/be/beeles_place/jambiLight/view</directory>
+									<excludes>
+										<exclude>**/*.java</exclude>
+									</excludes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<!-- copy all dependencies of your app to target folder-->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.8</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<configuration>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>false</overWriteSnapshots>
+							<overWriteIfNewer>true</overWriteIfNewer>
+						</configuration>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<JavaFX-Version>${javafx.version}+</JavaFX-Version>
+							<Main-Class>be.beeles_place.jambiLight.Main</Main-Class>
+							<implementation-version>1.0</implementation-version>
+							<JavaFX-Application-Class>be.beeles_place.jambiLight.Main</JavaFX-Application-Class>
+							<JavaFX-Class-Path>
+								<!-- list all your dependencies here-->
+								dependency/jfxrt.jar
+							</JavaFX-Class-Path>
+							<!-- The artifactId (name) of the jfxrt.jar ... see dependency system scope-->
+							<Class-Path>
+								dependency/javafx-${javafx.version}.jar dependency/jfxrt.jar dependency/guava-16.0.1.jar  dependency/jssc-2.8.0.jar dependency/RXTX-2.2.jar dependency/hamcrest-core-1.3.jar dependency/junit-4.11.jar
+							</Class-Path>
+						</manifestEntries>
+						<manifest>
+							<addClasspath>true</addClasspath>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+		
+		<finalName>JambiLight</finalName>
+	</build>
+
+</project>

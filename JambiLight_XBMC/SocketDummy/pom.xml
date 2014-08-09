@@ -1,0 +1,83 @@
+<project 	xmlns="http://maven.apache.org/POM/4.0.0" 
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>be.beeles_place</groupId>
+	<artifactId>SocketDummy</artifactId>
+	<packaging>jar</packaging>
+	<version>1.0</version>
+	<name>SocketDummy</name>
+	
+	<url>https://github.com/beele/JambiLight</url>
+	
+	<repositories>
+		<repository>
+		<id>central</id>
+		<name>Maven Repository Switchboard</name>
+		<layout>default</layout>
+		<url>http://repo1.maven.org/maven2/</url>
+		<snapshots>
+			<enabled>false</enabled>
+		</snapshots>
+		</repository>
+	</repositories>
+	
+	<developers>
+		<developer>
+			<id>beele</id>
+			<name>Kevin Van den Abeele</name>
+			<email>info@beeles-place.be</email>
+		</developer>
+	</developers>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<testSourceDirectory>src/main/test</testSourceDirectory>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<Main-Class>be.beeles_place.socketDummy.Main</Main-Class>
+							<implementation-version>1.0</implementation-version>
+						</manifestEntries>
+						<manifest>
+							<addClasspath>true</addClasspath>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			
+		</plugins>
+		
+		<finalName>SocketDummy</finalName>
+	</build>
+</project>
