@@ -164,7 +164,9 @@ public class AmbiLightCore {
      * Call this method when stopping the AmbiLightMode!
      */
     public void dispose() {
-        capper.dispose();
-        capper = null;
+        if(capper != null) {
+            capper.dispose();
+            capper = null;
+        }
     }
 }

@@ -17,7 +17,12 @@ public abstract class AbstractColorMode implements IColorMode, Runnable {
         init();
         logger.INFO("MODE => Color mode running.");
         while (!forceQuit) {
-            start();
+            try {
+                start();
+            } catch (Exception e) {
+                logger.ERROR("MODE => Unexpected error! => " + e.getMessage());
+                stop();
+            }
         }
     }
 
