@@ -9,4 +9,4 @@ mvn clean install
 mv ./JambiLight_JAVA/target/dependency/JNIscreenCapMock-1.0.dll ./JambiLight_JAVA/target/ScreenCapper.dll
 echo "java -Xmx256m -jar JambiLight.jar" > ./JambiLight_JAVA/target/run.sh
 echo "java -Xmx128m -jar SocketDummy.jar" > ./JambiLight_XBMC/SocketDummy/target/run.sh
-read -p "Press any key to continue..."
+read -p "Press return to continue..."
