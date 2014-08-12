@@ -147,7 +147,7 @@ public class MainViewController implements Initializable {
             Rectangle rect = new Rectangle();
             rect.widthProperty().bind(gridItems.widthProperty().divide(20));
             rect.heightProperty().bind(gridItems.heightProperty().divide(14));
-            rect.setFill(new Color(0,1,(i * 10 + 10)/255,1));
+            rect.setFill(new Color(0,1,(i * 10 + 10)/(double)255,1));
             rects.add(rect);
             gridItems.add(rect, i, 0);
         }
@@ -156,7 +156,7 @@ public class MainViewController implements Initializable {
             Rectangle rect = new Rectangle();
             rect.widthProperty().bind(gridItems.widthProperty().divide(20));
             rect.heightProperty().bind(gridItems.heightProperty().divide(14));
-            rect.setFill(new Color(0,1,(i * 10 + 10)/255,1));
+            rect.setFill(new Color(0,1,(i * 10 + 10)/(double)255,1));
             rects.add(rect);
             gridItems.add(rect, settings.getHorizontalRegions() - 1, i + 1);
         }
@@ -165,7 +165,7 @@ public class MainViewController implements Initializable {
             Rectangle rect = new Rectangle();
             rect.widthProperty().bind(gridItems.widthProperty().divide(20));
             rect.heightProperty().bind(gridItems.heightProperty().divide(14));
-            rect.setFill(new Color(0,1,(i * 10 + 10)/255,1));
+            rect.setFill(new Color(0,1,(i * 10 + 10)/(double)255,1));
             rects.add(rect);
             gridItems.add(rect, (settings.getHorizontalRegions() - 1) - i, settings.getVerticalRegions() - 1);
         }
@@ -174,7 +174,7 @@ public class MainViewController implements Initializable {
             Rectangle rect = new Rectangle();
             rect.widthProperty().bind(gridItems.widthProperty().divide(20));
             rect.heightProperty().bind(gridItems.heightProperty().divide(14));
-            rect.setFill(new Color(0,1,(i * 10 + 10)/255,1));
+            rect.setFill(new Color(0,1,(i * 10 + 10)/(double)255,1));
             rects.add(rect);
             gridItems.add(rect, 0, (settings.getVerticalRegions() - 2) - i);
         }
