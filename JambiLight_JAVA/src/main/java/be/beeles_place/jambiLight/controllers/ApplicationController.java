@@ -121,6 +121,8 @@ public class ApplicationController {
         startup();
     }
 
+    int count = 0;
+
     @Subscribe
     public void onColorsUpdated(ColorModelUpdatedEvent event) {
         
@@ -138,6 +140,18 @@ public class ApplicationController {
             stage.setTitle(title);
             viewController.updateColors();
         });
+
+        /**
+         * Temp testing only, make the system stop after a huge perf drop => check the logs!
+         * The first perf drop should always be ignored, as it might be from connecting/starting things up.
+         */
+        if(model.getActionDuration() > 500) {
+            if(count == 0) {
+                count++;
+            } else {
+                shutdown();
+            }
+        }
     }
 
     @Subscribe

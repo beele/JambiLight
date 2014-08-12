@@ -43,7 +43,7 @@ while ALIVE:
         xbmc.sleep(10000)
 
     while CONNECTED:
-        xbmc.sleep(30)
+        xbmc.sleep(100)
         try:
             #Check if there something playing.
             if xbmc.Player().isPlaying():
@@ -52,7 +52,8 @@ while ALIVE:
                 if capture.getCaptureState() == xbmc.CAPTURE_STATE_DONE:
                     #Get frame data and send it.
                     pixels = capture.getImage()
-                    sock.sendall(pixels)
+                    sock.send(pixels)
+                    pixels = None
                 else:
                     log("No image captured!")
             else:

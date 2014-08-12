@@ -48,7 +48,6 @@ public class Main {
             byte[] pixels = new byte[(int)(dimensions.getWidth() * dimensions.getHeight() * 4)];
 
             while(true) {
-
                 //Rainbows!
                 r = (int)(Math.sin(frequency * rbCount + 0) * 127 + 128);
                 g = (int)(Math.sin(frequency * rbCount + 2) * 127 + 128);
@@ -65,6 +64,9 @@ public class Main {
                     pixels[i] = (byte)b;
                 }
                 out.write(pixels);
+                //This value is required for the application to keep working on osx!
+                //On windows no sleep directive is required.
+                Thread.sleep(5);
             }
 
         } catch (Exception e) {

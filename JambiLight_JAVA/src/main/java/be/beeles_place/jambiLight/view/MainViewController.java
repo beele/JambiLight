@@ -13,6 +13,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 import java.net.URL;
 import java.util.*;
@@ -89,7 +91,7 @@ public class MainViewController implements Initializable {
     private ComboBox<ScreenCapperMode> cmbColorMode;
 
     //Local variables
-    private final List<Pane> panes = new ArrayList<>();
+    private final List<Rectangle> rects = new ArrayList<>();
     private final ColumnConstraints ccs = new ColumnConstraints(10D,100D,-1D,Priority.SOMETIMES,null,true);
     private final RowConstraints rcs = new RowConstraints(10D,30D,-1D,Priority.SOMETIMES,null,true);
 
@@ -139,34 +141,42 @@ public class MainViewController implements Initializable {
     }
 
     private void addPanels() {
-        panes.removeAll(panes);
+        rects.removeAll(rects);
 
         for (int i = 0; i < settings.getHorizontalRegions(); i++) {
-            Pane pane = new Pane();
-            pane.setStyle("-fx-background-color: rgb(0,255," + (i * 10 + 10) + ");");
-            panes.add(pane);
-            gridItems.add(pane, i, 0);
+            Rectangle rect = new Rectangle();
+            rect.widthProperty().bind(gridItems.widthProperty().divide(20));
+            rect.heightProperty().bind(gridItems.heightProperty().divide(14));
+            rect.setFill(new Color(0,1,(i * 10 + 10)/255,1));
+            rects.add(rect);
+            gridItems.add(rect, i, 0);
         }
 
         for (int i = 0; i < settings.getVerticalRegions() - 2; i++) {
-            Pane pane = new Pane();
-            pane.setStyle("-fx-background-color: rgb(0,255," + (i * 10 + 10) + ");");
-            panes.add(pane);
-            gridItems.add(pane, settings.getHorizontalRegions() - 1, i + 1);
+            Rectangle rect = new Rectangle();
+            rect.widthProperty().bind(gridItems.widthProperty().divide(20));
+            rect.heightProperty().bind(gridItems.heightProperty().divide(14));
+            rect.setFill(new Color(0,1,(i * 10 + 10)/255,1));
+            rects.add(rect);
+            gridItems.add(rect, settings.getHorizontalRegions() - 1, i + 1);
         }
 
         for (int i = 0; i < settings.getHorizontalRegions(); i++) {
-            Pane pane = new Pane();
-            pane.setStyle("-fx-background-color: rgb(0,255," + (i * 10 + 10) + ");");
-            panes.add(pane);
-            gridItems.add(pane, (settings.getHorizontalRegions() - 1) - i, settings.getVerticalRegions() - 1);
+            Rectangle rect = new Rectangle();
+            rect.widthProperty().bind(gridItems.widthProperty().divide(20));
+            rect.heightProperty().bind(gridItems.heightProperty().divide(14));
+            rect.setFill(new Color(0,1,(i * 10 + 10)/255,1));
+            rects.add(rect);
+            gridItems.add(rect, (settings.getHorizontalRegions() - 1) - i, settings.getVerticalRegions() - 1);
         }
 
         for (int i = 0; i < settings.getVerticalRegions() - 2; i++) {
-            Pane pane = new Pane();
-            pane.setStyle("-fx-background-color: rgb(0,255," + (i * 10 + 10) + ");");
-            panes.add(pane);
-            gridItems.add(pane, 0, (settings.getVerticalRegions() - 2) - i);
+            Rectangle rect = new Rectangle();
+            rect.widthProperty().bind(gridItems.widthProperty().divide(20));
+            rect.heightProperty().bind(gridItems.heightProperty().divide(14));
+            rect.setFill(new Color(0,1,(i * 10 + 10)/255,1));
+            rects.add(rect);
+            gridItems.add(rect, 0, (settings.getVerticalRegions() - 2) - i);
         }
     }
 
@@ -188,7 +198,7 @@ public class MainViewController implements Initializable {
             iter.next();
             iter.remove();
         }
-        panes.removeAll(panes);
+        rects.removeAll(rects);
 
         reInitUI();
     }
@@ -197,13 +207,11 @@ public class MainViewController implements Initializable {
         int[][] colors = model.getCurrentColors();
 
         //This prevents an ArrayIndexOutOfBoundsException when the size of the regions has just been changed!
-        if(colors.length == panes.size()) {
-            for (int i = 0; i < panes.size(); i++) {
+        if(colors.length == rects.size()) {
+            for (int i = 0; i < rects.size(); i++) {
                 int[] rgb = colors[i];
-                String values = "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ");";
-                panes.get(i).setStyle("-fx-background-color: " + values);
+                rects.get(i).setFill(new Color((double)rgb[0]/255,(double)rgb[1]/255,(double)rgb[2]/255,1));
                 rgb = null;
-                values = null;
             }
         }
 
