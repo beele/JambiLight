@@ -1,2 +1,6 @@
 v0.0.1
 - Initial version
+v0.1.0
+- The plugin is now much less error prone. It will handle disconnects with the host application much better and will reconnect when possible.
+- When no video is playing, a low framerate static color is send to the host application!
+- License updated to creative commons.
