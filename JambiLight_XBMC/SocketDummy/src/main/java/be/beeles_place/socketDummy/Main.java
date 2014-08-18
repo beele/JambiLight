@@ -2,11 +2,10 @@ package be.beeles_place.socketDummy;
 
 import java.awt.*;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 
 public class Main {
-
-    private boolean initDone = false;
 
     private int port;
     private Dimension dimensions;
@@ -15,6 +14,7 @@ public class Main {
     private int width;
     private int height;
     private int totalBytes;
+    private byte[] pixels;
 
     private int r = 255;
     private int g = 0;
@@ -22,32 +22,64 @@ public class Main {
 
     private float frequency = 0.3f;
     private int rbCount = 0;
-
-    //TODO: Clean up this mess!
+    
+    private DataOutputStream out;
+    private Socket clientSocket;
 
     public static void main(String[] args) {
-        Main m = new Main();
-        m.run();
+        Main mummy = new Main();
+        mummy.run();
     }
 
     public void run() {
         try {
-            port = 1337;
-            width = 720;
-            height = 480;
+        	init();
+            sendLoop();
+        } catch (Exception e) {
+        	System.out.println("Fatal Error => " + e.getMessage());
+        } finally {
+        	dispose();
+        }
+    }
+    
+    private void init() throws InterruptedException {
+    	System.out.println("Info => Init...");
+    	
+    	port = 1337;
+        width = 720;
+        height = 480;
 
-            //XBMC sends the pixel data as BGRA (4 bytes per pixel).
-            totalPixels = width * height;
-            totalBytes = totalPixels * 4;
-            dimensions = new Dimension(width, height);
+        //XBMC sends the pixel data as BGRA (4 bytes per pixel).
+        totalPixels = width * height;
+        totalBytes = totalPixels * 4;
+        dimensions = new Dimension(width, height);
+        pixels = new byte[(int)(dimensions.getWidth() * dimensions.getHeight() * 4)];
 
-            Socket clientSocket = new Socket("127.0.0.1",port);
-            clientSocket.setReceiveBufferSize(totalBytes);
-            DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
-
-            byte[] pixels = new byte[(int)(dimensions.getWidth() * dimensions.getHeight() * 4)];
-
-            while(true) {
+        boolean connected = false;
+        while(connected == false) {
+        	try {
+           	  	connectToSocket();
+           	  	connected = true;
+            } catch (Exception e) {
+            	System.out.println("Error => " + e.getMessage());
+            	Thread.sleep(1000);
+            }
+        }
+        System.out.println("Info => Connected!");
+    }
+    
+    private void connectToSocket() throws Exception {
+    	System.out.println("Info => Connecting to socket...");
+    	
+    	clientSocket = new Socket("127.0.0.1",port);
+        clientSocket.setReceiveBufferSize(totalBytes);
+        out = new DataOutputStream(clientSocket.getOutputStream());
+    }
+    
+    private void sendLoop() {
+    	boolean run = true;
+    	try {
+    		while(true) {
                 //Rainbows!
                 r = (int)(Math.sin(frequency * rbCount + 0) * 127 + 128);
                 g = (int)(Math.sin(frequency * rbCount + 2) * 127 + 128);
@@ -63,14 +95,34 @@ public class Main {
                     pixels[i+1] = (byte)g;
                     pixels[i] = (byte)b;
                 }
+                System.out.println("Info => Sending data: R: " + r + " G: " + g + " B: " + b);
                 out.write(pixels);
-                //This value is required for the application to keep working on osx!
-                //On windows no sleep directive is required.
-                Thread.sleep(5);
+                //Set to 30 FPS => 1000/30
+                Thread.sleep(33);
             }
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+    	} catch (Exception e) {
+    		System.out.println("Error => " + e.getMessage());
+    		run = false;
+    	}
+    }
+    
+    private void dispose() {
+    	System.out.println("Info => Disposing...");
+    	
+    	if(out != null) {
+			try {
+				out.close();
+			} catch (Exception e) {
+				System.out.println("Error => Cannot close output stream!");
+			}
+    	}
+    	
+    	if(clientSocket != null) {
+    		try {
+				clientSocket.close();
+			} catch (IOException e) {
+				System.out.println("Error => Cannot close socket!");
+			}
+    	}
     }
 }
