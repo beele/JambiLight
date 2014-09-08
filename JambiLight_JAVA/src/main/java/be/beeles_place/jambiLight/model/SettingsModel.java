@@ -1,47 +1,50 @@
 package be.beeles_place.jambiLight.model;
 
-import be.beeles_place.jambiLight.utils.screenCapture.ScreenCapperMode;
+import be.beeles_place.jambiLight.utils.screenCapture.ScreenCapperStrategy;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.util.List;
 
+/**
+ * This class contains the settings for the application.
+ */
 @XmlRootElement(name = "settings")
 public class SettingsModel {
 
     //JambiLight core settings.
-    private int horizontalRegions;              //Between 4 and MAX_INT (please lower than 100).
-    private int verticalRegions;                //Between 4 and MAX_INT (please lower than 100).
+    private int horizontalRegions;                  //Between 4 and MAX_INT (please lower than 100).
+    private int verticalRegions;                    //Between 4 and MAX_INT (please lower than 100).
 
-    private int horizontalMargin;               //Between 0 and horizontalRegions - 2.
-    private int verticalMargin;                 //Between 0 and verticalRegions - 2.
+    private int horizontalMargin;                   //Between 0 and horizontalRegions - 2.
+    private int verticalMargin;                     //Between 0 and verticalRegions - 2.
 
-    private int pixelIteratorStepSize;          //Between 1 and 10 (please lower than 5).
+    private int pixelIteratorStepSize;              //Between 1 and 10 (please lower than 5).
 
     //Color enhancement settings.
-    private boolean enhanceColor;               //True or false.
-    private float enhanceValue;                 //Between 1 and MAX_FLOAT (please lower than 10).
+    private boolean enhanceColor;                   //True or false.
+    private float enhanceValue;                     //Between 1 and MAX_FLOAT (please lower than 10).
 
     //Region consolidation settings.
-    private boolean weighColor;                 //True or false
-    private int weighFactor;                    //Between 1 and 5.
+    private boolean weighColor;                     //True or false
+    private int weighFactor;                        //Between 1 and 5.
 
     //Color correction settings.
-    private boolean correctIntensity;           //True or false.
-    private int greyDetectionThreshold;         //Between 0 and 255 (please lower than 20).
-    private float scaleUpValue;                 //Between 0.0f and 1.0f.
-    private float scaleDownValue;               //Between 0.0f and 1.0f.
+    private boolean correctIntensity;               //True or false.
+    private int greyDetectionThreshold;             //Between 0 and 255 (please lower than 20).
+    private float scaleUpValue;                     //Between 0.0f and 1.0f.
+    private float scaleDownValue;                   //Between 0.0f and 1.0f.
 
     //Comm port settings.
-    private String port;                        //String that contains the name of the port e.g: COM3.
-    private List<String> ports;                 //A list of String objects containing all available comm ports.
-    private boolean autoConnect;                //True or false.
+    private String port;                            //String that contains the name of the port e.g: COM3.
+    private List<String> ports;                     //A list of String objects containing all available comm ports.
+    private boolean autoConnect;                    //True or false.
 
-    private ScreenCapperMode captureMode;       //Enum value of type ScreenCapperMode, containing the active capture strategy.
+    private ScreenCapperStrategy captureMode;       //Enum value of type ScreenCapperMode, containing the active capture strategy.
 
     /**
-     * Creates a new SettingsModel instance.
+     * Constructor.
      */
     public SettingsModel() {
 
@@ -183,12 +186,12 @@ public class SettingsModel {
         this.autoConnect = autoConnect;
     }
 
-    public ScreenCapperMode getCaptureMode() {
+    public ScreenCapperStrategy getCaptureMode() {
         return captureMode;
     }
 
     @XmlElement
-    public void setCaptureMode(ScreenCapperMode captureMode) {
+    public void setCaptureMode(ScreenCapperStrategy captureMode) {
         this.captureMode = captureMode;
     }
 

@@ -5,7 +5,7 @@ import be.beeles_place.jambiLight.events.ShutdownEvent;
 import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.utils.EventbusWrapper;
-import be.beeles_place.jambiLight.utils.screenCapture.ScreenCapperMode;
+import be.beeles_place.jambiLight.utils.screenCapture.ScreenCapperStrategy;
 import com.google.common.eventbus.EventBus;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -19,6 +19,7 @@ import javafx.scene.shape.Rectangle;
 import java.net.URL;
 import java.util.*;
 
+//TODO: This needs a FULL rewrite together with the FXML!
 public class MainViewController implements Initializable {
 
     //Local variables.
@@ -88,13 +89,19 @@ public class MainViewController implements Initializable {
     private TextField txtScaleDownValue;
 
     @FXML
-    private ComboBox<ScreenCapperMode> cmbColorMode;
+    private ComboBox<ScreenCapperStrategy> cmbColorMode;
 
     //Local variables
     private final List<Rectangle> rects = new ArrayList<>();
     private final ColumnConstraints ccs = new ColumnConstraints(10D,100D,-1D,Priority.SOMETIMES,null,true);
     private final RowConstraints rcs = new RowConstraints(10D,30D,-1D,Priority.SOMETIMES,null,true);
 
+    /**
+     * Executed when the view is initialized.
+     *
+     * @param fxmlFileLocation The location of the FXML file.
+     * @param resources Resource bundle if any.
+     */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         //Register this class to receive events from the event bus!
@@ -102,6 +109,9 @@ public class MainViewController implements Initializable {
         eventBus.register(this);
     }
 
+    /**
+     * Initializes the UI.
+     */
     public void initUI() {
         //Dynamically generate the columns and rows.
         for(int i = 0; i < settings.getHorizontalRegions() - 1; i++) {
@@ -124,6 +134,9 @@ public class MainViewController implements Initializable {
         updateSettingsValues();
     }
 
+    /**
+     * Re-initializes the UI.
+     */
     private void reInitUI() {
         for(int i = 0; i < settings.getHorizontalRegions(); i++) {
             gridItems.getColumnConstraints().add(ccs);
@@ -140,6 +153,9 @@ public class MainViewController implements Initializable {
         updateSettingsValues();
     }
 
+    /**
+     * Adds panels to the dynamic grid.
+     */
     private void addPanels() {
         rects.removeAll(rects);
 
@@ -180,6 +196,9 @@ public class MainViewController implements Initializable {
         }
     }
 
+    /**
+     * Rebuilds the dynamic grid.
+     */
     private void rebuildGrid() {
         ListIterator iter = gridItems.getChildren().listIterator();
         while(iter.hasNext()) {
@@ -203,6 +222,9 @@ public class MainViewController implements Initializable {
         reInitUI();
     }
 
+    /**
+     * Update the colors.
+     */
     public void updateColors() {
         int[][] colors = model.getCurrentColors();
 
@@ -246,7 +268,7 @@ public class MainViewController implements Initializable {
         txtScaleUpValue.setText(settings.getScaleUpValue() + "");
         txtScaleDownValue.setText(settings.getScaleDownValue() + "");
 
-        cmbColorMode.setItems(FXCollections.observableArrayList(new ArrayList<ScreenCapperMode>(Arrays.asList(ScreenCapperMode.values()))));
+        cmbColorMode.setItems(FXCollections.observableArrayList(new ArrayList<ScreenCapperStrategy>(Arrays.asList(ScreenCapperStrategy.values()))));
         if(settings.getCaptureMode() != null) {
             cmbColorMode.getSelectionModel().select(settings.getCaptureMode());
         }

@@ -1,8 +1,6 @@
-package be.beeles_place.jambiLight.utils.communication.impl;
+package be.beeles_place.jambiLight.communication.impl;
 
-import be.beeles_place.jambiLight.model.ColorModel;
-import be.beeles_place.jambiLight.utils.communication.ASerialComm;
-import be.beeles_place.jambiLight.utils.logger.LOGGER;
+import be.beeles_place.jambiLight.communication.AbstractSerialCommStrategy;
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
@@ -17,12 +15,11 @@ import java.util.List;
 /**
  * Please do not longer use this implementation!
  * It should still function but the JSSC implementation is better in every way!
+ * May be removed in the future.
  */
+@SuppressWarnings("unchecked")
 @Deprecated
-public class SerialCommRXTX extends ASerialComm {
-
-    private LOGGER logger;
-    private ColorModel model;
+public class SerialCommRXTX extends AbstractSerialCommStrategy {
 
     private String portName;
 
@@ -33,10 +30,7 @@ public class SerialCommRXTX extends ASerialComm {
 
     private boolean started;
 
-    public SerialCommRXTX(ColorModel model) {
-        this.model = model;
-
-        logger = LOGGER.getInstance();
+    public SerialCommRXTX() {
         logger.INFO("COMM => Initiating serial communication service using RXTX lib");
     }
 
@@ -58,7 +52,6 @@ public class SerialCommRXTX extends ASerialComm {
 
             //Initial state setup.
             totalBytes = model.getNumberOfConsolidatedRegions() * 3;
-            //TODO: put the stepsize (aka bytes sent per loop) in the settings model.
             stepSize = 48;
             steps = (int) totalBytes / stepSize;
             currentStep = 0;
@@ -92,7 +85,6 @@ public class SerialCommRXTX extends ASerialComm {
                 Thread.sleep(1);
             }
 
-            //TODO: add in a system so each color is sent only once!
             if(canSendNext && model.getCurrentColors() != null) {
                 if(currentStep >= steps) {
                     currentStep = 0;
@@ -123,7 +115,7 @@ public class SerialCommRXTX extends ASerialComm {
 
     public void stop() {
         logger.INFO("COMM => Terminating and cleaning up serial communication!");
-        super.forceQuit = true;
+        forceQuit = true;
         port.close();
         output = null;
         port = null;

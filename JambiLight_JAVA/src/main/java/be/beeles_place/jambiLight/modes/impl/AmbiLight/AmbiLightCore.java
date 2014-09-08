@@ -1,4 +1,4 @@
-package be.beeles_place.jambiLight.modes.impl;
+package be.beeles_place.jambiLight.modes.impl.AmbiLight;
 
 import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.model.SettingsModel;
@@ -69,7 +69,7 @@ public class AmbiLightCore {
 
         //Create the required instances.
         enhancer = new ColorEnhancer(settings.getEnhanceValue());
-        corrector = new IntensityCorrector(settings);
+        corrector = new IntensityCorrector(settings.getGreyDetectionThreshold(), settings.getScaleUpValue(), settings.getScaleDownValue());
         consolidator = new RegionConsolidator( this.horizontalRegionSize, this.verticalRegionSize,
                                                 settings.getHorizontalMargin(), settings.getVerticalMargin(),
                                                 settings.isWeighColor(), settings.getWeighFactor());

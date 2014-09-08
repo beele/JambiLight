@@ -5,11 +5,10 @@ import be.beeles_place.jambiLight.events.SettingsUpdatedEvent;
 import be.beeles_place.jambiLight.events.ShutdownEvent;
 import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.model.SettingsModel;
-import be.beeles_place.jambiLight.modes.AbstractColorMode;
-import be.beeles_place.jambiLight.modes.impl.AmbilightMode;
+import be.beeles_place.jambiLight.modes.ColorStrategy;
 import be.beeles_place.jambiLight.utils.EventbusWrapper;
 import be.beeles_place.jambiLight.utils.SettingsLoader;
-import be.beeles_place.jambiLight.utils.communication.CommunicationLibraries;
+import be.beeles_place.jambiLight.communication.CommunicationStrategy;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.view.MainViewController;
 import com.google.common.eventbus.EventBus;
@@ -29,11 +28,18 @@ public class ApplicationController {
 
     //Logic
     private ColorController colorController;
-    private CommunicatorController serialCommunicator;
+    private CommunicationController serialCommunicator;
 
     //UI vars
     private Stage stage;
     private MainViewController viewController;
+
+    //Temp & testing
+    private final boolean debug = true;
+    private Runtime rt;
+    private int megabyteInBytes;
+    private int performanceCounter;
+
 
     /**
      * Creates an ApplicationController instance.
@@ -45,11 +51,16 @@ public class ApplicationController {
         eventBus.register(this);
 
         settingsLoader = new SettingsLoader();
+
+        rt = Runtime.getRuntime();
+        megabyteInBytes = 1048576;
+        performanceCounter = 0;
     }
 
     /**
      * Initializes the ApplicationController.
      * This will create and load settings.
+     *
      * @param stage The javaFX stage object.
      * @param mainViewController The controller instance for the main view.
      */
@@ -81,37 +92,42 @@ public class ApplicationController {
         viewController.initUI();
     }
 
+    /**
+     * Sets up everything and starts the main logic.
+     */
     private void startup() {
         logger.INFO("INIT => Starting core logic and serial communication.");
 
         //Create color model if required!
-        if(model == null) {
-            model = new ColorModel();
-        }
+        model = model == null ? new ColorModel() : model;
         //Calculate the new amount of regions.
         model.setNumberOfConsolidatedRegions(settings.getHorizontalRegions() * 2 + (settings.getVerticalRegions() * 2) - 4);
 
-        //Create communicator!
-        serialCommunicator = new CommunicatorController(model, CommunicationLibraries.JSSC);
-        settings.setPorts(serialCommunicator.getPorts());
-        if(settings.isAutoConnect() && settings.getPort() != null){
-            serialCommunicator.open(settings.getPort());
-        }
+        //TODO: Communication strategy in UI & settings model.
+        //Create and set up the communication controller.
+        serialCommunicator = new CommunicationController(model, settings);
+        serialCommunicator.init(CommunicationStrategy.JSSC);
 
-        //New color controller and mode.
-        colorController = new ColorController();
-        if(settings.getCaptureMode() != null) {
-            AbstractColorMode mode = new AmbilightMode(settings, model, settings.getCaptureMode().getCaptureLogic());
-            colorController.setColorMode(mode);
-        }
+        //TODO: Color strategy in UI & settings model.
+        //Create and set up the color controller.
+        colorController = new ColorController(settings, model);
+        colorController.startColorStrategy(ColorStrategy.AMBILIGHT);
     }
 
+    /**
+     * Shuts down the main processing logic.
+     */
     private void shutdown() {
         logger.INFO("INIT => Shutting down core logic and serial communication.");
-        colorController.stopCurrentColorMode();
+        colorController.stopCurrentColorStrategy();
         serialCommunicator.close();
     }
 
+    /**
+     * Executed when the SettingsModel has been updated and the SettingsUpdatedEvent has been dispatched.
+     *
+     * @param event The event that was dispatched.
+     */
     @Subscribe
     public void onSettingsModelUpdated(SettingsUpdatedEvent event) {
         //When the settings have been updated save them and restart the system.
@@ -121,20 +137,14 @@ public class ApplicationController {
         startup();
     }
 
-    int count = 0;
-
+    /**
+     * Executed when the ColorModel has been updated and the ColorModelUpdatedEvent has been dispatched.
+     *
+     * @param event The event that was dispatched.
+     */
     @Subscribe
     public void onColorsUpdated(ColorModelUpdatedEvent event) {
-        
-        //Testing only:
-        int mb = 1048576;
-        Runtime rt = Runtime.getRuntime();
-        logger.DEBUG("#### HEAP USAGE ####");
-        logger.DEBUG("Used mem: " + (rt.totalMemory()- rt.freeMemory() )/ mb);
-        logger.DEBUG("Free mem: " + rt.freeMemory() / mb);
-        logger.DEBUG("All  mem: " +  rt.totalMemory() / mb);
-        logger.DEBUG("Max  mem: " + rt.maxMemory() / mb);
-        
+        //Prevent UI threading issues and run this whenever the runtime sees fit.
         Platform.runLater(() -> {
             String title = "JambiLight => running at: " + (1000 / model.getActionDuration()) + " FPS";
             stage.setTitle(title);
@@ -142,31 +152,42 @@ public class ApplicationController {
         });
 
         /**
-         * Temp testing only, make the system stop after a huge perf drop => check the logs!
-         * The first perf drop should always be ignored, as it might be from connecting/starting things up.
+         * Testing only!!!!!
+         *
+         * Prints out the memory usage of the application.
+         *
+         * Make the system stops after a huge performance drop => check the logs!
+         * The first performance drop should always be ignored, as it might be from connecting/starting things up.
+         *
+         * Disable this for release builds!
          */
-        if(model.getActionDuration() > 500) {
-            if(count == 0) {
-                count++;
-            } else {
-                shutdown();
+        if(debug) {
+            logger.DEBUG("#### HEAP USAGE ####");
+            logger.DEBUG("Used mem: " + (rt.totalMemory()- rt.freeMemory() )/ megabyteInBytes);
+            logger.DEBUG("Free mem: " + rt.freeMemory() / megabyteInBytes);
+            logger.DEBUG("All  mem: " +  rt.totalMemory() / megabyteInBytes);
+            logger.DEBUG("Max  mem: " + rt.maxMemory() / megabyteInBytes);
+
+            if(model.getActionDuration() > 500) {
+                if(performanceCounter == 0) {
+                    performanceCounter++;
+                } else {
+                    shutdown();
+                }
             }
         }
     }
 
+    /**
+     * Executed when the application shut do a full shutdown (close the app).
+     * This will be executed when the ShutdownEvent has been dispatched.
+     *
+     * @param event The event that was dispatched.
+     */
     @Subscribe
     public void onApplicationExit(ShutdownEvent event) {
         shutdown();
         logger.INFO("INIT => Application now shutting down! GOODBYE...");
         System.exit(0);
-    }
-
-    //Getters & setters.
-    public MainViewController getViewController() {
-        return viewController;
-    }
-
-    public void setViewController(MainViewController viewController) {
-        this.viewController = viewController;
     }
 }

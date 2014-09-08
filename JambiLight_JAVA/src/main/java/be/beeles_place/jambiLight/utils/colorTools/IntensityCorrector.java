@@ -1,7 +1,5 @@
 package be.beeles_place.jambiLight.utils.colorTools;
 
-import be.beeles_place.jambiLight.model.SettingsModel;
-
 import java.awt.*;
 
 public class IntensityCorrector {
@@ -16,12 +14,15 @@ public class IntensityCorrector {
 
     /**
      * Creates a new IntensityCorrector instance.
-     * @param settingsModel The SettingsModel containing the application settings.
+     *
+     * @param greyScaleThreshold The value that is used to detect white/grey/black colors. (R=G=B +/- threshold)
+     * @param scaleUpValue The value that is used to increase the intensity.
+     * @param scaleDownValue The value that is used to decrease the intensity.
      */
-    public IntensityCorrector(SettingsModel settingsModel) {
-        this.greyDetectionThreshold = settingsModel.getGreyDetectionThreshold();
-        this.scaleUpValue = settingsModel.getScaleUpValue();
-        this.scaleDownValue = settingsModel.getScaleDownValue();
+    public IntensityCorrector(int greyScaleThreshold, float scaleUpValue, float scaleDownValue) {
+        this.greyDetectionThreshold = greyScaleThreshold;
+        this.scaleUpValue = scaleUpValue;
+        this.scaleDownValue = scaleDownValue;
 
         this.hsb = new float[3];
     }
@@ -29,6 +30,7 @@ public class IntensityCorrector {
     /**
      * Corrects the Intensity for each region.
      * White and grey values will be toned down and colors will be scaled up (increase the saturation).
+     *
      * @param regions A int[][] containing the regions (first dimension) and the Colors (second dimension R/G/B) to be corrected.
      * @return The regions with updated colors per region.
      */

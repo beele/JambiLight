@@ -11,6 +11,7 @@ import java.net.Socket;
 public class XbmcScreenCapper implements IScreenCapper {
 
     private final LOGGER logger;
+    private Dimension dimensions;
 
     private boolean initDone = false;
 
@@ -21,7 +22,6 @@ public class XbmcScreenCapper implements IScreenCapper {
 
     private byte[] data;
     private int[] pixels;
-    private Dimension dimensions;
 
     private final int totalPixels;
     private final int width;
@@ -34,6 +34,7 @@ public class XbmcScreenCapper implements IScreenCapper {
      */
     public XbmcScreenCapper() {
         logger = LOGGER.getInstance();
+        logger.INFO("SCREENCAPPER => Starting screen capture with XBMC.");
 
         port = 1337;
         width = 720;
@@ -103,6 +104,7 @@ public class XbmcScreenCapper implements IScreenCapper {
 
     /**
      * Sets up a new socket connection with both client and server.
+     *
      * @throws Exception When the socket cannot be started!
      */
     private void init() throws Exception{
@@ -120,6 +122,10 @@ public class XbmcScreenCapper implements IScreenCapper {
         initDone = true;
     }
 
+    /**
+     * Processes the pixel data.
+     * Splits up the R/G/B components.
+     */
     private void processData() {
         //Convert bytes to integer values!
         int pixelCounter = 0;

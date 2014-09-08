@@ -21,7 +21,7 @@ public class ScreenCapperMock implements IScreenCapper {
     private int delay = 0;
 
     /**
-     * Default no argument constructor.
+     * Constructor.
      */
     public ScreenCapperMock() {
         this(20);
@@ -34,6 +34,7 @@ public class ScreenCapperMock implements IScreenCapper {
      */
     public ScreenCapperMock(int delay) {
         logger = LOGGER.getInstance();
+        logger.INFO("SCREENCAPPER => Starting mock screen capture. (RAINBOW)");
 
         this.delay = delay;
 

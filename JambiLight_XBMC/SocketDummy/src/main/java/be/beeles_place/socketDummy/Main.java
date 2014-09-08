@@ -79,7 +79,7 @@ public class Main {
     private void sendLoop() {
     	boolean run = true;
     	try {
-    		while(true) {
+    		while(run) {
                 //Rainbows!
                 r = (int)(Math.sin(frequency * rbCount + 0) * 127 + 128);
                 g = (int)(Math.sin(frequency * rbCount + 2) * 127 + 128);

@@ -6,6 +6,7 @@ public class ColorEnhancer {
 
     /**
      * Creates a new ColorEnhancer instance.
+     *
      * @param enhanceValue A float representing the amount of enhancement to apply.
      */
     public ColorEnhancer(float enhanceValue) {

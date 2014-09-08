@@ -12,6 +12,7 @@ public class EventbusWrapper {
 
     /**
      * Gets the EventBus instance.
+     *
      * @return The EventBus instance.
      */
     public static EventBus getInstance() {

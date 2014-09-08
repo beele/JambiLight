@@ -2,7 +2,7 @@ package be.beeles_place.jambiLight.utils;
 
 import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
-import be.beeles_place.jambiLight.utils.screenCapture.ScreenCapperMode;
+import be.beeles_place.jambiLight.utils.screenCapture.ScreenCapperStrategy;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -24,6 +24,7 @@ public class SettingsLoader {
      * Will load a settings file from disk.
      * The settings file is named settings.xml and stored in the default directory.
      * If no appropriate settings file was found, or an error occurred, new default settings will be loaded.
+     *
      * @return A SettingsModel instance containing the loaded settings.
      */
     public SettingsModel loadSettingsModel() {
@@ -83,7 +84,7 @@ public class SettingsLoader {
             settings.setScaleDownValue(0.67f);
 
             //Set the default screen capture method to JAVA_SCREENSHOT
-            settings.setCaptureMode(ScreenCapperMode.JAVA_SCREENSHOT);
+            settings.setCaptureMode(ScreenCapperStrategy.JAVA_SCREENSHOT);
 
             //Save the new settings to disk!
             saveSettingsModel(settings);
@@ -95,6 +96,7 @@ public class SettingsLoader {
     /**
      * Saves the given SettingsModel instance to disk.
      * The settings file is named settings.xml and stored in the default directory.
+     *
      * @param settings The SettingsModel instance to save to the disk.
      */
     public void saveSettingsModel(SettingsModel settings) {

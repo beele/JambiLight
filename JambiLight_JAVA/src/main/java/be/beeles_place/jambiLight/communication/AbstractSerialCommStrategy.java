@@ -1,22 +1,35 @@
-package be.beeles_place.jambiLight.utils.communication;
+package be.beeles_place.jambiLight.communication;
 
+import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import gnu.io.CommPortIdentifier;
 
 import java.util.List;
 
-public abstract class ASerialComm implements ISerialComm, Runnable {
+public abstract class AbstractSerialCommStrategy implements ISerialComm, Runnable {
 
-    private LOGGER logger;
+    protected LOGGER logger;
+    protected ColorModel model;
+
     protected boolean forceQuit = false;
 
-    {
+    /**
+     * Constructor.
+     */
+    protected AbstractSerialCommStrategy() {
         logger = LOGGER.getInstance();
     }
 
+    /**
+     * Executed when the strategy is started as a thread.
+     * Will loop the start() method (in a while loop) as long as the forceQuit variable is false.
+     * If an exception occurs the logic will be aborted.
+     */
     @Override
     public void run() {
         forceQuit = false;
+        logger.INFO("MODE => Communication strategy started.");
+
         while (!forceQuit) {
             start();
         }
@@ -28,11 +41,13 @@ public abstract class ASerialComm implements ISerialComm, Runnable {
     @Override
     public abstract void start();
 
+    @Override
     public void stop() {
         forceQuit = true;
     }
 
     //Methods available to all implementations.
+    @Override
     public String getArduinoSerialDeviceName() {
         String name = "";
 
@@ -48,7 +63,8 @@ public abstract class ASerialComm implements ISerialComm, Runnable {
         return name;
     }
 
-    private String getPortTypeName(int portType) {
+    @Override
+    public String getPortTypeName(int portType) {
         switch (portType) {
             case CommPortIdentifier.PORT_I2C:
                 return "I2C";

@@ -1,7 +1,6 @@
-package be.beeles_place.jambiLight.utils.communication.impl;
+package be.beeles_place.jambiLight.communication.impl;
 
-import be.beeles_place.jambiLight.model.ColorModel;
-import be.beeles_place.jambiLight.utils.communication.ASerialComm;
+import be.beeles_place.jambiLight.communication.AbstractSerialCommStrategy;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import jssc.SerialPort;
 import jssc.SerialPortException;
@@ -11,10 +10,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public class SerialCommJSSC extends ASerialComm {
-
-    private LOGGER logger;
-    private ColorModel model;
+public class SerialCommJSSC extends AbstractSerialCommStrategy {
 
     private String portName;
     private SerialPort port;
@@ -24,10 +20,7 @@ public class SerialCommJSSC extends ASerialComm {
     private byte[] buffer;
     private int regionIndex;
 
-    public SerialCommJSSC(ColorModel model) {
-        this.model = model;
-
-        logger = LOGGER.getInstance();
+    public SerialCommJSSC() {
         logger.INFO("COMM => Initiating serial communication service using JSSC lib");
     }
 
@@ -99,7 +92,7 @@ public class SerialCommJSSC extends ASerialComm {
 
             if(canSendNext) {
                 if(currentStep >= steps || colors == null) {
-                    if(model.getNewColorsForCommAvailable()) {
+                    if(model.areNewColorsForCommAvailable()) {
                         //New colors are available and we can send the next series of colors to the arduino.
                         //Get the new colors and reset the currentStep counter.
                         colors = model.getCurrentColorsForComm();
@@ -151,7 +144,7 @@ public class SerialCommJSSC extends ASerialComm {
     public void stop() {
         logger.INFO("COMM => Terminating and cleaning up serial communication!");
 
-        super.forceQuit = true;
+        forceQuit = true;
         try {
             if(port != null) {
                 port.closePort();

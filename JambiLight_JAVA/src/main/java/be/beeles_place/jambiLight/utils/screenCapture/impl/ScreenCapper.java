@@ -1,5 +1,6 @@
 package be.beeles_place.jambiLight.utils.screenCapture.impl;
 
+import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.utils.screenCapture.IScreenCapper;
 import com.sun.glass.ui.Pixels;
 import com.sun.glass.ui.Screen;
@@ -10,7 +11,9 @@ import java.awt.image.DataBufferInt;
 
 public class ScreenCapper implements IScreenCapper {
 
+    private LOGGER logger;
     private Dimension size;
+
     private Robot robot;
     private com.sun.glass.ui.Robot backupRobot;
 
@@ -23,9 +26,12 @@ public class ScreenCapper implements IScreenCapper {
      * Creates a new ScreenCapper instance.
      */
     public ScreenCapper() {
-        useBackupRobot = GraphicsEnvironment.isHeadless();
+        logger = LOGGER.getInstance();
+        logger.INFO("SCREENCAPPER => Starting screen capture with JAVA.");
 
+        useBackupRobot = GraphicsEnvironment.isHeadless();
         if(useBackupRobot) {
+            logger.INFO("SCREENCAPPER => Falling back to backup robot.");
             size = new Dimension(Screen.getMainScreen().getWidth(),Screen.getMainScreen().getHeight());
         } else {
             size = Toolkit.getDefaultToolkit().getScreenSize();
@@ -33,7 +39,7 @@ public class ScreenCapper implements IScreenCapper {
             try {
                 robot = new Robot();
             } catch (Exception e) {
-                System.out.println("Cannot create robot!" + e.getMessage());
+                logger.INFO("SCREENCAPPER => Cannot create capture robot: " + e.getMessage());
             }
         }
     }
@@ -44,8 +50,6 @@ public class ScreenCapper implements IScreenCapper {
 
     public int[] capture() {
         if(useBackupRobot){
-            //System.out.println(Thread.currentThread().getName());
-            //TODO: crashes because of some threading problem ==> investigate!
             Pixels pixelsColl = backupRobot.getScreenCapture(0, 0, size.width, size.height);
             pixels = (int[]) pixelsColl.getPixels().array();
             pixelsColl = null;

@@ -26,6 +26,7 @@ public class RegionConsolidator {
     
     /**
      * Creates a new RegionConsolidator instance.
+     *
      * @param horizontalRegions The number of horizontal regions.
      * @param verticalRegions The number of vertical regions.
      * @param horizontalMargin An int representing the horizontal margin.
@@ -169,6 +170,7 @@ public class RegionConsolidator {
 
     /**
      * Calculates the average of two given regions.
+     *
      * @param regionA Array of int containing the R/G/B colors for the first region.
      * @param regionB Array of int containing the R/G/B colors for the second region.
      * @return An array of int containing the averaged R/G/B values.
@@ -184,6 +186,7 @@ public class RegionConsolidator {
 
     /**
      * Gets the weight for the given index. There are n steps in this method. After the first 5 steps (index = 0,1,2,3,4) the minimum weight is reached.
+     *
      * @param index An int that represents the index to be weighed. 0 is maximum weight. n = minimum weight.
      * @return A weighed int representing the index.
      */
@@ -198,6 +201,7 @@ public class RegionConsolidator {
 
     /**
      * Gets the total weight for n loops.
+     *
      * @param totalLoops The total number of iterations for which to calculate the total weight.
      * @return An int representing the total calculated weight.
      */
