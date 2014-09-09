@@ -11,10 +11,13 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 import java.net.URL;
 import java.util.*;
@@ -27,12 +30,15 @@ public class MainViewController implements Initializable {
     private ColorModel model;
     private SettingsModel settings;
 
-    //FXML items.
-    @FXML
-    private GridPane gridItems;
+    private Image image;
+    private double cellWidth;
+    private double cellHeight;
 
     @FXML
-    private AnchorPane imageContainer;
+    private Canvas ledCanvas;
+
+    @FXML
+    private AnchorPane canvasWrapper;
 
     @FXML
     private Accordion settingsPanes;
@@ -91,11 +97,6 @@ public class MainViewController implements Initializable {
     @FXML
     private ComboBox<ScreenCapperStrategy> cmbColorMode;
 
-    //Local variables
-    private final List<Rectangle> rects = new ArrayList<>();
-    private final ColumnConstraints ccs = new ColumnConstraints(10D,100D,-1D,Priority.SOMETIMES,null,true);
-    private final RowConstraints rcs = new RowConstraints(10D,30D,-1D,Priority.SOMETIMES,null,true);
-
     /**
      * Executed when the view is initialized.
      *
@@ -107,119 +108,78 @@ public class MainViewController implements Initializable {
         //Register this class to receive events from the event bus!
         eventBus = EventbusWrapper.getInstance();
         eventBus.register(this);
+
+        image = new Image(getClass().getResourceAsStream("/be/beeles_place/jambiLight/view/assets/tv.png"));
     }
 
     /**
      * Initializes the UI.
      */
     public void initUI() {
-        //Dynamically generate the columns and rows.
-        for(int i = 0; i < settings.getHorizontalRegions() - 1; i++) {
-            gridItems.getColumnConstraints().add(ccs);
-        }
-        for(int j = 0; j < settings.getVerticalRegions() - 1; j++) {
-            gridItems.getRowConstraints().add(rcs);
-        }
-        //Set the imageContainer to the correct position.
-        GridPane.setColumnIndex(imageContainer,1);
-        GridPane.setRowIndex(imageContainer,1);
-        GridPane.setColumnSpan(imageContainer, settings.getHorizontalRegions() - 2);
-        GridPane.setRowSpan(imageContainer, settings.getVerticalRegions() - 2);
+        canvasWrapper.widthProperty().addListener((observableValue, oldValue, newValue) -> drawUI());
+        canvasWrapper.heightProperty().addListener((observableValue, oldValue, newValue) -> drawUI());
 
-        //Set the default opened settings panel.
-        settingsPanes.expandedPaneProperty().setValue(firstSettingsPane);
-
-        //Add the panels to the UI.
-        addPanels();
+        drawUI();
         updateSettingsValues();
+    }
+
+    private void drawUI() {
+        ledCanvas.setWidth(canvasWrapper.getWidth());
+        ledCanvas.setHeight(canvasWrapper.getHeight());
+
+        cellWidth = ledCanvas.getWidth() / settings.getHorizontalRegions();
+        cellHeight = ledCanvas.getHeight() / settings.getVerticalRegions();
+
+        GraphicsContext gc = ledCanvas.getGraphicsContext2D();
+        gc.clearRect(0, 0, ledCanvas.getWidth(), ledCanvas.getHeight());
+        gc.drawImage(image, cellWidth, cellHeight, ledCanvas.getWidth() - cellWidth * 2, ledCanvas.getHeight() - cellHeight * 2);
+
+        int totalRegions = settings.getHorizontalRegions() * 2 + (settings.getVerticalRegions() - 2) * 2;
+        for (int i = 0 ; i < totalRegions ; i++) {
+            Color c;
+            if(i % 2 == 0) {
+                c = Color.GREEN;
+            } else {
+                c = Color.RED;
+            }
+            drawCell(i, cellWidth, cellHeight, c, ledCanvas);
+        }
+    }
+
+    private void drawCell(int number, double cellWidth, double cellHeight, Color color, Canvas canvas) {
+        int x = (int)(canvas.getWidth() / 2 - cellWidth / 2);
+        int y = (int)(canvas.getHeight() / 2 - cellHeight / 2);
+
+        int h1 = settings.getHorizontalRegions();
+        int v1 = h1 + settings.getVerticalRegions() - 1;
+        int h2 = v1 + settings.getHorizontalRegions() - 2;
+        int v2 = h2 + settings.getVerticalRegions();
+
+        if(number < h1) {
+            x = (int)(number * cellWidth);
+            y = 0;
+        } else if(number >= h1 && number < v1) {
+            x = (int)(canvas.getWidth() - cellWidth);
+            y = (int)((number - h1 + 1) * cellHeight);
+        } else if(number >= v1 && number < h2) {
+            x = (int)(canvas.getWidth() - cellWidth * (number - v1 + 2));
+            y = (int)(canvas.getHeight() - cellHeight);
+        } else if(number >= h2 && number < v2) {
+            x = 0;
+            y = (int)(canvas.getHeight() - cellHeight * (number - h2 + 1));
+        }
+
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.setFill(color);
+        gc.fillRect(x, y, cellWidth, cellHeight);
     }
 
     /**
      * Re-initializes the UI.
      */
     private void reInitUI() {
-        for(int i = 0; i < settings.getHorizontalRegions(); i++) {
-            gridItems.getColumnConstraints().add(ccs);
-        }
-        for(int j = 0; j < settings.getVerticalRegions(); j++) {
-            gridItems.getRowConstraints().add(rcs);
-        }
-
-        GridPane.setColumnSpan(imageContainer, settings.getHorizontalRegions() - 2);
-        GridPane.setRowSpan(imageContainer, settings.getVerticalRegions() - 2);
-
-        //Add the panels to the UI.
-        addPanels();
+        drawUI();
         updateSettingsValues();
-    }
-
-    /**
-     * Adds panels to the dynamic grid.
-     */
-    private void addPanels() {
-        rects.removeAll(rects);
-
-        for (int i = 0; i < settings.getHorizontalRegions(); i++) {
-            Rectangle rect = new Rectangle();
-            rect.widthProperty().bind(gridItems.widthProperty().divide(20));
-            rect.heightProperty().bind(gridItems.heightProperty().divide(14));
-            rect.setFill(new Color(0,1,(i * 10 + 10)/(double)255,1));
-            rects.add(rect);
-            gridItems.add(rect, i, 0);
-        }
-
-        for (int i = 0; i < settings.getVerticalRegions() - 2; i++) {
-            Rectangle rect = new Rectangle();
-            rect.widthProperty().bind(gridItems.widthProperty().divide(20));
-            rect.heightProperty().bind(gridItems.heightProperty().divide(14));
-            rect.setFill(new Color(0,1,(i * 10 + 10)/(double)255,1));
-            rects.add(rect);
-            gridItems.add(rect, settings.getHorizontalRegions() - 1, i + 1);
-        }
-
-        for (int i = 0; i < settings.getHorizontalRegions(); i++) {
-            Rectangle rect = new Rectangle();
-            rect.widthProperty().bind(gridItems.widthProperty().divide(20));
-            rect.heightProperty().bind(gridItems.heightProperty().divide(14));
-            rect.setFill(new Color(0,1,(i * 10 + 10)/(double)255,1));
-            rects.add(rect);
-            gridItems.add(rect, (settings.getHorizontalRegions() - 1) - i, settings.getVerticalRegions() - 1);
-        }
-
-        for (int i = 0; i < settings.getVerticalRegions() - 2; i++) {
-            Rectangle rect = new Rectangle();
-            rect.widthProperty().bind(gridItems.widthProperty().divide(20));
-            rect.heightProperty().bind(gridItems.heightProperty().divide(14));
-            rect.setFill(new Color(0,1,(i * 10 + 10)/(double)255,1));
-            rects.add(rect);
-            gridItems.add(rect, 0, (settings.getVerticalRegions() - 2) - i);
-        }
-    }
-
-    /**
-     * Rebuilds the dynamic grid.
-     */
-    private void rebuildGrid() {
-        ListIterator iter = gridItems.getChildren().listIterator();
-        while(iter.hasNext()) {
-            Object e = iter.next();
-            if(e instanceof AnchorPane == false) {
-                iter.remove();
-            }
-        }
-        iter = gridItems.getColumnConstraints().listIterator();
-        while(iter.hasNext()) {
-            iter.next();
-            iter.remove();
-        }
-        iter = gridItems.getRowConstraints().listIterator();
-        while(iter.hasNext()) {
-            iter.next();
-            iter.remove();
-        }
-        rects.removeAll(rects);
-
-        reInitUI();
     }
 
     /**
@@ -228,13 +188,10 @@ public class MainViewController implements Initializable {
     public void updateColors() {
         int[][] colors = model.getCurrentColors();
 
-        //This prevents an ArrayIndexOutOfBoundsException when the size of the regions has just been changed!
-        if(colors.length == rects.size()) {
-            for (int i = 0; i < rects.size(); i++) {
-                int[] rgb = colors[i];
-                rects.get(i).setFill(new Color((double)rgb[0]/255,(double)rgb[1]/255,(double)rgb[2]/255,1));
-                rgb = null;
-            }
+        for (int i = 0; i < colors.length; i++) {
+            int[] rgb = colors[i];
+            drawCell(i, cellWidth, cellHeight, new Color((double) rgb[0] / 255, (double) rgb[1] / 255, (double) rgb[2] / 255, 1), ledCanvas);
+            rgb = null;
         }
 
         colors = null;
@@ -299,7 +256,7 @@ public class MainViewController implements Initializable {
 
         eventBus.post(new SettingsUpdatedEvent());
         //Update the view again => recalculate new boundaries.
-        rebuildGrid();
+        //rebuildGrid();
     }
 
     @FXML
