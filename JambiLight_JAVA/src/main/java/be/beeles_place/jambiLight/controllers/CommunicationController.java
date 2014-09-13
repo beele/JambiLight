@@ -59,7 +59,7 @@ public class CommunicationController {
      */
     public void open() {
         if(comm != null && settings.getPort() != null) {
-            comm.setUpCommPort(settings.getPort());
+            comm.setUpCommPort(model, settings.getPort());
             commThread = new Thread(comm);
             commThread.setPriority(Thread.MAX_PRIORITY);
             commThread.setName(comm.getClass().getName());

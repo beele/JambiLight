@@ -1,6 +1,7 @@
 package be.beeles_place.jambiLight.communication.impl;
 
 import be.beeles_place.jambiLight.communication.AbstractSerialCommStrategy;
+import be.beeles_place.jambiLight.model.ColorModel;
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
@@ -35,8 +36,10 @@ public class SerialCommRXTX extends AbstractSerialCommStrategy {
     }
 
     @Override
-    public void setUpCommPort(String portName) {
+    public void setUpCommPort(ColorModel model, String portName) {
+        this.model = model;
         this.portName = portName;
+
         try {
             logger.INFO("COMM => Opening com port => " + portName);
 

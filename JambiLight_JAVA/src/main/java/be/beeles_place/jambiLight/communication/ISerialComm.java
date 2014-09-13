@@ -1,5 +1,7 @@
 package be.beeles_place.jambiLight.communication;
 
+import be.beeles_place.jambiLight.model.ColorModel;
+
 import java.util.List;
 
 public interface ISerialComm {
@@ -7,9 +9,10 @@ public interface ISerialComm {
     /**
      * Sets up the given port.
      *
+     * @param model The model containing the color data.
      * @param portName The name of the port to set up.
      */
-    public void setUpCommPort(String portName);
+    public void setUpCommPort(ColorModel model, String portName);
 
     /**
      * Starts the communication with the given strategy and on the given port.

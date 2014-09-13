@@ -1,6 +1,7 @@
 package be.beeles_place.jambiLight.communication.impl;
 
 import be.beeles_place.jambiLight.communication.AbstractSerialCommStrategy;
+import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import jssc.SerialPort;
 import jssc.SerialPortException;
@@ -25,8 +26,10 @@ public class SerialCommJSSC extends AbstractSerialCommStrategy {
     }
 
     @Override
-    public void setUpCommPort(String portName) {
+    public void setUpCommPort(ColorModel model, String portName) {
+        this.model = model;
         this.portName = portName;
+
         try {
             logger.INFO("COMM => Opening com port => " + portName);
 

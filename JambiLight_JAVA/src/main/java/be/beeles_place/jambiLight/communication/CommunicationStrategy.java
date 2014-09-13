@@ -4,6 +4,7 @@ import be.beeles_place.jambiLight.communication.impl.SerialCommJSSC;
 import be.beeles_place.jambiLight.communication.impl.SerialCommMock;
 import be.beeles_place.jambiLight.communication.impl.SerialCommRXTX;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
+import com.sun.java_cup.internal.runtime.virtual_parse_stack;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
@@ -15,10 +16,10 @@ import java.lang.reflect.Constructor;
 public enum CommunicationStrategy {
 
     @XmlEnumValue("COMM_MOCK")
-    MOCK(SerialCommJSSC.class),
+    MOCK(SerialCommMock.class),
 
     @XmlEnumValue("COMM_JSSC")
-    JSSC(SerialCommMock.class),
+    JSSC(SerialCommJSSC.class),
 
     @XmlEnumValue("COMM_RXTX")
     RXTX(SerialCommRXTX.class);
