@@ -62,7 +62,7 @@ public class AmbiLightCore {
         //Initialize the regions.
         horizontalRegionSize = settings.getHorizontalRegions();
         verticalRegionSize = settings.getVerticalRegions();
-        //There are n*m regions, made by the n x m dimensions. The last dimension of 3 is to store r/g/b/#pixels separately.
+        //There are (n x m) regions, made by the n and m dimensions. The last dimension of 3 is to store r/g/b/#pixels separately.
         regions = new int[this.horizontalRegionSize][this.verticalRegionSize][4];
         regionWidth = (float) width / this.horizontalRegionSize;
         regionHeight = (float) height / this.verticalRegionSize;
@@ -140,6 +140,7 @@ public class AmbiLightCore {
             }
         }
         //Set the consolidated regions with colors on the model.
+
         int[][] cRegions = consolidator.consolidateRegions(regions);
         //Correct the intensity if enabled.
         if(doCorrection) {

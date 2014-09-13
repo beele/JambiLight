@@ -163,7 +163,7 @@ public class ApplicationController {
          */
         if(debug) {
             logger.DEBUG("#### HEAP USAGE ####");
-            logger.DEBUG("Used mem: " + (rt.totalMemory()- rt.freeMemory() )/ megabyteInBytes);
+            logger.DEBUG("Used mem: " + (rt.totalMemory() - rt.freeMemory() )/ megabyteInBytes);
             logger.DEBUG("Free mem: " + rt.freeMemory() / megabyteInBytes);
             logger.DEBUG("All  mem: " +  rt.totalMemory() / megabyteInBytes);
             logger.DEBUG("Max  mem: " + rt.maxMemory() / megabyteInBytes);

@@ -18,11 +18,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import org.controlsfx.dialog.Dialogs;
 
 import java.net.URL;
 import java.util.*;
 
-//TODO: This needs a FULL rewrite together with the FXML!
+//TODO: Better error handling and new settings UI.
 public class MainViewController implements Initializable {
 
     //Local variables.
@@ -119,6 +120,9 @@ public class MainViewController implements Initializable {
         canvasWrapper.widthProperty().addListener((observableValue, oldValue, newValue) -> drawUI());
         canvasWrapper.heightProperty().addListener((observableValue, oldValue, newValue) -> drawUI());
 
+        //Set the default opened settings panel.
+        settingsPanes.expandedPaneProperty().setValue(firstSettingsPane);
+
         drawUI();
         updateSettingsValues();
     }
@@ -197,6 +201,9 @@ public class MainViewController implements Initializable {
         colors = null;
     }
 
+    /**
+     * Updates view to show the new settings values.
+     */
     private void updateSettingsValues() {
         cmbSerialPort.setItems(FXCollections.observableList(settings.getPorts()));
         if(settings.getPort() != null) {
@@ -231,77 +238,103 @@ public class MainViewController implements Initializable {
         }
     }
 
+    /**
+     * Show an error popup message with the given title and message.
+     *
+     * @param title The title to display.
+     * @param message The message to display.
+     */
+    private void showErrorMessage(String title, String message) {
+        Dialogs.create()
+                .owner(canvasWrapper)
+                .title(title)
+                .message(message)
+                .lightweight()
+                .showError();
+    }
+
     //Event handlers.
     @FXML
     void OnSaveSettingsClicked(ActionEvent event) {
-        settings.setPort(cmbSerialPort.getSelectionModel().getSelectedItem());
-        settings.setAutoConnect(chkAutoConntect.selectedProperty().getValue());
-
+        int hRegions;
+        int vRegions;
         try {
-            int hRegions = Integer.parseInt(txtHorizontalRegions.getText());
-            int vRegions = Integer.parseInt(txtVerticalRegions.getText());
-            if(hRegions < 0 || vRegions < 0) {
-                throw new Exception("TODO-Exception");
+            hRegions = Integer.parseInt(txtHorizontalRegions.getText());
+            vRegions = Integer.parseInt(txtVerticalRegions.getText());
+            if(hRegions < 3 || vRegions < 3) {
+                throw new Exception("The minimal dimensions required are 3 horizontal and 3 vertical regions!");
             }
-            settings.setHorizontalRegions(hRegions);
-            settings.setVerticalRegions(vRegions);
         } catch (Exception e) {
-            //TODO: handle this!
+            showErrorMessage("Cannot save settings!", e.getMessage());
+            return;
         }
 
+        //Only save settings when no errors have occurred!
+        settings.setPort(cmbSerialPort.getSelectionModel().getSelectedItem());
+        settings.setAutoConnect(chkAutoConntect.selectedProperty().getValue());
+        settings.setHorizontalRegions(hRegions);
+        settings.setVerticalRegions(vRegions);
         settings.setHorizontalMargin((int)sldHorizontalMargin.getValue());
         settings.setVerticalMargin((int)sldVerticalMargin.getValue());
-
         settings.setPixelIteratorStepSize((int)sldPixelStepSize.getValue());
 
         eventBus.post(new SettingsUpdatedEvent());
         //Update the view again => recalculate new boundaries.
-        //rebuildGrid();
+        reInitUI();
     }
 
     @FXML
     void OnSaveColorWeightSettingsClicked(ActionEvent event) {
-        settings.setWeighColor(chkWeighColors.selectedProperty().getValue());
+        int weighFactor;
+
         try {
-            int weighFactor = Integer.parseInt(txtColorWeight.getText());
+            weighFactor = Integer.parseInt(txtColorWeight.getText());
             if(weighFactor < 1 || weighFactor > 5) {
-                throw new Exception("TODO-Exception");
+                throw new Exception("Weight factor should be in range of [1 , 5]");
             }
-            settings.setWeighFactor(weighFactor);
-        } catch (Exception e){
-            //TODO: handle this!
+        } catch (Exception e) {
+            showErrorMessage("Cannot save settings!", e.getMessage());
+            return;
         }
+
+        //Only save settings when no errors have occurred!
+        settings.setWeighColor(chkWeighColors.selectedProperty().getValue());
+        settings.setWeighFactor(weighFactor);
 
         eventBus.post(new SettingsUpdatedEvent());
     }
 
     @FXML
     void OnSaveEnhancementSettingsClicked(ActionEvent event) {
-        settings.setEnhanceColor(chkEnhanceColors.selectedProperty().getValue());
+        float enhanceValue;
+        int gThreshold;
+        float scaleUp;
+        float scaleDown;
+
         try {
-            float enhanceValue = Float.parseFloat(txtEnhanceFactor.getText());
+            enhanceValue = Float.parseFloat(txtEnhanceFactor.getText());
             if(enhanceValue < 1f || enhanceValue > 10f) {
-                throw new Exception("TODO-Exception");
+                throw new Exception("Color enhance value should be in range of [1 , 10]");
             }
-            settings.setEnhanceValue(enhanceValue);
+
+            gThreshold = Integer.parseInt(txtGreyThreshold.getText());
+            scaleUp = Float.parseFloat(txtScaleUpValue.getText());
+            scaleDown = Float.parseFloat(txtScaleDownValue.getText());
+            if(gThreshold < 0 || scaleUp < 0 || scaleDown < 0) {
+                throw new Exception("Threshold, scale-up and scale-down should be greater than 0!");
+            }
         } catch (Exception e) {
-            //TODO: handle this!
+            showErrorMessage("Cannot save settings!", e.getMessage());
+            return;
         }
 
+        //Only save settings when no errors have occurred!
+        settings.setEnhanceColor(chkEnhanceColors.selectedProperty().getValue());
+        settings.setEnhanceValue(enhanceValue);
         settings.setCorrectIntensity(chkIntensifyColors.selectedProperty().getValue());
-        try {
-            int gThreshold = Integer.parseInt(txtGreyThreshold.getText());
-            float scaleUp = Float.parseFloat(txtScaleUpValue.getText());
-            float scaleDown = Float.parseFloat(txtScaleDownValue.getText());
-            if(gThreshold < 0 || scaleUp < 0 || scaleDown < 0) {
-                throw new Exception("TODO-Exception");
-            }
-            settings.setGreyDetectionThreshold(gThreshold);
-            settings.setScaleUpValue(scaleUp);
-            settings.setScaleDownValue(scaleDown);
-        } catch (Exception e) {
-            //TODO: handle this!
-        }
+        settings.setGreyDetectionThreshold(gThreshold);
+        settings.setScaleUpValue(scaleUp);
+        settings.setScaleDownValue(scaleDown);
 
         eventBus.post(new SettingsUpdatedEvent());
     }

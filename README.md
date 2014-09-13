@@ -5,11 +5,12 @@ Java implementation of an Ambilight system (as seen in the Philips TV sets)
 JambiLight can be used to supercharge your media viewing experience.
 
 JambiLight supports a fully dynamical region system with optional margins and various enhancements for color detection.
-A downloadable binary for Windows is available from http://www.beeles-place.be/wordpress/?p=687 Remember that the project it currently in beta and might not function as expected sometimes.
+The Beta-1 binaries can be downloaded from => http://www.beeles-place.be/wordpress/?p=726 Remember that the project it currently in beta and might not function as expected sometimes.
+
 
 How to build & run
 ---------------------------------
-- Have maven 3.x and the JRE 1.8 installed. (Make sure maven is using java 8 ==> mvn --version)
+- Have maven 3.x and the JDK/JRE 1.8 installed. (Make sure maven is using java 8 ==> mvn --version)
 - Clone the repository to a folder on your computer.
 - Build the project using maven:
   * Windows users can build by double clicking the build.bat file.
@@ -17,17 +18,16 @@ How to build & run
 - When the build has finished go to the /JambiLight_JAVA/target/ and/or the /JambiLight_XBMC/SocketDummy/target/ folder.
 - Run the application by executing the run.bat or run.sh file. (This will set some Java environment variables, to keep the memory usage in check!)
   * You can also double click the jar file or manually start the program through the command prompt. This however could lead to high memory usage!
-  * When you have made a build with RXTX enabled use the following command: java -jar JambiLight.jar -Djava.library.path="PATH_TO_FOLDER_WITH_RXTX_SERIAL_DLL"
-- XBMC support is forthcoming, read the XBMC section below for full details!
+- XBMC support is operational, read the XBMC section below for full details!
 
   
 Important notes:
 ---------------------------------
 RUNNING:
 - Java Robot screen capture now works on both Windows and OSX (Linux is untested but should work).
-- JNI implementation only supports Windows for now. The JNI code mimics the local Java code for MOCK_RAINBOW.
+- JNI implementation only supports Windows for now. The JNI code captures the screen but is as slow as the normal Java screenshot capture.
 - When running in debug mode from an IDE the performance can be lower!
-- To test the XBMC logic without setting up XBMC you can use the jar file in the /JambiLight_XBMC/SocketDummy/target/ folder. Make sure to execute JambiLight BEFORE you run this jar file!
+- To test the XBMC logic without setting up XBMC you can use the jar file in the /JambiLight_XBMC/SocketDummy/target/ folder.
 
 JAVA:
 - Make sure you use the 1.8 version of the JDK if developing or JRE 1.8 when running and not developing!
@@ -45,6 +45,7 @@ RXTX:
 - RXTX is now deprecated, and will no longer be maintained!
 - Please use the JSSC serial communication implementation! Using the RXTX way can be tricky to get working correctly!
 - Place the required dll or jnilib files in the root folder of the project to run it.
+  * When you have made a build with RXTX enabled use the following command: java -jar JambiLight.jar -Djava.library.path="PATH_TO_FOLDER_WITH_RXTX_SERIAL_DLL"
 - The dll's and jnilib files can be found in the /lib/rxtx/ folder.
 - OSX users must first run the following commands in the terminal application for the rxtx lib to work!
   * $ sudo mkdir /var/lock
@@ -54,10 +55,11 @@ RXTX:
 Uses the following libraries:
 ---------------------------------
 - Guava (more information here => http://code.google.com/p/guava-libraries/)
+- ControlsFX (more information here => http://fxexperience.com/controlsfx/)
 - JSSC (more information here => https://code.google.com/p/java-simple-serial-connector/wiki/jSSC_examples)
 - RXTX (more information here => http://rxtx.qbang.org/wiki/index.php/Main_Page)
 
-I have included a lib folder in the git project. Link all the jars in this folder when setting up the project in your IDE.
+The lib folder incluced in the java source code only contains the dependencies not found on a maven repository. The build scripts will place those libraries as dependencies in your local m2 storage!
 
 JSSC:  
 No special steps have to be taken to get the JSSC serial communication working.
