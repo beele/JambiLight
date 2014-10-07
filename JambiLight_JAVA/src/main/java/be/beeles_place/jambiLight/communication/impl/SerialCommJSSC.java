@@ -44,8 +44,8 @@ public class SerialCommJSSC extends AbstractSerialCommStrategy {
             totalBytes = model.getNumberOfConsolidatedRegions() * 3;
 
             stepSize = 48;
-            partialSteps = stepSize / 3;
-            steps = (int)totalBytes / stepSize;
+            partialSteps = (int)Math.ceil((float)stepSize / (float)3);
+            steps = (int)Math.ceil((float)totalBytes / (float)stepSize);
             buffer = new byte[stepSize];
 
             currentStep = 0;
@@ -114,6 +114,15 @@ public class SerialCommJSSC extends AbstractSerialCommStrategy {
                     for(int i = 0 ; i < partialSteps ; i++) {
                         //Send each color (R/G/B)
                         regionIndex = (currentStep * partialSteps) + i;
+
+                        //Safety check to prevent access to non existent color regions.
+                        if(colors.length == regionIndex) {
+                            //Fill the remaining, unused space with zeroes.
+                            for(;bitIndex < stepSize ; bitIndex++) {
+                                buffer[bitIndex] = 0;
+                            }
+                            break;
+                        }
 
                         buffer[bitIndex++] = (byte)colors[regionIndex][0];
                         buffer[bitIndex++] = (byte)colors[regionIndex][1];

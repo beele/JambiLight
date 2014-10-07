@@ -51,7 +51,13 @@ void loop() {
   if (Serial.available() == stepSize) {
     for(int i = 0 ; i < stepSize ; i++) {
       int index = ((stepSize * stepCounter) + i);
-      colors[index] = Serial.read(); 
+
+      //Make sure no illegal array access occurs. More data will be sent then is actually needed (sometimes)
+      if(index < totalBytes) {
+         colors[index] = Serial.read();   
+      } else {
+         Serial.read(); 
+      }
     }
     bytesSaved += stepSize;
     stepCounter += 1;
@@ -59,7 +65,7 @@ void loop() {
   }
 
   //If all the bytes have been received, process them
-  if(bytesSaved == totalBytes) {
+  if(bytesSaved >= totalBytes) {
     for(int i = 0 ; i < nLEDs ; i++) {
       //Get the R/G/B values. The rgbDivFactor is used to weigh the colors correcty depending of the type of LED strip!
       int rVal = colors[i * 3] / rgbDivFactor; 
