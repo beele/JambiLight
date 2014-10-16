@@ -67,30 +67,24 @@ public class XbmcScreenCapper implements IScreenCapper {
         }
 
         //Try to receive data.
-        int read = 0;
+        int frameByteCount = 0;
         boolean run = true;
         while(run) {
             try {
                 //If enough data is in the buffer, read it out.
-                if(in.available() == totalBytes) {
-                    read += in.read(data, read, in.available());
-
-                    while(read < totalBytes) {
-                        int toRead = totalBytes - read;
-                        if(toRead > 0) {
-                            read += in.read(data, read, toRead);
-                        }
+                int avail = in.available();
+                if(avail > 0) {
+                    if(totalBytes - (frameByteCount + avail) >= 0) {
+                        //avail is avail
+                    } else {
+                        avail = totalBytes - frameByteCount;
                     }
-                }
+                    frameByteCount += in.read(data, frameByteCount, avail);
 
-                //Only continue when the correct amount of pixels has been read!
-                if(read == totalBytes) {
-                    //Process the data and return the pixels.
-                    processData();
-                    return pixels;
-                } else {
-                    //Saves CPU, waits for the next loop to see if all the data has been received.
-                    Thread.sleep(1);
+                    if(frameByteCount >= totalBytes) {
+                        processData();
+                        return pixels;
+                    }
                 }
             } catch (Exception e) {
                 logger.ERROR("IScreenCapper => XBMC connection error: " +  e.getMessage());
