@@ -9,6 +9,8 @@ import com.google.common.eventbus.EventBus;
  */
 public class ColorModel {
 
+    private int[] rawImageData;
+
     private int[][] currentColors;
     private long actionDuration;
     private boolean colorsAreNew;
@@ -34,6 +36,14 @@ public class ColorModel {
     }
 
     //Getters & setters.
+    public int[] getRawImageData() {
+        return rawImageData;
+    }
+
+    public void setRawImageData(int[] rawImageData) {
+        this.rawImageData = rawImageData;
+    }
+
     /**
      * Returns the colors on the model.
      * Colors are formatted as int[][] where the outer array is the number of consolidated pixels and the inner

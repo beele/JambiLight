@@ -3,6 +3,7 @@ package be.beeles_place.jambiLight.controllers;
 import be.beeles_place.jambiLight.events.ColorModelUpdatedEvent;
 import be.beeles_place.jambiLight.events.SettingsUpdatedEvent;
 import be.beeles_place.jambiLight.events.ShutdownEvent;
+import be.beeles_place.jambiLight.events.VisualDebugEvent;
 import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.modes.ColorStrategy;
@@ -10,11 +11,19 @@ import be.beeles_place.jambiLight.utils.EventbusWrapper;
 import be.beeles_place.jambiLight.utils.SettingsLoader;
 import be.beeles_place.jambiLight.communication.CommunicationStrategy;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
+import be.beeles_place.jambiLight.view.DebugViewController;
 import be.beeles_place.jambiLight.view.MainViewController;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.JavaFXBuilderFactory;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.net.URL;
 
 public class ApplicationController {
 
@@ -149,6 +158,8 @@ public class ApplicationController {
             String title = "JambiLight => running at: " + (1000 / model.getActionDuration()) + " FPS";
             stage.setTitle(title);
             viewController.updateColors();
+
+            tempController.paint(model.getRawImageData(), 720, 480);
         });
 
         /**
@@ -175,6 +186,27 @@ public class ApplicationController {
                     shutdown();
                 }
             }
+        }
+    }
+
+    DebugViewController tempController;
+    @Subscribe
+    public void onVisualDebugStartRequested(VisualDebugEvent event) throws IOException {
+        if(event.isStart()) {
+            URL location = getClass().getResource("/be/beeles_place/jambiLight/view/debug.fxml");
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(location);
+            fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
+            Parent root = fxmlLoader.load(location.openStream());
+
+            Stage stage = new Stage();
+            stage.setTitle("Visual debug view!");
+            stage.setScene(new Scene(root, 1150, 650));
+            stage.show();
+
+            tempController = fxmlLoader.getController();
+        } else {
+
         }
     }
 

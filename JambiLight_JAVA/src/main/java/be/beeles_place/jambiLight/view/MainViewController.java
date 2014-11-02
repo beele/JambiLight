@@ -2,6 +2,7 @@ package be.beeles_place.jambiLight.view;
 
 import be.beeles_place.jambiLight.events.SettingsUpdatedEvent;
 import be.beeles_place.jambiLight.events.ShutdownEvent;
+import be.beeles_place.jambiLight.events.VisualDebugEvent;
 import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.utils.EventbusWrapper;
@@ -97,6 +98,9 @@ public class MainViewController implements Initializable {
 
     @FXML
     private ComboBox<ScreenCapperStrategy> cmbColorMode;
+
+    @FXML
+    private Button btnVisualDebug;
 
     /**
      * Executed when the view is initialized.
@@ -347,7 +351,18 @@ public class MainViewController implements Initializable {
     }
 
     @FXML
-    private void OnCloseClicked(ActionEvent event) {
+    void onShowDebugClicked(ActionEvent event) {
+        if(btnVisualDebug.getText().equals("Start debug")) {
+            btnVisualDebug.setText("Stop debug");
+            eventBus.post(new VisualDebugEvent(true));
+        } else {
+            btnVisualDebug.setText("Start debug");
+            eventBus.post(new VisualDebugEvent(false));
+        }
+    }
+
+    @FXML
+    void OnCloseClicked(ActionEvent event) {
         eventBus.post(new ShutdownEvent());
     }
 

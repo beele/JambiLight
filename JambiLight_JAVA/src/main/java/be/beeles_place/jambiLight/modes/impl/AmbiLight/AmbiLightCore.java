@@ -96,6 +96,7 @@ public class AmbiLightCore {
         //Make a screen capture.
         //Disabling aero themes in windows can easily double or triple performance!
         int[] pixels = capper.capture();
+        model.setRawImageData(pixels.clone());
 
         for (int i = 0; i < pixels.length; i += stepSize) {
             //The pixels in the image are in one long array, we need to get the x and y values of the pixel.
