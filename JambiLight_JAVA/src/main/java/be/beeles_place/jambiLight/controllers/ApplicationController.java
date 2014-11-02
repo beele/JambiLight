@@ -41,7 +41,9 @@ public class ApplicationController {
 
     //UI vars
     private Stage stage;
+    private Stage debugStage;
     private MainViewController viewController;
+    private DebugViewController debugViewController;
 
     //Temp & testing
     private final boolean debug = true;
@@ -159,7 +161,9 @@ public class ApplicationController {
             stage.setTitle(title);
             viewController.updateColors();
 
-            tempController.paint(model.getRawImageData(), 720, 480);
+            if(debugViewController != null) {
+                debugViewController.paint();
+            }
         });
 
         /**
@@ -189,7 +193,6 @@ public class ApplicationController {
         }
     }
 
-    DebugViewController tempController;
     @Subscribe
     public void onVisualDebugStartRequested(VisualDebugEvent event) throws IOException {
         if(event.isStart()) {
@@ -199,14 +202,17 @@ public class ApplicationController {
             fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
             Parent root = fxmlLoader.load(location.openStream());
 
-            Stage stage = new Stage();
-            stage.setTitle("Visual debug view!");
-            stage.setScene(new Scene(root, 1150, 650));
-            stage.show();
+            debugStage = new Stage();
+            debugStage.setTitle("Visual debug view => 1280 x 720");
+            debugStage.setScene(new Scene(root, 1280, 720));
+            debugStage.show();
 
-            tempController = fxmlLoader.getController();
+            debugViewController = fxmlLoader.getController();
+            debugViewController.init(debugStage, model);
         } else {
-
+            debugStage.close();
+            debugStage = null;
+            debugViewController = null;
         }
     }
 

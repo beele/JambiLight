@@ -58,6 +58,8 @@ public class AmbiLightCore {
         Dimension size = capper.getScreenDimensions();
         width = (int) size.getWidth();
         height = (int) size.getHeight();
+        model.setRawWidth(width);
+        model.setRawHeight(height);
 
         //Initialize the regions.
         horizontalRegionSize = settings.getHorizontalRegions();

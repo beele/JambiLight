@@ -346,7 +346,6 @@ public class MainViewController implements Initializable {
     @FXML
     void OnSaveAdvancedSettingsClicked(ActionEvent event) {
         settings.setCaptureMode(cmbColorMode.getValue());
-
         eventBus.post(new SettingsUpdatedEvent());
     }
 

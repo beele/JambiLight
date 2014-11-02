@@ -10,6 +10,8 @@ import com.google.common.eventbus.EventBus;
 public class ColorModel {
 
     private int[] rawImageData;
+    private int rawWidth;
+    private int rawHeight;
 
     private int[][] currentColors;
     private long actionDuration;
@@ -42,6 +44,22 @@ public class ColorModel {
 
     public void setRawImageData(int[] rawImageData) {
         this.rawImageData = rawImageData;
+    }
+
+    public int getRawWidth() {
+        return rawWidth;
+    }
+
+    public void setRawWidth(int rawWidth) {
+        this.rawWidth = rawWidth;
+    }
+
+    public int getRawHeight() {
+        return rawHeight;
+    }
+
+    public void setRawHeight(int rawHeight) {
+        this.rawHeight = rawHeight;
     }
 
     /**
