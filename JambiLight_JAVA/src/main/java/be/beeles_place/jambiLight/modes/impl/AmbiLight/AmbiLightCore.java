@@ -44,6 +44,7 @@ public class AmbiLightCore {
      *
      * @param settings   The SettingsModel instance.
      * @param colorModel The ColorModel instance.
+     * @param screenCapper The IScreenCapper instance that will facilitate the capture of input data.
      */
     public AmbiLightCore(SettingsModel settings, ColorModel colorModel, IScreenCapper screenCapper) {
         model = colorModel;
@@ -132,8 +133,8 @@ public class AmbiLightCore {
                 }
             }
         }
-        //Set the consolidated regions with colors on the model.
 
+        //Set the consolidated regions with colors on the model.
         int[][] cRegions = consolidator.consolidateRegions(regions);
         //Correct the intensity if enabled.
         if(doCorrection) {

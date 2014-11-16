@@ -1,5 +1,6 @@
 package be.beeles_place.jambiLight.controllers;
 
+import be.beeles_place.jambiLight.communication.CommunicationStrategy;
 import be.beeles_place.jambiLight.events.ColorModelUpdatedEvent;
 import be.beeles_place.jambiLight.events.SettingsUpdatedEvent;
 import be.beeles_place.jambiLight.events.ShutdownEvent;
@@ -9,7 +10,6 @@ import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.modes.ColorStrategy;
 import be.beeles_place.jambiLight.utils.EventbusWrapper;
 import be.beeles_place.jambiLight.utils.SettingsLoader;
-import be.beeles_place.jambiLight.communication.CommunicationStrategy;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.view.DebugViewController;
 import be.beeles_place.jambiLight.view.MainViewController;

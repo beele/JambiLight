@@ -60,6 +60,7 @@ public class DirectShowCapper implements IScreenCapper {
         vc = new VideoCapture(0);
         //vc.set(CV_CAP_PROP_FRAME_WIDTH,720);
         //vc.set(CV_CAP_PROP_FRAME_HEIGHT,480);
+        vc.set(CV_CAP_PROP_FPS ,25);
         videoInputSurface = new Mat();
 
         initDone = true;

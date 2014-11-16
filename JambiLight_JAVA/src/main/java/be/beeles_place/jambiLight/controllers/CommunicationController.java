@@ -1,9 +1,9 @@
 package be.beeles_place.jambiLight.controllers;
 
-import be.beeles_place.jambiLight.model.ColorModel;
-import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.communication.AbstractSerialCommStrategy;
 import be.beeles_place.jambiLight.communication.CommunicationStrategy;
+import be.beeles_place.jambiLight.model.ColorModel;
+import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
 
 import java.util.List;
