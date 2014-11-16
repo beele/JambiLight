@@ -183,13 +183,13 @@ public class ApplicationController {
             logger.DEBUG("All  mem: " +  rt.totalMemory() / megabyteInBytes);
             logger.DEBUG("Max  mem: " + rt.maxMemory() / megabyteInBytes);
 
-            if(model.getActionDuration() > 500) {
+            /*if(model.getActionDuration() > 500) {
                 if(performanceCounter == 0) {
                     performanceCounter++;
                 } else {
                     shutdown();
                 }
-            }
+            }*/
         }
     }
 

@@ -1,10 +1,7 @@
 package be.beeles_place.jambiLight.utils.screenCapture;
 
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
-import be.beeles_place.jambiLight.utils.screenCapture.impl.ScreenCapper;
-import be.beeles_place.jambiLight.utils.screenCapture.impl.ScreenCapperJNI;
-import be.beeles_place.jambiLight.utils.screenCapture.impl.ScreenCapperMock;
-import be.beeles_place.jambiLight.utils.screenCapture.impl.XbmcScreenCapper;
+import be.beeles_place.jambiLight.utils.screenCapture.impl.*;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
@@ -25,7 +22,10 @@ public enum ScreenCapperStrategy {
     MOCK_RAINBOW(ScreenCapperMock.class),
 
     @XmlEnumValue("MOCK_JNI")
-    MOCK_JNI(ScreenCapperJNI.class);
+    MOCK_JNI(ScreenCapperJNI.class),
+
+    @XmlEnumValue("DIRECT_SHOW")
+    DIRECT_SHOW(DirectShowCapper.class);
 
     private Class captureStrategy;
 
