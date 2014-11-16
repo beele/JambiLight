@@ -37,7 +37,6 @@ public class AmbiLightCore {
     private float regionHeight;
 
     private int x, y;
-    private int regionXCount, regionYCount;
     private int regionX, regionY;
 
     /**
@@ -55,18 +54,16 @@ public class AmbiLightCore {
         enhanceColors = settings.isEnhanceColor();
         doCorrection = settings.isCorrectIntensity();
 
-        regionXCount = settings.getHorizontalRegions();
-        regionYCount = settings.getVerticalRegions();
+        horizontalRegionSize = settings.getHorizontalRegions();
+        verticalRegionSize = settings.getVerticalRegions();
 
         //Update size of regions
         checkDimensionsAndRegionSize();
 
         //Create the required instances.
-        enhancer = new ColorEnhancer(settings.getEnhanceValue());
-        corrector = new IntensityCorrector(settings.getGreyDetectionThreshold(), settings.getScaleUpValue(), settings.getScaleDownValue());
-        consolidator = new RegionConsolidator( this.horizontalRegionSize, this.verticalRegionSize,
-                                                settings.getHorizontalMargin(), settings.getVerticalMargin(),
-                                                settings.isWeighColor(), settings.getWeighFactor());
+        enhancer = new ColorEnhancer(settings);
+        corrector = new IntensityCorrector(settings);
+        consolidator = new RegionConsolidator(settings);
 
         //Get the logger instance only once.
         logger = LOGGER.getInstance();
@@ -82,7 +79,7 @@ public class AmbiLightCore {
     /**
      * Will capture the screen and split it up into the predefined region count.
      * Afterwards it will consolidate the regions into the (to be mapped) pixel regions.
-     * (Each consolidated region will be mapped to a pixel.)
+     * (Each consolidated region will be mapped to a single LED.)
      */
     public void calculate() {
         long startTime = new Date().getTime();
@@ -171,9 +168,6 @@ public class AmbiLightCore {
             model.setRawWidth(width);
             model.setRawHeight(height);
 
-            //Initialize the regions.
-            horizontalRegionSize = regionXCount;
-            verticalRegionSize = regionYCount;
             //There are (n x m) regions, made by the n and m dimensions. The last dimension of 3 is to store r/g/b/#pixels separately.
             regions = new int[this.horizontalRegionSize][this.verticalRegionSize][4];
             regionWidth = (float) width / this.horizontalRegionSize;

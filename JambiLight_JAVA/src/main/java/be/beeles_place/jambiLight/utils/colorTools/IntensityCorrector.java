@@ -1,5 +1,7 @@
 package be.beeles_place.jambiLight.utils.colorTools;
 
+import be.beeles_place.jambiLight.model.SettingsModel;
+
 import java.awt.*;
 
 public class IntensityCorrector {
@@ -15,14 +17,12 @@ public class IntensityCorrector {
     /**
      * Creates a new IntensityCorrector instance.
      *
-     * @param greyScaleThreshold The value that is used to detect white/grey/black colors. (R=G=B +/- threshold)
-     * @param scaleUpValue The value that is used to increase the intensity.
-     * @param scaleDownValue The value that is used to decrease the intensity.
+     * @param settings The SettingsModel object containing all the application settings.
      */
-    public IntensityCorrector(int greyScaleThreshold, float scaleUpValue, float scaleDownValue) {
-        this.greyDetectionThreshold = greyScaleThreshold;
-        this.scaleUpValue = scaleUpValue;
-        this.scaleDownValue = scaleDownValue;
+    public IntensityCorrector(SettingsModel settings) {
+        this.greyDetectionThreshold = settings.getGreyDetectionThreshold();
+        this.scaleUpValue = settings.getScaleUpValue();
+        this.scaleDownValue = settings.getScaleDownValue();
 
         this.hsb = new float[3];
     }

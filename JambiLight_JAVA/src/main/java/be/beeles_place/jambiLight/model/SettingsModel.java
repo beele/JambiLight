@@ -51,6 +51,10 @@ public class SettingsModel {
     }
 
     //Getters & setters.
+    /**
+     * The number of horizontal regions.
+     * @return The number of horizontal regions.
+     */
     public int getHorizontalRegions() {
         return horizontalRegions;
     }
@@ -60,6 +64,10 @@ public class SettingsModel {
         this.horizontalRegions = horizontalRegions;
     }
 
+    /**
+     * The number of vertical regions.
+     * @return The number of vertical regions.
+     */
     public int getVerticalRegions() {
         return verticalRegions;
     }
@@ -69,6 +77,10 @@ public class SettingsModel {
         this.verticalRegions = verticalRegions;
     }
 
+    /**
+     * An int representing the horizontal margin.
+     * @return An int representing the horizontal margin.
+     */
     public int getHorizontalMargin() {
         return horizontalMargin;
     }
@@ -78,6 +90,10 @@ public class SettingsModel {
         this.horizontalMargin = horizontalMargin;
     }
 
+    /**
+     * An int representing the vertical margin.
+     * @return An int representing the vertical margin.
+     */
     public int getVerticalMargin() {
         return verticalMargin;
     }
@@ -123,6 +139,10 @@ public class SettingsModel {
         this.correctIntensity = correctIntensity;
     }
 
+    /**
+     * A boolean indicating if the colors need to be weighed or not.
+     * @return A boolean indicating if the colors need to be weighed or not.
+     */
     public boolean isWeighColor() {
         return weighColor;
     }
@@ -132,6 +152,10 @@ public class SettingsModel {
         this.weighColor = weighColor;
     }
 
+    /**
+     * The factor which the weight is calculated with. A higher number will result in bigger weight steps.
+     * @return The factor which the weight is calculated with. A higher number will result in bigger weight steps.
+     */
     public int getWeighFactor() {
         return weighFactor;
     }
@@ -141,6 +165,10 @@ public class SettingsModel {
         this.weighFactor = weighFactor;
     }
 
+    /**
+     * The value that is used to detect white/grey/black colors. (R=G=B +/- threshold)
+     * @return The value that is used to detect white/grey/black colors. (R=G=B +/- threshold)
+     */
     public int getGreyDetectionThreshold() {
         return greyDetectionThreshold;
     }
@@ -150,6 +178,10 @@ public class SettingsModel {
         this.greyDetectionThreshold = greyDetectionThreshold;
     }
 
+    /**
+     * The value that is used to increase the intensity.
+     * @return The value that is used to increase the intensity.
+     */
     public float getScaleUpValue() {
         return scaleUpValue;
     }
@@ -159,6 +191,10 @@ public class SettingsModel {
         this.scaleUpValue = scaleUpValue;
     }
 
+    /**
+     * The value that is used to decrease the intensity.
+     * @return The value that is used to decrease the intensity.
+     */
     public float getScaleDownValue() {
         return scaleDownValue;
     }

@@ -1,10 +1,13 @@
 package be.beeles_place.jambiLight;
 
+import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.utils.colorTools.RegionConsolidator;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class RegionConsolidatorTest {
 
@@ -22,22 +25,22 @@ public class RegionConsolidatorTest {
     public void testConsolidation() {
         //Without margins
         System.out.println("=> Consolidator, no margins");
-        RegionConsolidator rc = new RegionConsolidator(width,height,0,0,true,2);
+        RegionConsolidator rc = new RegionConsolidator(generateSettings(width,height,0,0,true,2));
         testColors(rc);
 
         //With horizontal margin
         System.out.println("=> Consolidator, horizontal margin");
-        rc = new RegionConsolidator(width,height,2,0,true,2);
+        rc = new RegionConsolidator(generateSettings(width,height,2,0,true,2));
         testColors(rc);
 
         //With vertical margin
         System.out.println("=> Consolidator, vertical margin");
-        rc = new RegionConsolidator(width,height,0,2,true,2);
+        rc = new RegionConsolidator(generateSettings(width,height,0,2,true,2));
         testColors(rc);
 
         //With both margins
         System.out.println("=> Consolidator, both margins");
-        rc = new RegionConsolidator(width,height,2,2,true,2);
+        rc = new RegionConsolidator(generateSettings(width,height,2,2,true,2));
         testColors(rc);
     }
 
@@ -73,6 +76,17 @@ public class RegionConsolidatorTest {
         System.out.println("------------------------------------------------");
     }
 
+    private SettingsModel generateSettings(int regionsX, int regionsY, int marginX, int marginY, boolean doWeighing, int weighFactor) {
+        SettingsModel settings = new SettingsModel();
+        settings.setHorizontalRegions(regionsX);
+        settings.setVerticalRegions(regionsY);
+        settings.setHorizontalMargin(marginX);
+        settings.setVerticalMargin(marginY);
+        settings.setWeighColor(doWeighing);
+        settings.setWeighFactor(weighFactor);
+        return settings;
+    }
+
     private int[][][] generateFullRegions(int r, int g, int b) {
         int[][][] regions = new int[width][height][3];
         for(int i = 0; i < width; i++) {
@@ -92,31 +106,31 @@ public class RegionConsolidatorTest {
                 //Red
                 int color = consolidatedRegions[m][0];
                 if(color > 255) {
-                    Assert.fail("Fault at: [" + m + "][r]" + consolidatedRegions[m][n] + " value was too large (>255)");
+                    fail("Fault at: [" + m + "][r]" + consolidatedRegions[m][n] + " value was too large (>255)");
                 } else if(color < 0) {
-                    Assert.fail("Fault at: [" + m + "][r]" + consolidatedRegions[m][n] + " value was too small (<0)");
+                    fail("Fault at: [" + m + "][r]" + consolidatedRegions[m][n] + " value was too small (<0)");
                 } else if(color != r) {
-                    Assert.fail("Red color was different from expected value : " + r + ", was: " + color);
+                    fail("Red color was different from expected value : " + r + ", was: " + color);
                 }
 
                 //Green
                 color = consolidatedRegions[m][1];
                 if(color > 255) {
-                    Assert.fail("Fault at: [" + m + "][g]" + consolidatedRegions[m][n] + " value was too large (>255)");
+                    fail("Fault at: [" + m + "][g]" + consolidatedRegions[m][n] + " value was too large (>255)");
                 } else if(color < 0) {
-                    Assert.fail("Fault at: [" + m + "][g]" + consolidatedRegions[m][n] + " value was too small (<0)");
+                    fail("Fault at: [" + m + "][g]" + consolidatedRegions[m][n] + " value was too small (<0)");
                 } else if(color != g) {
-                    Assert.fail("Green color was different from expected value : " + g + ", was: " + color);
+                    fail("Green color was different from expected value : " + g + ", was: " + color);
                 }
 
                 //Blue
                 color = consolidatedRegions[m][2];
                 if(color > 255) {
-                    Assert.fail("Fault at: [" + m + "][b]" + consolidatedRegions[m][n] + " value was too large (>255)");
+                    fail("Fault at: [" + m + "][b]" + consolidatedRegions[m][n] + " value was too large (>255)");
                 } else if(color < 0) {
-                    Assert.fail("Fault at: [" + m + "][b]" + consolidatedRegions[m][n] + " value was too small (<0)");
+                    fail("Fault at: [" + m + "][b]" + consolidatedRegions[m][n] + " value was too small (<0)");
                 } else if(color != b) {
-                    Assert.fail("Blue color was different from expected value : " + b + ", was: " + color);
+                    fail("Blue color was different from expected value : " + b + ", was: " + color);
                 }
             }
         }

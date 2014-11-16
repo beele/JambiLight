@@ -1,5 +1,7 @@
 package be.beeles_place.jambiLight.utils.colorTools;
 
+import be.beeles_place.jambiLight.model.SettingsModel;
+
 public class ColorEnhancer {
 
     private float enhanceValue = 1f;
@@ -7,10 +9,10 @@ public class ColorEnhancer {
     /**
      * Creates a new ColorEnhancer instance.
      *
-     * @param enhanceValue A float representing the amount of enhancement to apply.
+     * @param settings The SettingsModel object containing all the application settings.
      */
-    public ColorEnhancer(float enhanceValue) {
-        this.enhanceValue = enhanceValue;
+    public ColorEnhancer(SettingsModel settings) {
+        this.enhanceValue = settings.getEnhanceValue();
     }
 
     /**

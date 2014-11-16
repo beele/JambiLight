@@ -1,5 +1,7 @@
 package be.beeles_place.jambiLight.utils.colorTools;
 
+import be.beeles_place.jambiLight.model.SettingsModel;
+
 public class RegionConsolidator {
 
     private int width;
@@ -23,21 +25,16 @@ public class RegionConsolidator {
     private int weight = 1;
     private int totalWeight = 1;
     private int tempWeight;
-    
+
     /**
      * Creates a new RegionConsolidator instance.
      *
-     * @param horizontalRegions The number of horizontal regions.
-     * @param verticalRegions The number of vertical regions.
-     * @param horizontalMargin An int representing the horizontal margin.
-     * @param verticalMargin An int representing the vertical margin.
-     * @param weighColors The SettingsModel containing the application settings.
-     * @param weighFactor The factor which the weight is calculated with. A higher number will result in bigger weight steps.
+     * @param settings The SettingsModel object containing all the application settings.
      */
-    public RegionConsolidator(int horizontalRegions, int verticalRegions, int horizontalMargin, int verticalMargin, boolean weighColors, int weighFactor) {
+    public RegionConsolidator(SettingsModel settings) {
         //The number of horizontal and vertical regions so the final amount of consolidated regions can be calculated.
-        width = horizontalRegions;
-        height = verticalRegions;
+        width = settings.getHorizontalRegions();
+        height = settings.getVerticalRegions();
 
         //Calculate the number of consolidated regions.
         //The minus 4 is because the sides are 2 shorter than the top and bottom (they overlap the sides).
@@ -52,11 +49,11 @@ public class RegionConsolidator {
         bottomDepth = height - topDepth;
 
         //The margins (from 0 to n) are the regions at the outside that will be ignored.
-        this.horizontalMargin = horizontalMargin;
-        this.verticalMargin = verticalMargin;
+        horizontalMargin = settings.getHorizontalMargin();
+        verticalMargin = settings.getVerticalMargin();
         //Settings value that determines if the regions should we weighed when consolidating.
-        this.weighColors = weighColors;
-        this.weighFactor = weighFactor;
+        weighColors = settings.isWeighColor();
+        weighFactor = settings.getWeighFactor();
     }
 
     /**
