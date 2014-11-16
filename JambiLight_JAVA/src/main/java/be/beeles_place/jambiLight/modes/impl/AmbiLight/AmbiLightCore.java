@@ -28,8 +28,8 @@ public class AmbiLightCore {
     private IntensityCorrector corrector;
     private ColorModel model;
 
-    private final int width;
-    private final int height;
+    private int width;
+    private int height;
     private int tempPixelValue;
 
     private int[][][] regions;
@@ -37,6 +37,7 @@ public class AmbiLightCore {
     private float regionHeight;
 
     private int x, y;
+    private int regionXCount, regionYCount;
     private int regionX, regionY;
 
     /**
@@ -54,20 +55,11 @@ public class AmbiLightCore {
         enhanceColors = settings.isEnhanceColor();
         doCorrection = settings.isCorrectIntensity();
 
-        //Get the screen size and calculate the number of pixels required!
-        Dimension size = capper.getScreenDimensions();
-        width = (int) size.getWidth();
-        height = (int) size.getHeight();
-        model.setRawWidth(width);
-        model.setRawHeight(height);
+        regionXCount = settings.getHorizontalRegions();
+        regionYCount = settings.getVerticalRegions();
 
-        //Initialize the regions.
-        horizontalRegionSize = settings.getHorizontalRegions();
-        verticalRegionSize = settings.getVerticalRegions();
-        //There are (n x m) regions, made by the n and m dimensions. The last dimension of 3 is to store r/g/b/#pixels separately.
-        regions = new int[this.horizontalRegionSize][this.verticalRegionSize][4];
-        regionWidth = (float) width / this.horizontalRegionSize;
-        regionHeight = (float) height / this.verticalRegionSize;
+        //Update size of regions
+        checkDimensionsAndRegionSize();
 
         //Create the required instances.
         enhancer = new ColorEnhancer(settings.getEnhanceValue());
@@ -98,6 +90,7 @@ public class AmbiLightCore {
         //Make a screen capture.
         //Disabling aero themes in windows can easily double or triple performance!
         int[] pixels = capper.capture();
+        checkDimensionsAndRegionSize();
         model.setRawImageData(pixels.clone());
 
         for (int i = 0; i < pixels.length; i += stepSize) {
@@ -162,6 +155,30 @@ public class AmbiLightCore {
         
         cRegions = null;
         pixels = null;
+    }
+
+    /**
+     * This method checks if the dimensions of the captured area have changed, if so the required changes are made.
+     * In principle this will allow each captured frame to have different dimensions and still be used for the core logic.
+     */
+    private void checkDimensionsAndRegionSize() {
+        Dimension size = capper.getScreenDimensions();
+
+        if(width != size.getWidth() || height != size.getHeight()) {
+            //Get the screen size and calculate the number of pixels required!
+            width = (int) size.getWidth();
+            height = (int) size.getHeight();
+            model.setRawWidth(width);
+            model.setRawHeight(height);
+
+            //Initialize the regions.
+            horizontalRegionSize = regionXCount;
+            verticalRegionSize = regionYCount;
+            //There are (n x m) regions, made by the n and m dimensions. The last dimension of 3 is to store r/g/b/#pixels separately.
+            regions = new int[this.horizontalRegionSize][this.verticalRegionSize][4];
+            regionWidth = (float) width / this.horizontalRegionSize;
+            regionHeight = (float) height / this.verticalRegionSize;
+        }
     }
 
     /**
