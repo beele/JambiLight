@@ -3,6 +3,7 @@ package be.beeles_place.jambiLight.utils.screenCapture.impl;
 import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.utils.screenCapture.IScreenCapper;
+import org.bytedeco.javacpp.videoInputLib;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -41,6 +42,14 @@ public class DirectShowCapper implements IScreenCapper {
 
         pixels = new int[width * height];
         dimensions = new Dimension(width,height);
+
+        //TODO: Split up into separate method!
+        logger.DEBUG("IScreenCapper => Listing available input devices...");
+        int devices = videoInputLib.videoInput.listDevices();
+        for (int i = 0; i < devices; i++) {
+            String info = videoInputLib.videoInput.getDeviceName(i).getString();
+            logger.DEBUG("IScreenCapper ==> Input device: " + info + ", device index is " + i);
+        }
     }
 
     @Override

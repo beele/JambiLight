@@ -93,7 +93,6 @@ public class XbmcScreenCapper implements IScreenCapper {
                     return staticPixels;
                 }
 
-
                 //If enough data is in the buffer, read it out.
                 if(in.available() == totalBytes) {
                     read += in.read(data, read, in.available());
