@@ -10,6 +10,7 @@ import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.modes.ColorStrategy;
 import be.beeles_place.jambiLight.utils.EventbusWrapper;
 import be.beeles_place.jambiLight.utils.SettingsLoader;
+import be.beeles_place.jambiLight.utils.StageFactory;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.view.DebugViewController;
 import be.beeles_place.jambiLight.view.MainViewController;
@@ -22,6 +23,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 
@@ -40,6 +42,7 @@ public class ApplicationController {
     private CommunicationController serialCommunicator;
 
     //UI vars
+    private boolean enableUI = false;
     private Stage stage;
     private Stage debugStage;
     private MainViewController viewController;
@@ -69,13 +72,10 @@ public class ApplicationController {
     }
 
     /**
-     * Initializes the ApplicationController.
+     * Initializes the ApplicationController without a GUI.
      * This will create and load settings.
-     *
-     * @param stage The javaFX stage object.
-     * @param mainViewController The controller instance for the main view.
      */
-    public void init(Stage stage, MainViewController mainViewController) {
+    public void init() {
         logger.INFO("==========================================================================");
         logger.INFO("==========================================================================");
         logger.INFO("     __           __   _ __   _      __   __ ");
@@ -87,8 +87,6 @@ public class ApplicationController {
         logger.INFO("==========================================================================");
 
         logger.INFO("INIT => Initializing JambiLight...");
-        this.stage = stage;
-        viewController = mainViewController;
 
         //Create settings model!
         settings = settingsLoader.loadSettingsModel();
@@ -96,6 +94,22 @@ public class ApplicationController {
 
         //Start the actual application core logic.
         startup();
+    }
+
+    /**
+     * Initializes the ApplicationController with a GUI.
+     * This will create and load settings.
+     *
+     * @param stage The javaFX stage object.
+     * @param mainViewController The controller instance for the main view.
+     */
+    public void init(Stage stage, MainViewController mainViewController) {
+        enableUI = true;
+
+        init();
+
+        this.stage = stage;
+        viewController = mainViewController;
 
         //Set model on view controller.
         viewController.setSettings(settings);
@@ -155,16 +169,18 @@ public class ApplicationController {
      */
     @Subscribe
     public void onColorsUpdated(ColorModelUpdatedEvent event) {
-        //Prevent UI threading issues and run this whenever the runtime sees fit.
-        Platform.runLater(() -> {
-            String title = "JambiLight => running at: " + (1000 / model.getActionDuration()) + " FPS";
-            stage.setTitle(title);
-            viewController.updateColors();
+        if(enableUI) {
+            //Prevent UI threading issues and run this whenever the runtime sees fit.
+            Platform.runLater(() -> {
+                String title = "JambiLight => running at: " + (1000 / model.getActionDuration()) + " FPS";
+                stage.setTitle(title);
+                viewController.updateColors();
 
-            if(debugViewController != null) {
-                debugViewController.paint();
-            }
-        });
+                if(debugViewController != null) {
+                    debugViewController.paint();
+                }
+            });
+        }
 
         /**
          * Testing only!!!!!
@@ -196,18 +212,10 @@ public class ApplicationController {
     @Subscribe
     public void onVisualDebugStartRequested(VisualDebugEvent event) throws IOException {
         if(event.isStart()) {
-            URL location = getClass().getResource("/be/beeles_place/jambiLight/view/debug.fxml");
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(location);
-            fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
-            Parent root = fxmlLoader.load(location.openStream());
+            StageFactory.StageFactoryResult<DebugViewController> result = StageFactory.getInstance().createStage("debug.fxml", "Visual debug view => 1280 x 720", new Dimension(1280, 720));
+            debugStage = result.getStage();
+            debugViewController = result.getController();
 
-            debugStage = new Stage();
-            debugStage.setTitle("Visual debug view => 1280 x 720");
-            debugStage.setScene(new Scene(root, 1280, 720));
-            debugStage.show();
-
-            debugViewController = fxmlLoader.getController();
             debugViewController.init(debugStage, model);
         } else {
             debugStage.close();
