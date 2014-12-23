@@ -114,4 +114,4 @@ while LIVE:
         info("Error", "Unknow error! Connection lost?")
         closeSocket()
 
-    xbmc.sleep(20)
+    xbmc.sleep(25)

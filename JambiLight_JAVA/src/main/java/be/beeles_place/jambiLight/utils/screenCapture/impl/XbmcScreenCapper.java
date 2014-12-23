@@ -58,6 +58,8 @@ public class XbmcScreenCapper implements IScreenCapper {
         }
     }
 
+    private int writeCounter = 0;
+
     @Override
     public Dimension getScreenDimensions() {
         return dimensions;
@@ -80,8 +82,9 @@ public class XbmcScreenCapper implements IScreenCapper {
         boolean run = true;
         while(run) {
             try {
+                Thread.sleep(20);
                 //Check to see if the socket is still open!
-                //TODO: Might need further cpu/mem optimisations!
+                writeCounter = 0;
                 try {
                     out.write(0);
                     out.flush();
@@ -111,7 +114,6 @@ public class XbmcScreenCapper implements IScreenCapper {
                     processData();
                     return pixels;
                 }
-                Thread.sleep(3);
             } catch (Exception e) {
                 logger.ERROR("IScreenCapper => XBMC connection error: " +  e.getMessage());
                 return null;

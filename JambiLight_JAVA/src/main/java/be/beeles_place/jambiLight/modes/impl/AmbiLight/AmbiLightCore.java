@@ -91,7 +91,7 @@ public class AmbiLightCore {
         checkDimensionsAndRegionSize();
         model.setRawImageData(pixels.clone());
 
-        for (int i = 0; i < pixels.length; i += stepSize) {
+        /*for (int i = 0; i < pixels.length; i += stepSize) {
             //The pixels in the image are in one long array, we need to get the x and y values of the pixel.
             y = (i / width);        //This is the row the pixel is at.
             x = i - (y * width);    //This is the column the pixel is at.
@@ -107,6 +107,15 @@ public class AmbiLightCore {
             colors[1] += (tempPixelValue >>> 8) & 0xFF;
             colors[2] += tempPixelValue & 0xFF;
             colors[3] += 1;
+        }*/
+
+        int redactedLength = pixels.length / 4;
+        int offset = redactedLength - 1;
+        for (int i = 0; i < redactedLength; i += stepSize) {
+            pixelCalc(regions, i, pixels[i]);
+            pixelCalc(regions, i + offset, pixels[i + offset]);
+            pixelCalc(regions, i + offset * 2, pixels[i + offset * 2]);
+            pixelCalc(regions, i + offset * 3, pixels[i + offset * 3]);
         }
 
         //Go over all the regions and calculate the average color.
@@ -121,15 +130,8 @@ public class AmbiLightCore {
                 colors[3] = 0;
 
                 //Only process regions that are not ignored or completely black!
-                if (colors[0] != 0 || colors[1] != 0 || colors[2] != 0) {
-                    if (enhanceColors) {
-                        regions[n][m] = enhancer.processColor(colors[0], colors[1], colors[2]);
-                    } else {
-                        //Safety check for color channel values.
-                        colors[0] = colors[0] < 256 ? colors[0] : 255;
-                        colors[1] = colors[1] < 256 ? colors[1] : 255;
-                        colors[2] = colors[2] < 256 ? colors[2] : 255;
-                    }
+                if (enhanceColors && (colors[0] != 0 || colors[1] != 0 || colors[2] != 0)) {
+                    regions[n][m] = enhancer.processColor(colors[0], colors[1], colors[2]);
                 }
             }
         }
@@ -144,8 +146,7 @@ public class AmbiLightCore {
 
         //It's all about tai-ming (not the vases)
         long endTime = new Date().getTime();
-        long difference = endTime - startTime;
-        model.setActionDuration(difference);
+        model.setActionDuration(endTime - startTime);
         LOGGER.getInstance().INFO("AMBILIGHT-CORE => Pixel processing completed in : " + model.getActionDuration() + "ms");
 
         //Everything has been updated!
@@ -153,6 +154,23 @@ public class AmbiLightCore {
         
         cRegions = null;
         pixels = null;
+    }
+
+    private void pixelCalc(int[][][] regions, int i, int pixel) {
+        //The pixels in the image are in one long array, we need to get the x and y values of the pixel.
+        y = (i / width);        //This is the row the pixel is at.
+        x = i - (y * width);    //This is the column the pixel is at.
+
+        //Calculate the correct region for the given x and y coordinate.
+        regionX = (int) (x / regionWidth);
+        regionY = (int) (y / regionHeight);
+
+        //Add the R/G/B to the current region.
+        int[] colors = regions[regionX][regionY];
+        colors[0] += (pixel >>> 16) & 0xFF;
+        colors[1] += (pixel >>> 8) & 0xFF;
+        colors[2] += pixel & 0xFF;
+        colors[3] += 1;
     }
 
     /**

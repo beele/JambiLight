@@ -1,0 +1,47 @@
+#btnSideScreen {
+	-fx-background-image: url("../img/icon_tv.png");
+	-fx-background-size: contain;
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: center;
+}
+#btnSideMode {
+	-fx-background-image: url("../img/icon_mode.png");
+	-fx-background-size: contain;
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: center;
+}
+
+#btnSideSettings {
+	-fx-background-image: url("../img/icon_settings_2.png");
+	-fx-background-size: contain;
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: center;
+}
+
+#btnSideAdvancedSettings {
+	-fx-background-image: url("../img/icon_advanced_settings.png");
+	-fx-background-size: contain;
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: center;
+}
+
+#btnSideArduino {
+	-fx-background-image: url("../img/icon_arduino.png");
+	-fx-background-size: contain;
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: center;
+}
+
+#btnSideDebug {
+	-fx-background-image: url("../img/icon_debug.png");
+	-fx-background-size: contain;
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: center;
+}
+
+#btnSideInfo {
+	-fx-background-image: url("../img/icon_about.png");
+	-fx-background-size: contain;
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: center;
+}
