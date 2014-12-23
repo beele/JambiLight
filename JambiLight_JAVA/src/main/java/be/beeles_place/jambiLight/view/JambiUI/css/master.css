@@ -1,9 +1,15 @@
+.flatButton {
+	/*-fx-background-color: #404040;*/
+	-fx-background-radius: 0;
+}
+
 #btnSideScreen {
 	-fx-background-image: url("../img/icon_tv.png");
 	-fx-background-size: contain;
 	-fx-background-repeat: no-repeat;
 	-fx-background-position: center;
 }
+
 #btnSideMode {
 	-fx-background-image: url("../img/icon_mode.png");
 	-fx-background-size: contain;

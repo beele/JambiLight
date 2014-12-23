@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
@@ -7,97 +9,232 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="592.0" prefWidth="980.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox alignment="CENTER" prefHeight="592.0" prefWidth="136.0" spacing="23.0">
+      <VBox alignment="CENTER" prefHeight="592.0" prefWidth="136.0" spacing="23.0" style="-fx-background-color: #808080;">
          <children>
-            <Button id="btnSideScreen" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" stylesheets="@css/master.css" />
-            <Button id="btnSideMode" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" stylesheets="@css/master.css" />
-            <Button id="btnSideSettings" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" stylesheets="@css/master.css" />
-            <Button id="btnSideAdvancedSettings" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" stylesheets="@css/master.css" />
-            <Button id="btnSideArduino" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" stylesheets="@css/master.css" />
-            <Button id="btnSideDebug" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" stylesheets="@css/master.css" />
-            <Button id="btnSideInfo" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" stylesheets="@css/master.css" />
+            <Button id="btnSideScreen" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
+            <Button id="btnSideMode" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
+            <Button id="btnSideSettings" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
+            <Button id="btnSideAdvancedSettings" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
+            <Button id="btnSideArduino" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
+            <Button id="btnSideDebug" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
+            <Button id="btnSideInfo" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
          </children>
       </VBox>
-      <Separator orientation="VERTICAL" prefHeight="200.0" />
+      <Separator orientation="VERTICAL" prefHeight="200.0" style="-fx-background-color: #808080;" />
       <AnchorPane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
          <children>
-            <TabPane layoutY="-35.0" prefHeight="628.0" prefWidth="838.0" tabClosingPolicy="UNAVAILABLE">
-              <tabs>
-                <Tab text="Screen">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="599.0" prefWidth="825.0">
+            <StackPane prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
+                     <top>
+                        <HBox style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
-                              <ImageView fitHeight="512.0" fitWidth="512.0" layoutX="144.0" layoutY="102.0">
-                                 <image>
-                                    <Image url="@img/image_tv.png" />
-                                 </image>
-                              </ImageView>
-                              <Slider blockIncrement="4.0" layoutX="176.0" layoutY="129.0" majorTickUnit="2.0" max="5.0" minorTickCount="1" nodeOrientation="LEFT_TO_RIGHT" prefHeight="14.0" prefWidth="448.0" showTickMarks="true" snapToTicks="true" />
-                              <Slider blockIncrement="1.0" layoutX="612.0" layoutY="143.0" majorTickUnit="2.0" max="5.0" minorTickCount="1" orientation="VERTICAL" prefHeight="265.0" prefWidth="14.0" showTickMarks="true" snapToTicks="true" />
-                              <Label layoutX="360.0" layoutY="150.0" text="Vertical margin" />
-                              <Label layoutX="551.0" layoutY="267.0" rotate="270.0" text="Horizontal margin" />
-                              <TextField layoutX="350.0" layoutY="70.0" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" promptText="Horizontal LEDs" />
-                              <TextField layoutX="625.0" layoutY="263.0" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" promptText="Vertical LEDs" rotate="270.0" />
-                              <Label layoutX="14.0" layoutY="14.0" text="Please set the correct amount of horizontal and vertical LEDs. Additionaly you can set a margin to remove black borders." />
-                              <Button layoutX="736.0" layoutY="560.0" mnemonicParsing="false" text="Save changes" />
-                           </children></AnchorPane>
-                  </content>
-                </Tab>
-                <Tab text="Mode">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="599.0" prefWidth="803.0">
+                              <Label text="Please set the correct amount of horizontal and vertical LEDs. Additionaly you can set a margin to remove black borders." HBox.hgrow="ALWAYS" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                     </top>
+                     <bottom>
+                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
-                              <Button layoutX="736.0" layoutY="560.0" mnemonicParsing="false" text="Save changes" />
-                              <Label layoutX="14.0" layoutY="14.0" text="Please select the desired mode for capturing and processing the input signal." />
-                              <ChoiceBox layoutX="295.0" layoutY="85.0" prefHeight="25.0" prefWidth="254.0" />
-                              <Label layoutX="188.0" layoutY="118.0" text="The mode selected here will determine the method that is used to attain the input signal" />
-                              <Label layoutX="14.0" layoutY="161.0" text="Modes in detail:" />
-                              <Label layoutX="43.0" layoutY="196.0" text="Java screencapture:" />
-                           </children></AnchorPane>
-                  </content>
-                </Tab>
-                  <Tab text="Settings">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                              <Button fx:id="T1_BTN_SaveSettings" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                     </bottom>
+                     <center>
+                        <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button layoutX="736.0" layoutY="560.0" mnemonicParsing="false" text="Save changes" />
-                           </children></AnchorPane>
-                    </content>
-                  </Tab>
-                  <Tab text="Advanced settings">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                              <Region prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: C0C0C0;" HBox.hgrow="ALWAYS" />
+                              <VBox prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <Region prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: C0C0C0;" VBox.vgrow="ALWAYS" />
+                                    <AnchorPane style="-fx-background-color: C0C0C0;">
+                                       <children>
+                                          <TextField fx:id="T1_TXT_VerticalLeds" layoutX="494.0" layoutY="171.0" maxWidth="100.0" minWidth="120.0" prefWidth="100.0" promptText="Vertical LEDs" rotate="270.0" />
+                                          <TextField fx:id="T1_TXT_HorizontalLeds" layoutX="250.0" layoutY="8.0" maxWidth="100.0" minWidth="120.0" prefWidth="100.0" promptText="Horizontal LEDs" />
+                                          <ImageView fitHeight="405.0" fitWidth="448.0" layoutX="86.0" layoutY="44.0">
+                                             <image>
+                                                <Image url="@img/image_tv.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label layoutX="258.0" layoutY="86.0" text="Horizontal margin" />
+                                          <Label layoutX="425.0" layoutY="171.0" rotate="270.0" text="Vertical margin" />
+                                          <Slider fx:id="T1_SLD_VerticalMarg" blockIncrement="1.0" layoutX="488.0" layoutY="70.0" majorTickUnit="2.0" max="5.0" minorTickCount="1" orientation="VERTICAL" prefHeight="217.0" prefWidth="16.0" showTickMarks="true" snapToTicks="true" />
+                                          <Slider fx:id="T1_SLD_HorizontalMarg" blockIncrement="4.0" layoutX="115.0" layoutY="69.0" majorTickUnit="2.0" max="5.0" minorTickCount="1" nodeOrientation="LEFT_TO_RIGHT" prefHeight="16.0" prefWidth="386.0" showTickMarks="true" snapToTicks="true" />
+                                       </children>
+                                    </AnchorPane>
+                                    <Region prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: C0C0C0;" VBox.vgrow="ALWAYS" />
+                                 </children>
+                              </VBox>
+                              <Region prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: C0C0C0;" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                     </center>
+                  </BorderPane>
+                  <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
+                     <bottom>
+                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
-                              <Button layoutX="736.0" layoutY="560.0" mnemonicParsing="false" text="Save changes" />
-                           </children></AnchorPane>
-                    </content>
-                  </Tab>
-                  <Tab text="Arduino">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                              <Button fx:id="T2_BTN_SaveSettings" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                     </bottom>
+                     <top>
+                        <HBox style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
-                              <Button layoutX="736.0" layoutY="560.0" mnemonicParsing="false" text="Save changes" />
-                              <Button layoutX="633.0" layoutY="560.0" mnemonicParsing="false" text="Generate code" />
-                           </children></AnchorPane>
-                    </content>
-                  </Tab>
-                  <Tab text="Debug">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                              <Label text="Please select the desired input capture mehtod below:" HBox.hgrow="ALWAYS" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                     </top>
+                     <left>
+                        <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button layoutX="745.0" layoutY="560.0" mnemonicParsing="false" text="Start debug" />
-                           </children></AnchorPane>
-                    </content>
-                  </Tab>
-                  <Tab text="About">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                    </content>
-                  </Tab>
-              </tabs>
-            </TabPane>
+                              <ComboBox fx:id="T2_CMB_CaptureMode" minWidth="250.0" prefHeight="26.0" prefWidth="250.0" promptText="Select a capture mode" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                     </left>
+                     <right>
+                        <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                           <BorderPane.margin>
+                              <Insets />
+                           </BorderPane.margin>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                           <children>
+                              <TextArea editable="false" minWidth="500.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;" text="## Java screenshot ##&#10;This mode uses the standard java robot implementation to take continues screenshots of the main display. &#10;This mode should work on all OSes but can result in lower performance!&#10;&#10;## KODI screenshot ##&#10;This mode works together with the KODI plugin for JambiLight and allows for faster and better capture of the screen through KODI. &#10;This mode should work on Windows/OSX with at least XBMC 12 or newer (or KODI).&#10;&#10;## Directshow ##&#10;This mode uses JavaCV to enumerate directshow devices and use them as input for JambiLight.&#10;This mode works on windows (and will later work on OSX too)&#10;&#10;## Mock rainbow ##&#10;This mode can be used for testing. It will cycle through the colors of the rainbow.&#10;This mode works on all OSes.&#10;&#10;## Mock jni ##&#10;This Mode is currently used for testing native JNI interfacting.&#10;This mode only works on Windows." wrapText="true" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                     </right>
+                  </BorderPane>
+                  <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
+                     <bottom>
+                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Button fx:id="T1_BTN_SaveSettings1" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                     </bottom>
+                     <top>
+                        <HBox style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label text="Please set the correct amount of horizontal and vertical LEDs. Additionaly you can set a margin to remove black borders." HBox.hgrow="ALWAYS" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                     </top>
+                  </BorderPane>
+                  <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
+                     <bottom>
+                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Button fx:id="T1_BTN_SaveSettings2" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                     </bottom>
+                     <top>
+                        <HBox style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label text="Please set the correct amount of horizontal and vertical LEDs. Additionaly you can set a margin to remove black borders." HBox.hgrow="ALWAYS" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                     </top>
+                  </BorderPane>
+                  <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
+                     <bottom>
+                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Button fx:id="T1_BTN_SaveSettings3" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                     </bottom>
+                     <top>
+                        <HBox style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label text="Please set the correct amount of horizontal and vertical LEDs. Additionaly you can set a margin to remove black borders." HBox.hgrow="ALWAYS" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                     </top>
+                  </BorderPane>
+                  <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
+                     <bottom>
+                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Button fx:id="T1_BTN_SaveSettings4" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                     </bottom>
+                     <top>
+                        <HBox style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label text="Please set the correct amount of horizontal and vertical LEDs. Additionaly you can set a margin to remove black borders." HBox.hgrow="ALWAYS" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                     </top>
+                  </BorderPane>
+                  <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
+                     <bottom>
+                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Button fx:id="T1_BTN_SaveSettings5" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                     </bottom>
+                     <top>
+                        <HBox style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label text="Fill me in!" HBox.hgrow="ALWAYS" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                     </top>
+                  </BorderPane>
+               </children>
+            </StackPane>
          </children>
       </AnchorPane>
    </children>
