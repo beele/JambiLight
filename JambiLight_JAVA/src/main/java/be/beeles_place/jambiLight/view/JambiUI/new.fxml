@@ -1,33 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.beeles_place.jambiLight.view.JambiUI.NewViewController">
    <children>
       <VBox alignment="CENTER" prefHeight="592.0" prefWidth="136.0" spacing="23.0" style="-fx-background-color: #808080;">
          <children>
-            <Button id="btnSideScreen" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
-            <Button id="btnSideMode" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
-            <Button id="btnSideSettings" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
-            <Button id="btnSideAdvancedSettings" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
-            <Button id="btnSideArduino" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
-            <Button id="btnSideDebug" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
-            <Button id="btnSideInfo" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
+            <Button id="btnSideScreen" fx:id="SIDE_BTN_Screen" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" onAction="#onSideButtonClicked" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
+            <Button id="btnSideMode" fx:id="SIDE_BTN_Function" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" onAction="#onSideButtonClicked" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
+            <Button id="btnSideSettings" fx:id="SIDE_BTN_Settings" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" onAction="#onSideButtonClicked" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
+            <Button id="btnSideAdvancedSettings" fx:id="SIDE_BTN_Advanced" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" onAction="#onSideButtonClicked" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
+            <Button id="btnSideArduino" fx:id="SIDE_BTN_Arduino" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" onAction="#onSideButtonClicked" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
+            <Button id="btnSideDebug" fx:id="SIDE_BTN_Debug" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" onAction="#onSideButtonClicked" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
+            <Button id="btnSideInfo" fx:id="SIDE_BTN_Info" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" onAction="#onSideButtonClicked" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
          </children>
       </VBox>
       <Separator orientation="VERTICAL" prefHeight="200.0" style="-fx-background-color: #808080;" />
       <AnchorPane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
          <children>
-            <StackPane prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <StackPane fx:id="STCK_TabContainer" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
+                  <BorderPane fx:id="T1_Screen" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
                      <top>
                         <HBox style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
@@ -39,7 +36,7 @@
                         </HBox>
                      </top>
                      <bottom>
-                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: C0C0C0;" BorderPane.alignment="CENTER">
+                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
                               <Button fx:id="T1_BTN_SaveSettings" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
                            </children>
@@ -51,11 +48,11 @@
                      <center>
                         <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Region prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: C0C0C0;" HBox.hgrow="ALWAYS" />
+                              <Region prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #C0C0C0;" HBox.hgrow="ALWAYS" />
                               <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <Region prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: C0C0C0;" VBox.vgrow="ALWAYS" />
-                                    <AnchorPane style="-fx-background-color: C0C0C0;">
+                                    <Region prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #C0C0C0;" VBox.vgrow="ALWAYS" />
+                                    <AnchorPane style="-fx-background-color: #C0C0C0;">
                                        <children>
                                           <TextField fx:id="T1_TXT_VerticalLeds" layoutX="494.0" layoutY="171.0" maxWidth="100.0" minWidth="120.0" prefWidth="100.0" promptText="Vertical LEDs" rotate="270.0" />
                                           <TextField fx:id="T1_TXT_HorizontalLeds" layoutX="250.0" layoutY="8.0" maxWidth="100.0" minWidth="120.0" prefWidth="100.0" promptText="Horizontal LEDs" />
@@ -70,17 +67,17 @@
                                           <Slider fx:id="T1_SLD_HorizontalMarg" blockIncrement="4.0" layoutX="115.0" layoutY="69.0" majorTickUnit="2.0" max="5.0" minorTickCount="1" nodeOrientation="LEFT_TO_RIGHT" prefHeight="16.0" prefWidth="386.0" showTickMarks="true" snapToTicks="true" />
                                        </children>
                                     </AnchorPane>
-                                    <Region prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: C0C0C0;" VBox.vgrow="ALWAYS" />
+                                    <Region prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #C0C0C0;" VBox.vgrow="ALWAYS" />
                                  </children>
                               </VBox>
-                              <Region prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: C0C0C0;" HBox.hgrow="ALWAYS" />
+                              <Region prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #C0C0C0;" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                      </center>
                   </BorderPane>
-                  <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
+                  <BorderPane fx:id="T2_Function" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
                      <bottom>
-                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: C0C0C0;" BorderPane.alignment="CENTER">
+                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
                               <Button fx:id="T2_BTN_SaveSettings" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
                            </children>
@@ -123,9 +120,9 @@
                         </HBox>
                      </right>
                   </BorderPane>
-                  <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
+                  <BorderPane fx:id="T3_Settings" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
                      <bottom>
-                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: C0C0C0;" BorderPane.alignment="CENTER">
+                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
                               <Button fx:id="T1_BTN_SaveSettings1" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
                            </children>
@@ -145,9 +142,9 @@
                         </HBox>
                      </top>
                   </BorderPane>
-                  <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
+                  <BorderPane fx:id="T4_Advanced" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
                      <bottom>
-                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: C0C0C0;" BorderPane.alignment="CENTER">
+                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
                               <Button fx:id="T1_BTN_SaveSettings2" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
                            </children>
@@ -167,9 +164,9 @@
                         </HBox>
                      </top>
                   </BorderPane>
-                  <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
+                  <BorderPane fx:id="T5_Arduino" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
                      <bottom>
-                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: C0C0C0;" BorderPane.alignment="CENTER">
+                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
                               <Button fx:id="T1_BTN_SaveSettings3" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
                            </children>
@@ -189,9 +186,9 @@
                         </HBox>
                      </top>
                   </BorderPane>
-                  <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
+                  <BorderPane fx:id="T6_Debug" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
                      <bottom>
-                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: C0C0C0;" BorderPane.alignment="CENTER">
+                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
                               <Button fx:id="T1_BTN_SaveSettings4" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
                            </children>
@@ -211,9 +208,9 @@
                         </HBox>
                      </top>
                   </BorderPane>
-                  <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
+                  <BorderPane fx:id="T7_Info" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
                      <bottom>
-                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: C0C0C0;" BorderPane.alignment="CENTER">
+                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
                               <Button fx:id="T1_BTN_SaveSettings5" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
                            </children>
