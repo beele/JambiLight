@@ -9,6 +9,13 @@ import com.google.common.eventbus.EventBus;
  */
 public class ColorModel {
 
+    private int screenWidth;
+    private int screenHeight;
+    private int memUsed;
+    private int memAvailable;
+    private int memTotal;
+    private int framerate;
+
     private int[] rawImageData;
     private int rawWidth;
     private int rawHeight;
@@ -38,6 +45,54 @@ public class ColorModel {
     }
 
     //Getters & setters.
+    public int getScreenWidth() {
+        return screenWidth;
+    }
+
+    public void setScreenWidth(int screenWidth) {
+        this.screenWidth = screenWidth;
+    }
+
+    public int getScreenHeight() {
+        return screenHeight;
+    }
+
+    public void setScreenHeight(int screenHeight) {
+        this.screenHeight = screenHeight;
+    }
+
+    public int getMemUsed() {
+        return memUsed;
+    }
+
+    public void setMemUsed(int memUsed) {
+        this.memUsed = memUsed;
+    }
+
+    public int getMemAvailable() {
+        return memAvailable;
+    }
+
+    public void setMemAvailable(int memAvailable) {
+        this.memAvailable = memAvailable;
+    }
+
+    public int getMemTotal() {
+        return memTotal;
+    }
+
+    public void setMemTotal(int memTotal) {
+        this.memTotal = memTotal;
+    }
+
+    public int getFramerate() {
+        return framerate;
+    }
+
+    public void setFramerate(int framerate) {
+        this.framerate = framerate;
+    }
+
     public int[] getRawImageData() {
         return rawImageData;
     }

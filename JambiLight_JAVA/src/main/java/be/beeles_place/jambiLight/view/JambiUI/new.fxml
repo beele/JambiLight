@@ -403,8 +403,8 @@
                            <children>
                               <Label fx:id="T6_LBL_StatusInfo" text="Jambilight running at ##FPS - Using ###MB RAM" />
                               <Region prefHeight="26.0" HBox.hgrow="ALWAYS" />
-                              <Button fx:id="T6_BTN_OpenLog" mnemonicParsing="false" text="Open log" />
-                              <Button fx:id="T6_BTN_OpenRawView" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Open input view" />
+                              <Button fx:id="T6_BTN_OpenLog" mnemonicParsing="false" text="Open log" onAction="#onOpenDebugLog"/>
+                              <Button fx:id="T6_BTN_OpenRawView" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Open input view" onAction="#onOpenRawInputView"/>
                            </children>
                            <padding>
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

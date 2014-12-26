@@ -54,15 +54,10 @@ public class Main extends Application {
         //Make a new application controller.
         appController = new ApplicationController();
 
-        //Create a new stage and load the FXML GUI.
-        StageFactory.StageFactoryResult<MainViewController> result = StageFactory.getInstance().createStage("main.fxml", "JambiLight 1.0 Alpha", new Dimension(1150, 650));
+        StageFactory.StageFactoryResult<NewViewController> result = StageFactory.getInstance().createStage("JambiUI/new.fxml", "JambiUI", new Dimension(1150, 650));
         stage = result.getStage();
         //Set the stage shutdown action.
         stage.setOnCloseRequest(event -> eventBus.post(new ShutdownEvent()));
-
-        //TODO: Use new GUI!
-        StageFactory.StageFactoryResult<NewViewController> tempResult = StageFactory.getInstance().createStage("JambiUI/new.fxml", "JambiUI", new Dimension(1150, 650));
-        appController.newViewController = tempResult.getController();
 
         //Init the application controller, giving it the stage and the view controller.
         appController.init(stage, result.getController());

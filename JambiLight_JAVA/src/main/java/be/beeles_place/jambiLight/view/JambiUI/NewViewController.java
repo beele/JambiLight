@@ -1,11 +1,14 @@
 package be.beeles_place.jambiLight.view.JambiUI;
 
 import be.beeles_place.jambiLight.events.SettingsUpdatedEvent;
+import be.beeles_place.jambiLight.events.UpdateUserInterfaceEvent;
+import be.beeles_place.jambiLight.events.VisualDebugEvent;
 import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.utils.EventbusWrapper;
 import be.beeles_place.jambiLight.utils.screenCapture.ScreenCapperStrategy;
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -35,6 +38,9 @@ public class NewViewController implements Initializable {
     private final String T5 = "T5_Arduino";
     private final String T6 = "T6_Debug";
     private final String T7 = "T7_Info";
+
+    //View state tracker
+    private String currentTab = null;
 
     //Components
     @FXML
@@ -82,6 +88,7 @@ public class NewViewController implements Initializable {
         this.model = model;
 
         //Activate the first tab!
+        currentTab = T1;
         setActiveStackView(T1);
         updateTabOne();
     }
@@ -89,30 +96,45 @@ public class NewViewController implements Initializable {
     //#########################################
     //### Event handlers.
     //#########################################
+    @Subscribe
+    public void onUpdateOfInterfaceRequired(UpdateUserInterfaceEvent event) {
+        //Only update if the tab is visible!
+        if(T6.equals(currentTab)) {
+            updateTabSix();
+        }
+    }
+
     @FXML
     void onSideButtonClicked(ActionEvent event) {
         Button target = (Button) event.getTarget();
 
         //Figure out which button in the sidebar was clicked and change the stack's first child to the corresponding view.
         if(SIDE_BTN_Screen.equals(target)) {
+            currentTab = T1;
             setActiveStackView(T1);
             updateTabOne();
         } else if(SIDE_BTN_Function.equals(target)) {
+            currentTab = T2;
             setActiveStackView(T2);
             updateTabTwo();
         } else if(SIDE_BTN_Settings.equals(target)) {
+            currentTab = T3;
             setActiveStackView(T3);
             updateTabThree();
         } else if(SIDE_BTN_Advanced.equals(target)) {
+            currentTab = T4;
             setActiveStackView(T4);
             updateTabFour();
         } else if(SIDE_BTN_Arduino.equals(target)) {
+            currentTab = T5;
             setActiveStackView(T5);
             updateTabFive();
         } else if(SIDE_BTN_Debug.equals(target)) {
+            currentTab = T6;
             setActiveStackView(T6);
             drawDebugUI();
         } else if(SIDE_BTN_Info.equals(target)) {
+            currentTab = T7;
             setActiveStackView(T7);
         }
     }
@@ -369,8 +391,30 @@ public class NewViewController implements Initializable {
         eventBus.post(new SettingsUpdatedEvent());
     }
 
-    private void updateTabSix() {
+    @FXML
+    private Label T6_LBL_StatusInfo;
 
+    private void updateTabSix() {
+        //Update the colors.
+        int[][] colors = model.getCurrentColors();
+
+        for (int i = 0; i < colors.length; i++) {
+            int[] rgb = colors[i];
+            drawCell(i, cellWidth, cellHeight, new Color((double) rgb[0] / 255, (double) rgb[1] / 255, (double) rgb[2] / 255, 1), T6_LedCanvas);
+        }
+
+        //Update text and other debug info.
+        T6_LBL_StatusInfo.setText("Jambilight running at " + model.getFramerate() + "FPS - Using " + model.getMemUsed() + "MB RAM out of " + model.getMemTotal() + "MB.");
+    }
+
+    @FXML
+    void onOpenDebugLog(ActionEvent actionEvent) {
+        //TODO: Implement!
+    }
+
+    @FXML
+    void onOpenRawInputView(ActionEvent actionEvent) {
+        eventBus.post(new VisualDebugEvent(true));
     }
 
     //#########################################
@@ -408,18 +452,6 @@ public class NewViewController implements Initializable {
                 .message(message)
                 .lightweight()
                 .showError();
-    }
-
-    /**
-     * Update the colors.
-     */
-    public void updateColors() {
-        int[][] colors = model.getCurrentColors();
-
-        for (int i = 0; i < colors.length; i++) {
-            int[] rgb = colors[i];
-            drawCell(i, cellWidth, cellHeight, new Color((double) rgb[0] / 255, (double) rgb[1] / 255, (double) rgb[2] / 255, 1), T6_LedCanvas);
-        }
     }
 
     private void drawDebugUI() {

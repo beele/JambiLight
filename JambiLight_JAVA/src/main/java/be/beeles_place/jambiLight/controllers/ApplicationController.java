@@ -1,10 +1,7 @@
 package be.beeles_place.jambiLight.controllers;
 
 import be.beeles_place.jambiLight.communication.CommunicationStrategy;
-import be.beeles_place.jambiLight.events.ColorModelUpdatedEvent;
-import be.beeles_place.jambiLight.events.SettingsUpdatedEvent;
-import be.beeles_place.jambiLight.events.ShutdownEvent;
-import be.beeles_place.jambiLight.events.VisualDebugEvent;
+import be.beeles_place.jambiLight.events.*;
 import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.modes.ColorStrategy;
@@ -46,7 +43,7 @@ public class ApplicationController {
     private boolean enableUI = false;
     private Stage stage;
     private Stage debugStage;
-    private MainViewController viewController;
+    private NewViewController viewController;
     private DebugViewController debugViewController;
 
     //Temp & testing
@@ -54,9 +51,6 @@ public class ApplicationController {
     private Runtime rt;
     private int megabyteInBytes;
     private int performanceCounter;
-
-    //TODO: Temp.
-    public NewViewController newViewController;
 
     /**
      * Creates an ApplicationController instance.
@@ -106,7 +100,7 @@ public class ApplicationController {
      * @param stage The javaFX stage object.
      * @param mainViewController The controller instance for the main view.
      */
-    public void init(Stage stage, MainViewController mainViewController) {
+    public void init(Stage stage, NewViewController mainViewController) {
         enableUI = true;
 
         init();
@@ -115,12 +109,7 @@ public class ApplicationController {
         viewController = mainViewController;
 
         //Set model on view controller.
-        viewController.setSettings(settings);
-        viewController.setModel(model);
-        viewController.initUI();
-
-        //TODO: Temp.
-        newViewController.initUI(model, settings);
+        viewController.initUI(model, settings);
     }
 
     /**
@@ -175,20 +164,22 @@ public class ApplicationController {
      */
     @Subscribe
     public void onColorsUpdated(ColorModelUpdatedEvent event) {
-        if(enableUI) {
-            //Prevent UI threading issues and run this whenever the runtime sees fit.
-            Platform.runLater(() -> {
-                String title = "JambiLight => running at: " + (1000 / model.getActionDuration()) + " FPS";
-                stage.setTitle(title);
-                viewController.updateColors();
+        //Update debug values.
+        model.setFramerate((int)(1000 / model.getActionDuration()));
+        model.setMemAvailable((int) (rt.freeMemory() / megabyteInBytes));
+        model.setMemUsed((int) ((rt.totalMemory() - rt.freeMemory() )/ megabyteInBytes));
+        model.setMemTotal((int) (rt.totalMemory() / megabyteInBytes));
 
+        if(enableUI) {
+            //Signal UI for update!
+            Platform.runLater(() -> {
+                //TODO: Maybe use a queue for the raw input view? Right now anything above 720P causes extreme lag!
                 if(debugViewController != null) {
                     debugViewController.paint();
                 }
-            });
 
-            //TODO: Temp.
-            Platform.runLater(newViewController::updateColors);
+                eventBus.post(new UpdateUserInterfaceEvent());
+            });
         }
 
         /**
@@ -208,13 +199,13 @@ public class ApplicationController {
             logger.DEBUG("All  mem: " +  rt.totalMemory() / megabyteInBytes);
             logger.DEBUG("Max  mem: " + rt.maxMemory() / megabyteInBytes);
 
-            /*if(model.getActionDuration() > 500) {
+            if(model.getActionDuration() > 500) {
                 if(performanceCounter == 0) {
                     performanceCounter++;
                 } else {
                     shutdown();
                 }
-            }*/
+            }
         }
     }
 
@@ -224,6 +215,8 @@ public class ApplicationController {
             StageFactory.StageFactoryResult<DebugViewController> result = StageFactory.getInstance().createStage("debug.fxml", "Visual debug view => 1280 x 720", new Dimension(1280, 720));
             debugStage = result.getStage();
             debugViewController = result.getController();
+            //TODO: This is not very clean!
+            debugStage.setOnCloseRequest(evt -> eventBus.post(new VisualDebugEvent(false)));
 
             debugViewController.init(debugStage, model);
         } else {
