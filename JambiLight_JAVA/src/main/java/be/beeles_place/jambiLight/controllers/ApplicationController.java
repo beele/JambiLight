@@ -13,6 +13,7 @@ import be.beeles_place.jambiLight.utils.SettingsLoader;
 import be.beeles_place.jambiLight.utils.StageFactory;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.view.DebugViewController;
+import be.beeles_place.jambiLight.view.JambiUI.NewViewController;
 import be.beeles_place.jambiLight.view.MainViewController;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -54,6 +55,8 @@ public class ApplicationController {
     private int megabyteInBytes;
     private int performanceCounter;
 
+    //TODO: Temp.
+    public NewViewController newViewController;
 
     /**
      * Creates an ApplicationController instance.
@@ -115,6 +118,9 @@ public class ApplicationController {
         viewController.setSettings(settings);
         viewController.setModel(model);
         viewController.initUI();
+
+        //TODO: Temp.
+        newViewController.initUI(model, settings);
     }
 
     /**
@@ -126,7 +132,7 @@ public class ApplicationController {
         //Create color model if required!
         model = model == null ? new ColorModel() : model;
         //Calculate the new amount of regions.
-        model.setNumberOfConsolidatedRegions(settings.getHorizontalRegions() * 2 + (settings.getVerticalRegions() * 2) - 4);
+        model.setNumberOfConsolidatedRegions((settings.getHorizontalRegions() * 2) + (settings.getVerticalRegions() * 2) - 4);
 
         //TODO: Communication strategy in UI & settings model.
         //Create and set up the communication controller.
@@ -180,6 +186,9 @@ public class ApplicationController {
                     debugViewController.paint();
                 }
             });
+
+            //TODO: Temp.
+            Platform.runLater(newViewController::updateColors);
         }
 
         /**

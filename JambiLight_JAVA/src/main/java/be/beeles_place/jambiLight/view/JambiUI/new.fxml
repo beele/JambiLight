@@ -41,9 +41,11 @@
                         </HBox>
                      </top>
                      <bottom>
-                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+                        <HBox alignment="CENTER_LEFT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="T1_BTN_SaveSettings" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
+                              <Label text="Either fill: A) horizontal + vertical     B) total     C) total and either horizontal or vertical!" />
+                              <Region maxHeight="26.0" minHeight="26.0" prefHeight="26.0" HBox.hgrow="ALWAYS" />
+                              <Button fx:id="T1_BTN_SaveSettings" mnemonicParsing="false" onAction="#onTabOneSaveClicked" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
                            </children>
                            <padding>
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -59,8 +61,6 @@
                                     <Region prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #C0C0C0;" VBox.vgrow="ALWAYS" />
                                     <AnchorPane style="-fx-background-color: #C0C0C0;">
                                        <children>
-                                          <TextField fx:id="T1_TXT_VerticalLeds" layoutX="494.0" layoutY="171.0" maxWidth="100.0" minWidth="120.0" prefWidth="100.0" promptText="Vertical LEDs" rotate="270.0" />
-                                          <TextField fx:id="T1_TXT_HorizontalLeds" layoutX="250.0" layoutY="8.0" maxWidth="100.0" minWidth="120.0" prefWidth="100.0" promptText="Horizontal LEDs" />
                                           <ImageView fitHeight="405.0" fitWidth="448.0" layoutX="86.0" layoutY="44.0">
                                              <image>
                                                 <Image url="@img/image_tv.png" />
@@ -70,6 +70,24 @@
                                           <Label layoutX="425.0" layoutY="171.0" rotate="270.0" text="Vertical margin" />
                                           <Slider fx:id="T1_SLD_VerticalMarg" blockIncrement="1.0" layoutX="488.0" layoutY="70.0" majorTickUnit="2.0" max="5.0" minorTickCount="1" orientation="VERTICAL" prefHeight="217.0" prefWidth="16.0" showTickMarks="true" snapToTicks="true" />
                                           <Slider fx:id="T1_SLD_HorizontalMarg" blockIncrement="4.0" layoutX="115.0" layoutY="69.0" majorTickUnit="2.0" max="5.0" minorTickCount="1" nodeOrientation="LEFT_TO_RIGHT" prefHeight="16.0" prefWidth="386.0" showTickMarks="true" snapToTicks="true" />
+                                          <HBox alignment="CENTER" layoutX="197.0" maxHeight="26.0" minHeight="26.0" prefHeight="26.0" spacing="5.0">
+                                             <children>
+                                                <Label text="Horizontal LEDs: " />
+                                                <TextField fx:id="T1_TXT_HorizontalLeds" maxWidth="100.0" minWidth="120.0" prefWidth="100.0" promptText="Horizontal LEDs" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER" layoutX="194.0" layoutY="391.0" maxHeight="26.0" minHeight="26.0" prefHeight="26.0" spacing="5.0">
+                                             <children>
+                                                <Label text="Total Leds:" />
+                                                <TextField fx:id="T1_TXT_TotalLeds" promptText="Total LEDs" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER" layoutX="461.0" layoutY="166.0" maxHeight="26.0" minHeight="26.0" prefHeight="26.0" rotate="270.0" spacing="5.0">
+                                             <children>
+                                                <Label text="Vertical Leds: " />
+                                                <TextField fx:id="T1_TXT_VerticalLeds" maxWidth="100.0" minWidth="120.0" prefWidth="100.0" promptText="Vertical LEDs" />
+                                             </children>
+                                          </HBox>
                                        </children>
                                     </AnchorPane>
                                     <Region prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #C0C0C0;" VBox.vgrow="ALWAYS" />
@@ -84,7 +102,7 @@
                      <bottom>
                         <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="T2_BTN_SaveSettings" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
+                              <Button fx:id="T2_BTN_SaveSettings" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" onAction="#onTabTwoSaveClicked"/>
                            </children>
                            <padding>
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -157,7 +175,7 @@
                      <bottom>
                         <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="T3_BTN_SaveSettings" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
+                              <Button fx:id="T3_BTN_SaveSettings" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" onAction="#onTabThreeSaveClicked"/>
                            </children>
                            <padding>
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -221,7 +239,7 @@
                      <bottom>
                         <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="T4_BTN_SaveSettings" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
+                              <Button fx:id="T4_BTN_SaveSettings" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" onAction="#onTabFourSaveClicked"/>
                            </children>
                            <padding>
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -319,7 +337,7 @@
                      <bottom>
                         <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="T5_BTN_SaveSettings" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
+                              <Button fx:id="T5_BTN_SaveSettings" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" onAction="#onTabFiveSaveClicked"/>
                            </children>
                            <padding>
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -373,6 +391,7 @@
                                     <TextField fx:id="T5_TXT_DataPin" promptText="Data pin" />
                                  </children>
                               </HBox>
+                              <ComboBox fx:id="T5_CMB_LedType" prefHeight="26.0" prefWidth="232.0" promptText="LED strip type" />
                               <Button fx:id="T5_BTN_GenerateCode" mnemonicParsing="false" text="Generate code" />
                            </children>
                         </VBox>

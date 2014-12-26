@@ -4,6 +4,7 @@ import be.beeles_place.jambiLight.controllers.ApplicationController;
 import be.beeles_place.jambiLight.events.ShutdownEvent;
 import be.beeles_place.jambiLight.utils.EventbusWrapper;
 import be.beeles_place.jambiLight.utils.StageFactory;
+import be.beeles_place.jambiLight.view.JambiUI.NewViewController;
 import be.beeles_place.jambiLight.view.MainViewController;
 import com.google.common.eventbus.EventBus;
 import javafx.application.Application;
@@ -55,11 +56,13 @@ public class Main extends Application {
 
         //Create a new stage and load the FXML GUI.
         StageFactory.StageFactoryResult<MainViewController> result = StageFactory.getInstance().createStage("main.fxml", "JambiLight 1.0 Alpha", new Dimension(1150, 650));
+        stage = result.getStage();
         //Set the stage shutdown action.
-        result.getStage().setOnCloseRequest(event -> eventBus.post(new ShutdownEvent()));
+        stage.setOnCloseRequest(event -> eventBus.post(new ShutdownEvent()));
 
         //TODO: Use new GUI!
-        StageFactory.getInstance().createStage("JambiUI/new.fxml", "JambiUI", new Dimension(1150, 650));
+        StageFactory.StageFactoryResult<NewViewController> tempResult = StageFactory.getInstance().createStage("JambiUI/new.fxml", "JambiUI", new Dimension(1150, 650));
+        appController.newViewController = tempResult.getController();
 
         //Init the application controller, giving it the stage and the view controller.
         appController.init(stage, result.getController());
