@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.canvas.*?>
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
+<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.beeles_place.jambiLight.view.JambiUI.NewViewController">
+<?import javafx.scene.text.*?>
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.beeles_place.jambiLight.view.MainViewController">
    <children>
       <VBox alignment="CENTER" prefHeight="592.0" prefWidth="136.0" spacing="23.0" style="-fx-background-color: #808080;">
          <children>

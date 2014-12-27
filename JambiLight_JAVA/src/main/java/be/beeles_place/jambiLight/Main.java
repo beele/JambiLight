@@ -4,18 +4,12 @@ import be.beeles_place.jambiLight.controllers.ApplicationController;
 import be.beeles_place.jambiLight.events.ShutdownEvent;
 import be.beeles_place.jambiLight.utils.EventbusWrapper;
 import be.beeles_place.jambiLight.utils.StageFactory;
-import be.beeles_place.jambiLight.view.JambiUI.NewViewController;
 import be.beeles_place.jambiLight.view.MainViewController;
 import com.google.common.eventbus.EventBus;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.JavaFXBuilderFactory;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.awt.*;
-import java.net.URL;
 
 public class Main extends Application {
 
@@ -54,7 +48,7 @@ public class Main extends Application {
         //Make a new application controller.
         appController = new ApplicationController();
 
-        StageFactory.StageFactoryResult<NewViewController> result = StageFactory.getInstance().createStage("JambiUI/new.fxml", "JambiUI", new Dimension(1150, 650));
+        StageFactory.StageFactoryResult<MainViewController> result = StageFactory.getInstance().createStage("mainView.fxml", "JambiLight RC1", new Dimension(1150, 650));
         stage = result.getStage();
         //Set the stage shutdown action.
         stage.setOnCloseRequest(event -> eventBus.post(new ShutdownEvent()));

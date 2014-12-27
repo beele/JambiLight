@@ -4,13 +4,14 @@ import be.beeles_place.jambiLight.events.ColorModelUpdatedEvent;
 import be.beeles_place.jambiLight.utils.EventbusWrapper;
 import com.google.common.eventbus.EventBus;
 
+import java.awt.*;
+
 /**
  * This class contains data for the application.
  */
 public class ColorModel {
 
-    private int screenWidth;
-    private int screenHeight;
+    private Dimension screenDimensions;
     private int memUsed;
     private int memAvailable;
     private int memTotal;
@@ -45,20 +46,12 @@ public class ColorModel {
     }
 
     //Getters & setters.
-    public int getScreenWidth() {
-        return screenWidth;
+    public Dimension getScreenDimensions() {
+        return screenDimensions;
     }
 
-    public void setScreenWidth(int screenWidth) {
-        this.screenWidth = screenWidth;
-    }
-
-    public int getScreenHeight() {
-        return screenHeight;
-    }
-
-    public void setScreenHeight(int screenHeight) {
-        this.screenHeight = screenHeight;
+    public void setScreenDimensions(Dimension screenDimensions) {
+        this.screenDimensions = screenDimensions;
     }
 
     public int getMemUsed() {

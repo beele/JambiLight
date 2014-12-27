@@ -9,8 +9,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 
-import static org.bytedeco.javacpp.opencv_core.*;
-import static org.bytedeco.javacpp.opencv_highgui.*;
+import static org.bytedeco.javacpp.opencv_core.Mat;
+import static org.bytedeco.javacpp.opencv_highgui.CV_CAP_PROP_FPS;
+import static org.bytedeco.javacpp.opencv_highgui.VideoCapture;
 
 public class DirectShowCapper implements IScreenCapper {
 

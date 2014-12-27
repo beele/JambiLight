@@ -10,20 +10,14 @@ import be.beeles_place.jambiLight.utils.SettingsLoader;
 import be.beeles_place.jambiLight.utils.StageFactory;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.view.DebugViewController;
-import be.beeles_place.jambiLight.view.JambiUI.NewViewController;
 import be.beeles_place.jambiLight.view.MainViewController;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.JavaFXBuilderFactory;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.IOException;
-import java.net.URL;
 
 public class ApplicationController {
 
@@ -43,7 +37,7 @@ public class ApplicationController {
     private boolean enableUI = false;
     private Stage stage;
     private Stage debugStage;
-    private NewViewController viewController;
+    private MainViewController viewController;
     private DebugViewController debugViewController;
 
     //Temp & testing
@@ -57,6 +51,11 @@ public class ApplicationController {
      */
     public ApplicationController() {
         logger = LOGGER.getInstance();
+        logger.setLogToFile(true);
+
+        if(debug) {
+            logger.setLogToSTDOUT(true);
+        }
 
         eventBus = EventbusWrapper.getInstance();
         eventBus.register(this);
@@ -100,7 +99,7 @@ public class ApplicationController {
      * @param stage The javaFX stage object.
      * @param mainViewController The controller instance for the main view.
      */
-    public void init(Stage stage, NewViewController mainViewController) {
+    public void init(Stage stage, MainViewController mainViewController) {
         enableUI = true;
 
         init();
@@ -122,8 +121,8 @@ public class ApplicationController {
         model = model == null ? new ColorModel() : model;
         //Calculate the new amount of regions.
         model.setNumberOfConsolidatedRegions((settings.getHorizontalRegions() * 2) + (settings.getVerticalRegions() * 2) - 4);
+        model.setScreenDimensions(Toolkit.getDefaultToolkit().getScreenSize());
 
-        //TODO: Communication strategy in UI & settings model.
         //Create and set up the communication controller.
         serialCommunicator = new CommunicationController(model, settings);
         serialCommunicator.init(CommunicationStrategy.JSSC);
