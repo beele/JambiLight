@@ -39,7 +39,7 @@ public class CommunicationController {
      * @param strategy The CommunicationStrategies enumerated name to use. The given strategy will be used
      *                 to open the communication.
      */
-    public void init(CommunicationStrategy strategy) {
+    public void init(CommunicationStrategy strategy, boolean openPortWhenDone) {
         if(strategy == null) {
             strategy = CommunicationStrategy.JSSC;
         } else {
@@ -48,7 +48,7 @@ public class CommunicationController {
         settings.setPorts(getPorts());
 
         //Only open the port is we can and may do so.
-        if(settings.isAutoConnect()){
+        if(openPortWhenDone || settings.isAutoConnect()){
             open();
         }
     }

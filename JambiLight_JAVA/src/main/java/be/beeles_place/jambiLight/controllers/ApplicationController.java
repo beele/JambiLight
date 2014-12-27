@@ -89,7 +89,7 @@ public class ApplicationController {
         logger.INFO("INIT => Settings read and applied.");
 
         //Start the actual application core logic.
-        startup();
+        startup(false);
     }
 
     /**
@@ -114,7 +114,7 @@ public class ApplicationController {
     /**
      * Sets up everything and starts the main logic.
      */
-    private void startup() {
+    private void startup(boolean openCommPort) {
         logger.INFO("INIT => Starting core logic and serial communication.");
 
         //Create color model if required!
@@ -125,7 +125,7 @@ public class ApplicationController {
 
         //Create and set up the communication controller.
         serialCommunicator = new CommunicationController(model, settings);
-        serialCommunicator.init(CommunicationStrategy.JSSC);
+        serialCommunicator.init(CommunicationStrategy.JSSC, openCommPort);
 
         //TODO: Color strategy in UI & settings model.
         //Create and set up the color controller.
@@ -153,8 +153,7 @@ public class ApplicationController {
         settingsLoader.saveSettingsModel(settings);
         logger.INFO("INIT => Reloading application after settings change.");
         shutdown();
-        startup();
-        serialCommunicator.open();
+        startup(true);
     }
 
     /**
