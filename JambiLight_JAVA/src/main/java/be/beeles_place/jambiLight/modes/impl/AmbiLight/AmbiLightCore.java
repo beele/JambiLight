@@ -82,7 +82,6 @@ public class AmbiLightCore {
      * (Each consolidated region will be mapped to a single LED.)
      */
     public void calculate() {
-        logger.DEBUG("in calculate: " + this.toString());
         long startTime = new Date().getTime();
 
         //Make a screen capture.
