@@ -161,6 +161,7 @@ public class MainViewController implements Initializable {
         T1_TXT_HorizontalLeds.setText(settings.getHorizontalRegions() + "");
 
         //TODO: Total!
+        T1_TXT_TotalLeds.setText(((settings.getVerticalRegions() * 2 + settings.getHorizontalRegions() * 2) - 4) + "");
 
         T1_SLD_VerticalMarg.setValue(settings.getVerticalMargin());
         T1_SLD_HorizontalMarg.setValue(settings.getHorizontalMargin());
@@ -205,7 +206,7 @@ public class MainViewController implements Initializable {
                         horizontalLeds = totalLeds / 2;
                         verticalLeds = horizontalLeds;
                     } else {
-                        horizontalLeds = (int)Math.round(ratio * totalLeds);
+                        horizontalLeds = (int)Math.floor(totalLeds * ratio / (1 + ratio));
                         verticalLeds = totalLeds - horizontalLeds;
                     }
                 }

@@ -154,6 +154,7 @@ public class ApplicationController {
         logger.INFO("INIT => Reloading application after settings change.");
         shutdown();
         startup();
+        serialCommunicator.open();
     }
 
     /**

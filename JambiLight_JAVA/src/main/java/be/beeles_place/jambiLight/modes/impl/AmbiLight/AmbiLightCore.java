@@ -30,7 +30,6 @@ public class AmbiLightCore {
 
     private int width;
     private int height;
-    private int tempPixelValue;
 
     private int[][][] regions;
     private float regionWidth;
@@ -83,6 +82,7 @@ public class AmbiLightCore {
      * (Each consolidated region will be mapped to a single LED.)
      */
     public void calculate() {
+        logger.DEBUG("in calculate: " + this.toString());
         long startTime = new Date().getTime();
 
         //Make a screen capture.
@@ -178,6 +178,11 @@ public class AmbiLightCore {
      * In principle this will allow each captured frame to have different dimensions and still be used for the core logic.
      */
     private void checkDimensionsAndRegionSize() {
+        //Fix for null pointer exception that could occur when restarting the app (after settings have changed).
+        if(capper == null) {
+            return;
+        }
+
         Dimension size = capper.getScreenDimensions();
 
         if(width != size.getWidth() || height != size.getHeight()) {
