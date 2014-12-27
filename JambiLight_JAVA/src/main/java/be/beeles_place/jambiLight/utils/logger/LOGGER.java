@@ -36,7 +36,7 @@ public class LOGGER {
         level = LoggerLevel.ALL;
 
         LocalDateTime now = LocalDateTime.now();
-        logFileName = "JambiLight[" + now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd@HH':'mm':'ss")) + "].log";
+        logFileName = "JambiLight[" + now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd@HH-mm-ss")) + "].log";
         logFile = Paths.get("./" + logFileName);
 
         timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
