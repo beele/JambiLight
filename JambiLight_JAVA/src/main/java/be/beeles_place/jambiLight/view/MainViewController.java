@@ -6,6 +6,8 @@ import be.beeles_place.jambiLight.events.VisualDebugEvent;
 import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.utils.EventbusWrapper;
+import be.beeles_place.jambiLight.utils.StageFactory;
+import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.utils.screenCapture.ScreenCapperStrategy;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -18,11 +20,15 @@ import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import org.controlsfx.dialog.Dialogs;
 
+import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -409,7 +415,8 @@ public class MainViewController implements Initializable {
 
     @FXML
     void onOpenDebugLog(ActionEvent actionEvent) {
-        //TODO: Implement!
+        StageFactory.StageFactoryResult<LogViewController> result = StageFactory.getInstance().createStage("logView.fxml", "JambiLight log view", new Dimension(1150, 650));
+        result.getController().loadLog(LOGGER.getInstance().getCurrentLogFile());
     }
 
     @FXML

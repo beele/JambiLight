@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.*?>
@@ -7,6 +10,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+
 <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.beeles_place.jambiLight.view.MainViewController">
    <children>
       <VBox alignment="CENTER" prefHeight="592.0" prefWidth="136.0" spacing="23.0" style="-fx-background-color: #808080;">
@@ -101,7 +105,7 @@
                      <bottom>
                         <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="T2_BTN_SaveSettings" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" onAction="#onTabTwoSaveClicked"/>
+                              <Button fx:id="T2_BTN_SaveSettings" mnemonicParsing="false" onAction="#onTabTwoSaveClicked" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
                            </children>
                            <padding>
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -174,7 +178,7 @@
                      <bottom>
                         <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="T3_BTN_SaveSettings" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" onAction="#onTabThreeSaveClicked"/>
+                              <Button fx:id="T3_BTN_SaveSettings" mnemonicParsing="false" onAction="#onTabThreeSaveClicked" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
                            </children>
                            <padding>
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -238,7 +242,7 @@
                      <bottom>
                         <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="T4_BTN_SaveSettings" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" onAction="#onTabFourSaveClicked"/>
+                              <Button fx:id="T4_BTN_SaveSettings" mnemonicParsing="false" onAction="#onTabFourSaveClicked" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
                            </children>
                            <padding>
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -336,7 +340,7 @@
                      <bottom>
                         <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="T5_BTN_SaveSettings" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" onAction="#onTabFiveSaveClicked"/>
+                              <Button fx:id="T5_BTN_SaveSettings" mnemonicParsing="false" onAction="#onTabFiveSaveClicked" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
                            </children>
                            <padding>
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -402,8 +406,8 @@
                            <children>
                               <Label fx:id="T6_LBL_StatusInfo" text="Jambilight running at ##FPS - Using ###MB RAM" />
                               <Region prefHeight="26.0" HBox.hgrow="ALWAYS" />
-                              <Button fx:id="T6_BTN_OpenLog" mnemonicParsing="false" text="Open log" onAction="#onOpenDebugLog"/>
-                              <Button fx:id="T6_BTN_OpenRawView" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Open input view" onAction="#onOpenRawInputView"/>
+                              <Button fx:id="T6_BTN_OpenLog" mnemonicParsing="false" onAction="#onOpenDebugLog" text="Open log" />
+                              <Button fx:id="T6_BTN_OpenRawView" mnemonicParsing="false" onAction="#onOpenRawInputView" styleClass="flatButton" stylesheets="@css/master.css" text="Open input view" />
                            </children>
                            <padding>
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -431,7 +435,11 @@
                         <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER_LEFT">
                            <children>
                               <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                              <Canvas fx:id="T6_LedCanvas" height="500.0" width="700.0" />
+                              <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Canvas fx:id="T6_LedCanvas" height="500.0" width="700.0" />
+                                 </children>
+                              </VBox>
                               <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>

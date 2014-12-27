@@ -211,7 +211,7 @@ public class ApplicationController {
     @Subscribe
     public void onVisualDebugStartRequested(VisualDebugEvent event) throws IOException {
         if(event.isStart()) {
-            StageFactory.StageFactoryResult<DebugViewController> result = StageFactory.getInstance().createStage("debug.fxml", "Visual debug view => 1280 x 720", new Dimension(1280, 720));
+            StageFactory.StageFactoryResult<DebugViewController> result = StageFactory.getInstance().createStage("debugView.fxml", "Visual debug view => 1280 x 720", new Dimension(1280, 720));
             debugStage = result.getStage();
             debugViewController = result.getController();
             //TODO: This is not very clean!
