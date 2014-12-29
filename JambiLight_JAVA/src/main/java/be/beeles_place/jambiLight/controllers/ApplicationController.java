@@ -127,7 +127,7 @@ public class ApplicationController {
         //Create color model if required!
         model = model == null ? new ColorModel() : model;
         //Calculate the new amount of regions.
-        model.setNumberOfConsolidatedRegions((settings.getHorizontalRegions() * 2) + (settings.getVerticalRegions() * 2));
+        model.setNumberOfConsolidatedRegions((settings.getHorizontalRegions() * 2) + (settings.getVerticalRegions() * 2) - 4);
         model.setScreenDimensions(Toolkit.getDefaultToolkit().getScreenSize());
 
         //Create and set up the communication controller.

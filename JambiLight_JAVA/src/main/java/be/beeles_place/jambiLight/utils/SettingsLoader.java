@@ -60,7 +60,7 @@ public class SettingsLoader {
 
             //By default a 16/9 aspect ratio is used (perfect for fullHD)
             settings.setHorizontalRegions(16);
-            settings.setVerticalRegions(9);
+            settings.setVerticalRegions(11);
 
             //Pixel iterator is 2 by default, thus only have the screen's pixels are used.
             settings.setPixelIteratorStepSize(2);

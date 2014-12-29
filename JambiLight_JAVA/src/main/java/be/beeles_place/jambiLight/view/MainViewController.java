@@ -164,10 +164,10 @@ public class MainViewController implements Initializable {
     private Slider T1_SLD_HorizontalMarg;
 
     private void updateTabOne() {
-        T1_TXT_VerticalLeds.setText(settings.getVerticalRegions() + "");
+        T1_TXT_VerticalLeds.setText((settings.getVerticalRegions() - 2) + "");
         T1_TXT_HorizontalLeds.setText(settings.getHorizontalRegions() + "");
 
-        T1_TXT_TotalLeds.setText(((settings.getVerticalRegions() * 2 + settings.getHorizontalRegions() * 2)) + "");
+        T1_TXT_TotalLeds.setText(((settings.getVerticalRegions() * 2 + settings.getHorizontalRegions() * 2) - 4) + "");
 
         T1_SLD_VerticalMarg.setValue(settings.getVerticalMargin());
         T1_SLD_HorizontalMarg.setValue(settings.getHorizontalMargin());
@@ -187,7 +187,7 @@ public class MainViewController implements Initializable {
             String horizontal = T1_TXT_HorizontalLeds.getText();
 
             if(total != null && !total.trim().isEmpty()) {
-                totalLeds = Integer.parseInt(total);
+                totalLeds = Integer.parseInt(total) + 4;
 
                 //Check for even number of LEDs
                 if(totalLeds % 2 != 0) {
