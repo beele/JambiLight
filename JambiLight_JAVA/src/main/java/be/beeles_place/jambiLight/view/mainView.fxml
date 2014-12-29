@@ -371,7 +371,8 @@
                            <children>
                               <Label text="Arduino comm channel:" underline="true" />
                               <ComboBox fx:id="T5_CMB_CommChannel" prefHeight="26.0" prefWidth="250.0" promptText="Please select a comm port" />
-                              <CheckBox fx:id="T5_CHK_AutoConnect" mnemonicParsing="false" text="Autoconnect on startup" />
+                              <CheckBox fx:id="T5_CHK_AutoConnect" mnemonicParsing="false" text="Autoconnect on startup/save" />
+                              <Button fx:id="T5_BTN_Connect" mnemonicParsing="false" text="Connect to arduino" onAction="#onConnectClicked"/>
                            </children>
                         </VBox>
                      </left>

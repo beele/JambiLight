@@ -96,7 +96,7 @@ public class ApplicationController {
         logger.INFO("INIT => Settings read and applied.");
 
         //Start the actual application core logic.
-        startup(false);
+        startup();
     }
 
     /**
@@ -121,7 +121,7 @@ public class ApplicationController {
     /**
      * Sets up everything and starts the main logic.
      */
-    private void startup(boolean openCommPort) {
+    private void startup() {
         logger.INFO("INIT => Starting core logic and serial communication.");
 
         //Create color model if required!
@@ -132,7 +132,7 @@ public class ApplicationController {
 
         //Create and set up the communication controller.
         serialCommunicator = new CommunicationController(model, settings);
-        serialCommunicator.init(CommunicationStrategy.JSSC, openCommPort);
+        serialCommunicator.init(CommunicationStrategy.JSSC, false);
 
         //TODO: Color strategy in UI & settings model.
         //Create and set up the color controller.
@@ -160,7 +160,20 @@ public class ApplicationController {
         settingsLoader.saveSettingsModel(settings);
         logger.INFO("INIT => Reloading application after settings change.");
         shutdown();
-        startup(true);
+        startup();
+    }
+
+    /**
+     * Executed when the user requests a connection is to be made to the Arduino.
+     *
+     * @param event The event that was dispatched.
+     */
+    @Subscribe
+    public  void onConnectToArduino(ConnectoArduinoEvent event) {
+        logger.INFO("COMM => Received user intent for Arduino connection!");
+        if(serialCommunicator != null) {
+            serialCommunicator.open();
+        }
     }
 
     /**

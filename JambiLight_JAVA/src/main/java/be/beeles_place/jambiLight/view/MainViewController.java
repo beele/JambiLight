@@ -1,5 +1,6 @@
 package be.beeles_place.jambiLight.view;
 
+import be.beeles_place.jambiLight.events.ConnectoArduinoEvent;
 import be.beeles_place.jambiLight.events.SettingsUpdatedEvent;
 import be.beeles_place.jambiLight.events.UpdateUserInterfaceEvent;
 import be.beeles_place.jambiLight.events.VisualDebugEvent;
@@ -329,7 +330,10 @@ public class MainViewController implements Initializable {
         T4_CHK_EnhanceColors.setSelected(settings.isEnhanceColor());
         T4_TXT_EnhancementValue.setText(settings.getEnhanceValue() + "");
 
-        //TODO: Per channel!
+        T4_CHK_EnhancePerChannel.setSelected(settings.isEnhancePerChannel());
+        T4_TXT_ChannelRed.setText(settings.getEnhanceValueR() + "");
+        T4_TXT_ChannelGreen.setText(settings.getEnhanceValueG() + "");
+        T4_TXT_ChannelBlue.setText(settings.getEnhanceValueB() + "");
 
         T4_CHK_CorrectIntensity.setSelected(settings.isCorrectIntensity());
         T4_TXT_GreyThreshold.setText(settings.getGreyDetectionThreshold() + "");
@@ -339,29 +343,46 @@ public class MainViewController implements Initializable {
 
     @FXML
     void onTabFourSaveClicked(ActionEvent actionEvent) {
-        float enhanceValue;
-        int gThreshold;
-        float scaleUp;
-        float scaleDown;
-
         try {
             //Only update when enabled!
             if(T4_CHK_EnhanceColors.isSelected()) {
-                enhanceValue = Float.parseFloat(T4_TXT_EnhancementValue.getText());
+                float enhanceValue = Float.parseFloat(T4_TXT_EnhancementValue.getText());
+
                 if(enhanceValue < 1f || enhanceValue > 10f) {
                     throw new Exception("Color enhance value should be in range of [1 , 10]");
                 }
 
-                //TODO: Per channel!
                 settings.setEnhanceValue(enhanceValue);
+
+                if(T4_CHK_EnhancePerChannel.isSelected()) {
+                    float enhanceValueR = Float.parseFloat(T4_TXT_ChannelRed.getText());
+                    float enhanceValueG = Float.parseFloat(T4_TXT_ChannelGreen.getText());
+                    float enhanceValueB = Float.parseFloat(T4_TXT_ChannelBlue.getText());
+
+                    if(enhanceValueR < 0f || enhanceValueR > 10f) {
+                        throw new Exception("Red enhancement value should be in range of [0, 10]");
+                    }
+                    if(enhanceValueG < 0f || enhanceValueG > 10f) {
+                        throw new Exception("Red enhancement value should be in range of [0, 10]");
+                    }
+                    if(enhanceValueB < 0f || enhanceValueB > 10f) {
+                        throw new Exception("Red enhancement value should be in range of [0, 10]");
+                    }
+
+                    settings.setEnhanceValueR(enhanceValueR);
+                    settings.setEnhanceValueG(enhanceValueG);
+                    settings.setEnhanceValueB(enhanceValueB);
+                }
             }
             settings.setEnhanceColor(T4_CHK_EnhanceColors.isSelected());
+            settings.setEnhancePerChannel(T4_CHK_EnhancePerChannel.isSelected());
 
             //Only update when enabled!
             if(T4_CHK_CorrectIntensity.isSelected()) {
-                gThreshold = Integer.parseInt(T4_TXT_GreyThreshold.getText());
-                scaleUp = Float.parseFloat(T4_TXT_ScaleUp.getText());
-                scaleDown = Float.parseFloat(T4_TXT_ScaleDown.getText());
+                int gThreshold = Integer.parseInt(T4_TXT_GreyThreshold.getText());
+                float scaleUp = Float.parseFloat(T4_TXT_ScaleUp.getText());
+                float scaleDown = Float.parseFloat(T4_TXT_ScaleDown.getText());
+
                 if(gThreshold < 0 || scaleUp < 0 || scaleDown < 0) {
                     throw new Exception("Threshold, scale-up and scale-down should be greater than 0!");
                 }
@@ -400,6 +421,11 @@ public class MainViewController implements Initializable {
         T5_CHK_AutoConnect.setSelected(settings.isAutoConnect());
 
         T5_CMB_LedType.setItems(FXCollections.observableArrayList(Arrays.asList("WS2801", "LPD8806")));
+    }
+
+    @FXML
+    void onConnectClicked(ActionEvent event) {
+        eventBus.post(new ConnectoArduinoEvent());
     }
 
     @FXML

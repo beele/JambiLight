@@ -72,6 +72,10 @@ public class SettingsLoader {
             //Color enhancement is disabled by default.
             settings.setEnhanceColor(false);
             settings.setEnhanceValue(2.5f);
+            settings.setEnhancePerChannel(false);
+            settings.setEnhanceValueR(1f);
+            settings.setEnhanceValueG(1f);
+            settings.setEnhanceValueB(1f);
 
             //Colors should be weighed, as it gives a much nicer result.
             settings.setWeighColor(true);

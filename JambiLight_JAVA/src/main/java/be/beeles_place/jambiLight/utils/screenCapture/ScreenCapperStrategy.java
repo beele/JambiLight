@@ -15,8 +15,8 @@ public enum ScreenCapperStrategy {
     @XmlEnumValue("JAVA_SCREENSHOT")
     JAVA_SCREENSHOT(ScreenCapper.class),
 
-    @XmlEnumValue("XBMC_SCREENSHOT")
-    XBMC_SCREENSHOT(XbmcScreenCapper.class),
+    @XmlEnumValue("KODI_SCREENSHOT")
+    KODI_SCREENSHOT(XbmcScreenCapper.class),
 
     @XmlEnumValue("MOCK_RAINBOW")
     MOCK_RAINBOW(ScreenCapperMock.class),

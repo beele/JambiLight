@@ -24,7 +24,11 @@ public class SettingsModel {
 
     //Color enhancement settings.
     private boolean enhanceColor;                   //True or false.
-    private float enhanceValue;                     //Between 1 and MAX_FLOAT (please lower than 10).
+    private float enhanceValue;                     //Between 1f and MAX_FLOAT (please lower than 10.0f).
+    private boolean enhancePerChannel;              //True or false.
+    private float enhanceValueR;                    //Between 0.0f and MAX_FLOAT (please lower than 10.0f).
+    private float enhanceValueG;                    //Between 0.0f and MAX_FLOAT (please lower than 10.0f).
+    private float enhanceValueB;                    //Between 0.0f and MAX_FLOAT (please lower than 10.0f).
 
     //Region consolidation settings.
     private boolean weighColor;                     //True or false
@@ -128,6 +132,42 @@ public class SettingsModel {
     @XmlElement
     public void setEnhanceValue(float enhanceValue) {
         this.enhanceValue = enhanceValue;
+    }
+
+    public boolean isEnhancePerChannel() {
+        return enhancePerChannel;
+    }
+
+    @XmlElement
+    public void setEnhancePerChannel(boolean enhancePerChannel) {
+        this.enhancePerChannel = enhancePerChannel;
+    }
+
+    public float getEnhanceValueR() {
+        return enhanceValueR;
+    }
+
+    @XmlElement
+    public void setEnhanceValueR(float enhanceValueR) {
+        this.enhanceValueR = enhanceValueR;
+    }
+
+    public float getEnhanceValueG() {
+        return enhanceValueG;
+    }
+
+    @XmlElement
+    public void setEnhanceValueG(float enhanceValueG) {
+        this.enhanceValueG = enhanceValueG;
+    }
+
+    public float getEnhanceValueB() {
+        return enhanceValueB;
+    }
+
+    @XmlElement
+    public void setEnhanceValueB(float enhanceValueB) {
+        this.enhanceValueB = enhanceValueB;
     }
 
     public boolean isCorrectIntensity() {

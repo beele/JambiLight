@@ -34,12 +34,13 @@ public class CommunicationController {
     /**
      * Initializes the communication controller logic.
      * Will automatically open the communications on the port in the settings, if isAutoConnect is true in the settings
-     * and the port is not null.
+     * and the port is not null. This auto connect can be overridden (only for connecting, not for not connecting).
      *
      * @param strategy The CommunicationStrategies enumerated name to use. The given strategy will be used
      *                 to open the communication.
+     * @param openIfNotAutoConnected Set this to true if you want a connection to be made even if auto connect is disabled!
      */
-    public void init(CommunicationStrategy strategy, boolean openPortWhenDone) {
+    public void init(CommunicationStrategy strategy, boolean openIfNotAutoConnected) {
         if(strategy == null) {
             strategy = CommunicationStrategy.JSSC;
         } else {
@@ -48,7 +49,7 @@ public class CommunicationController {
         settings.setPorts(getPorts());
 
         //Only open the port is we can and may do so.
-        if(openPortWhenDone || settings.isAutoConnect()){
+        if(openIfNotAutoConnected || settings.isAutoConnect()){
             open();
         }
     }
