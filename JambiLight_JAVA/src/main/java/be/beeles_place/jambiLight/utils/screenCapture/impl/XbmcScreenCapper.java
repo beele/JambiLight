@@ -77,6 +77,8 @@ public class XbmcScreenCapper implements IScreenCapper {
             }
         }
 
+        int previousMissingBytes = 0;
+
         //Try to receive data.
         int read = 0;
         boolean run = true;
@@ -97,8 +99,9 @@ public class XbmcScreenCapper implements IScreenCapper {
                 }
 
                 //If enough data is in the buffer, read it out.
-                if(in.available() == totalBytes) {
-                    read += in.read(data, read, in.available());
+                int size = in.available();
+                if(size >= totalBytes) {
+                    read = in.read(data, previousMissingBytes, totalBytes);
 
                     while(read < totalBytes) {
                         int toRead = totalBytes - read;
@@ -106,7 +109,33 @@ public class XbmcScreenCapper implements IScreenCapper {
                             read += in.read(data, read, toRead);
                         }
                     }
+
+                    previousMissingBytes = 0;
                 }
+
+                //TODO: Temp fix for KODI issues on OSX => Causes horizontal scrolling of input source for now, but it keeps working!
+                if(totalBytes - size < 100 && totalBytes - size > 0) {
+                    int missingBytes = totalBytes - size;
+                    System.out.println("=========> Stall override: missing " + missingBytes + " bytes!");
+
+                    read = in.read(data, previousMissingBytes, size);
+
+                    while(read < totalBytes - missingBytes) {
+                        int toRead = totalBytes - missingBytes - read;
+                        if(toRead > 0) {
+                            read += in.read(data, read, toRead);
+                        }
+                    }
+
+                    for(int i = missingBytes; i > 0 ; i--) {
+                        //Fill missing pixels data in with black!
+                        data[data.length - i] = (byte) 0;
+                    }
+
+                    read += missingBytes;
+                    previousMissingBytes = missingBytes;
+                }
+                //TODO: End of temp fix!
 
                 //Only continue when the correct amount of pixels has been read!
                 if(read == totalBytes) {
@@ -116,6 +145,7 @@ public class XbmcScreenCapper implements IScreenCapper {
                 }
             } catch (Exception e) {
                 logger.ERROR("IScreenCapper => XBMC connection error: " +  e.getMessage());
+                e.printStackTrace();
                 return null;
             }
         }
