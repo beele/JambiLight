@@ -13,6 +13,9 @@ import java.awt.*;
 
 public class Main extends Application {
 
+    private static boolean enableUI = true;
+    private static boolean enableDebug = false;
+
     private EventBus eventBus;
     private ApplicationController appController;
 
@@ -21,17 +24,28 @@ public class Main extends Application {
      *
      * @param args Optional application arguments.
      *             If you pass the argument "disableUI" the GUI will be disabled and only the console will be used!
+     *             If you pass the argument "enableDebug" the debug mode will enable and a performance monitor will run.
+     *             Also logging level will be set to ALL and will also be output to the Standard output.
      */
     public static void main(String[] args) {
+        //Run through all the given parameters and use the ones we want.
         for (String arg : args) {
             if ("disableUI".equals(arg)) {
-                Main m = new Main();
-                m.startNoUI();
-                return;
+                enableUI = false;
+            }
+            if("enableDebug".equals(arg)) {
+                enableDebug = true;
             }
         }
-        //Launch the JavaFX application.
-        launch(args);
+
+        //Start with ot without UI depending on the given parameters.
+        if(enableUI) {
+            //Launch the JavaFX application.
+            launch(args);
+        } else {
+            Main m = new Main();
+            m.startNoUI();
+        }
     }
 
     /**
@@ -46,7 +60,7 @@ public class Main extends Application {
         eventBus.register(this);
 
         //Make a new application controller.
-        appController = new ApplicationController();
+        appController = new ApplicationController(enableDebug);
 
         StageFactory.StageFactoryResult<MainViewController> result = StageFactory.getInstance().createStage("mainView.fxml", "JambiLight RC1", new Dimension(1150, 650));
         stage = result.getStage();
@@ -62,7 +76,7 @@ public class Main extends Application {
      */
     public void startNoUI() {
         //Make a new application controller.
-        appController = new ApplicationController();
+        appController = new ApplicationController(enableDebug);
         //Init the application controller, giving it the stage and the view controller.
         appController.init();
     }

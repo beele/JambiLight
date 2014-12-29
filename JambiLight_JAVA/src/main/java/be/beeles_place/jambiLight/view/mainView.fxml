@@ -395,7 +395,7 @@
                                  </children>
                               </HBox>
                               <ComboBox fx:id="T5_CMB_LedType" prefHeight="26.0" prefWidth="232.0" promptText="LED strip type" />
-                              <Button fx:id="T5_BTN_GenerateCode" mnemonicParsing="false" text="Generate code" />
+                              <Button fx:id="T5_BTN_GenerateCode" mnemonicParsing="false" text="Generate code" onAction="#onGenerateCodeClicked"/>
                            </children>
                         </VBox>
                      </right>

@@ -5,6 +5,7 @@ import be.beeles_place.jambiLight.events.UpdateUserInterfaceEvent;
 import be.beeles_place.jambiLight.events.VisualDebugEvent;
 import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.model.SettingsModel;
+import be.beeles_place.jambiLight.utils.ArduinoCode;
 import be.beeles_place.jambiLight.utils.EventbusWrapper;
 import be.beeles_place.jambiLight.utils.StageFactory;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
@@ -29,6 +30,8 @@ import javafx.scene.paint.Color;
 import org.controlsfx.dialog.Dialogs;
 
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -234,6 +237,11 @@ public class MainViewController implements Initializable {
                 horizontalLeds -= 1;
             }
 
+            //TODO: Adjust these numbers! Test what is the actual minimum.
+            if(horizontalLeds < 5 || verticalLeds < 5 || totalLeds < 20) {
+                throw new Exception("Amount of LEDs is too small. At least 20 in total required!");
+            }
+
             //TODO: Remove +2!
             int verticalRegions = ((verticalLeds) / 2) + 2;
             int horizontalRegions = (horizontalLeds / 2);
@@ -379,6 +387,12 @@ public class MainViewController implements Initializable {
     private CheckBox T5_CHK_AutoConnect;
     @FXML
     private ComboBox<String> T5_CMB_CommChannel;
+    @FXML
+    private TextField T5_TXT_ClockPin;
+    @FXML
+    private TextField T5_TXT_DataPin;
+    @FXML
+    private ComboBox<String> T5_CMB_LedType;
 
     private void updateTabFive() {
         T5_CMB_CommChannel.setItems(FXCollections.observableList(settings.getPorts()));
@@ -386,6 +400,30 @@ public class MainViewController implements Initializable {
             T5_CMB_CommChannel.getSelectionModel().select(settings.getPort());
         }
         T5_CHK_AutoConnect.setSelected(settings.isAutoConnect());
+
+        T5_CMB_LedType.setItems(FXCollections.observableArrayList(Arrays.asList("WS2801", "LPD8806")));
+    }
+
+    @FXML
+    void onGenerateCodeClicked(ActionEvent event) {
+        String clockPin = T5_TXT_ClockPin.getText();
+        String dataPin = T5_TXT_DataPin.getText();
+
+        String stripType = T5_CMB_LedType.getSelectionModel().getSelectedItem();
+
+        if(     clockPin != null && !clockPin.trim().isEmpty() &&
+                dataPin != null && !dataPin.trim().isEmpty() &&
+                stripType != null && !stripType.trim().isEmpty()) {
+
+            //Generate the code and set it on the clipboard!
+            String code = ArduinoCode.generateCode(model.getNumberOfConsolidatedRegions(), clockPin, dataPin, stripType.equals("WS2801"));
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(new StringSelection(code), null);
+
+            showMessage("Code copied!", "The generated code has been copied to your clipboard!");
+        } else {
+            showErrorMessage("Error generation code!", "Please fill in clock, data pin numbers and select a LED strip type!");
+        }
     }
 
     @FXML
@@ -445,6 +483,21 @@ public class MainViewController implements Initializable {
                 break;
             }
         }
+    }
+
+    /**
+     * Show an info popup message with the given title and message.
+     *
+     * @param title The title to display.
+     * @param message The message to display.
+     */
+    private void showMessage(String title, String message) {
+        Dialogs.create()
+                .owner(STCK_TabContainer)
+                .title(title)
+                .message(message)
+                .lightweight()
+                .showInformation();
     }
 
     /**

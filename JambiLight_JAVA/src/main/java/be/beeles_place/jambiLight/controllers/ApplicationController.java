@@ -9,6 +9,7 @@ import be.beeles_place.jambiLight.utils.EventbusWrapper;
 import be.beeles_place.jambiLight.utils.SettingsLoader;
 import be.beeles_place.jambiLight.utils.StageFactory;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
+import be.beeles_place.jambiLight.utils.logger.LoggerLevel;
 import be.beeles_place.jambiLight.view.DebugViewController;
 import be.beeles_place.jambiLight.view.MainViewController;
 import com.google.common.eventbus.EventBus;
@@ -41,7 +42,7 @@ public class ApplicationController {
     private DebugViewController debugViewController;
 
     //Temp & testing
-    private final boolean debug = true;
+    private boolean debug;
     private Runtime rt;
     private int megabyteInBytes;
     private int performanceCounter;
@@ -49,12 +50,18 @@ public class ApplicationController {
     /**
      * Creates an ApplicationController instance.
      */
-    public ApplicationController() {
+    public ApplicationController(boolean debug) {
+        this.debug = debug;
+
         logger = LOGGER.getInstance();
         logger.setLogToFile(true);
 
+        //In debug mode, output to standard output and log all info. In non debug mode, log only errors.
         if(debug) {
             logger.setLogToSTDOUT(true);
+            logger.setLoggerLevel(LoggerLevel.ALL);
+        } else {
+            logger.setLoggerLevel(LoggerLevel.ERROR);
         }
 
         eventBus = EventbusWrapper.getInstance();
@@ -181,16 +188,8 @@ public class ApplicationController {
             });
         }
 
-        /**
-         * Testing only!!!!!
-         *
-         * Prints out the memory usage of the application.
-         *
-         * Make the system stops after a huge performance drop => check the logs!
-         * The first performance drop should always be ignored, as it might be from connecting/starting things up.
-         *
-         * Disable this for release builds!
-         */
+        //In debug mode we will print the memory usage and check for performance issues.
+        //If a delay of 500ms is measured for two times, the application will be stopped.
         if(debug) {
             logger.DEBUG("#### HEAP USAGE ####");
             logger.DEBUG("Used mem: " + (rt.totalMemory() - rt.freeMemory() )/ megabyteInBytes);
