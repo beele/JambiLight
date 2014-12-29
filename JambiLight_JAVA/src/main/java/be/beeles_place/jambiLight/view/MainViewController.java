@@ -163,8 +163,7 @@ public class MainViewController implements Initializable {
         T1_TXT_VerticalLeds.setText(settings.getVerticalRegions() + "");
         T1_TXT_HorizontalLeds.setText(settings.getHorizontalRegions() + "");
 
-        //TODO: Total!
-        T1_TXT_TotalLeds.setText(((settings.getVerticalRegions() * 2 + settings.getHorizontalRegions() * 2) - 4) + "");
+        T1_TXT_TotalLeds.setText(((settings.getVerticalRegions() * 2 + settings.getHorizontalRegions() * 2)) + "");
 
         T1_SLD_VerticalMarg.setValue(settings.getVerticalMargin());
         T1_SLD_HorizontalMarg.setValue(settings.getHorizontalMargin());
@@ -242,8 +241,7 @@ public class MainViewController implements Initializable {
                 throw new Exception("Amount of LEDs is too small. At least 20 in total required!");
             }
 
-            //TODO: Remove +2!
-            int verticalRegions = ((verticalLeds) / 2) + 2;
+            int verticalRegions = ((verticalLeds) / 2);
             int horizontalRegions = (horizontalLeds / 2);
 
             settings.setVerticalRegions(verticalRegions);
