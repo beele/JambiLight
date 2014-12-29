@@ -277,28 +277,28 @@
                                     <TextField fx:id="T4_TXT_EnhancementValue" promptText="Enhancement value" />
                                  </children>
                               </HBox>
-                              <Label text="Enabeling color enhancement makes colors more pronounced. The suggested setting is off because it might overdo some colors. (Good for cartoons though)" textAlignment="JUSTIFY" wrapText="true" />
-                              <Region maxHeight="20.0" minHeight="20.0" prefHeight="20.0" />
+                              <Label text="Enabeling color enhancement makes colors more pronounced. It detects 6 basic colors: Red, green, blue, yellow, cyan and purple and scales the color to be more pronounced." textAlignment="JUSTIFY" wrapText="true" />
                               <Label text="Per channel enhancement:" underline="true" />
                               <CheckBox fx:id="T4_CHK_EnhancePerChannel" mnemonicParsing="false" text="Enable per channel" />
                               <HBox alignment="CENTER_LEFT" maxHeight="26.0" minHeight="26.0" prefHeight="26.0" spacing="5.0">
                                  <children>
                                     <Label text="R: " />
-                                    <TextField fx:id="T4_TXT_ChannelRed" promptText="Red value (1 default)" />
+                                    <TextField fx:id="T4_TXT_ChannelRed" promptText="Red value" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" maxHeight="26.0" minHeight="26.0" prefHeight="26.0" spacing="5.0">
                                  <children>
                                     <Label text="G: " />
-                                    <TextField fx:id="T4_TXT_ChannelGreen" promptText="Green value (1 default)" />
+                                    <TextField fx:id="T4_TXT_ChannelGreen" promptText="Green value" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" maxHeight="26.0" minHeight="26.0" prefHeight="26.0" spacing="5.0">
                                  <children>
                                     <Label text="B: " />
-                                    <TextField fx:id="T4_TXT_ChannelBlue" promptText="Blue value (1 default)" />
+                                    <TextField fx:id="T4_TXT_ChannelBlue" promptText="Blue value" />
                                  </children>
                               </HBox>
+                              <Label text="Per channel enhancement multiplies the color per channel." wrapText="true" />
                            </children>
                         </VBox>
                      </left>
@@ -372,7 +372,7 @@
                               <Label text="Arduino comm channel:" underline="true" />
                               <ComboBox fx:id="T5_CMB_CommChannel" prefHeight="26.0" prefWidth="250.0" promptText="Please select a comm port" />
                               <CheckBox fx:id="T5_CHK_AutoConnect" mnemonicParsing="false" text="Autoconnect on startup/save" />
-                              <Button fx:id="T5_BTN_Connect" mnemonicParsing="false" text="Connect to arduino" onAction="#onConnectClicked"/>
+                              <Button fx:id="T5_BTN_Connect" mnemonicParsing="false" onAction="#onConnectClicked" text="Connect to arduino" />
                            </children>
                         </VBox>
                      </left>
@@ -396,7 +396,7 @@
                                  </children>
                               </HBox>
                               <ComboBox fx:id="T5_CMB_LedType" prefHeight="26.0" prefWidth="232.0" promptText="LED strip type" />
-                              <Button fx:id="T5_BTN_GenerateCode" mnemonicParsing="false" text="Generate code" onAction="#onGenerateCodeClicked"/>
+                              <Button fx:id="T5_BTN_GenerateCode" mnemonicParsing="false" onAction="#onGenerateCodeClicked" text="Generate code" />
                            </children>
                         </VBox>
                      </right>
@@ -448,9 +448,10 @@
                   </BorderPane>
                   <BorderPane fx:id="T7_Info" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
                      <bottom>
-                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+                        <HBox alignment="BOTTOM_RIGHT" spacing="5.0" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="T7_BTN_OpenWebsite" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Open website" />
+                              <Button fx:id="T7_BTN_OpenLicense" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Open license" onAction="#onOpenLicenseSiteClicked"/>
+                              <Button fx:id="T7_BTN_OpenWebsite" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Open website" onAction="#onOpenWebsiteClicked"/>
                            </children>
                            <padding>
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -460,7 +461,7 @@
                      <top>
                         <HBox style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
-                              <Label text="Jambilight Info &amp; credits" HBox.hgrow="ALWAYS">
+                              <Label text="JambiLight Info &amp; credits" HBox.hgrow="ALWAYS">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font></Label>
@@ -470,6 +471,40 @@
                            </padding>
                         </HBox>
                      </top>
+                     <center>
+                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0" BorderPane.alignment="CENTER">
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                           <children>
+                              <Label text="About JambiLight:">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label text="JambiLight is a free and open source Java based ambilight implementation." wrapText="true" />
+                              <Label text="Visit the website for more information." />
+                              <Region maxHeight="20.0" minHeight="20.0" prefHeight="20.0" />
+                              <Label text="Used libraries and resources:">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label text="JambiLight uses the following libraries and resources:" wrapText="true" />
+                              <Label text="Java: Google Guava, Scream3r JSSC, RXTX, ControlsFX, bytedeco JavaCV" />
+                              <Label text="Images: Flickr (solarbotics), www.linhpham.me, www.danilodemarco.com and google image search with copyright settings set to reuse." />
+                              <Region maxHeight="20.0" minHeight="20.0" prefHeight="20.0" />
+                              <Label text="Copyrights and trademarks:">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label text="JambiLight is available under the Attribution-NonCommercial 4.0 International license." wrapText="true" />
+                              <Label text="All Libraries can have their own license, all rights belong to their respective owners." />
+                              <Region maxHeight="20.0" minHeight="20.0" prefHeight="20.0" />
+                           </children>
+                        </VBox>
+                     </center>
                   </BorderPane>
                </children>
             </StackPane>

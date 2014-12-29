@@ -33,6 +33,9 @@ import org.controlsfx.dialog.Dialogs;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -171,7 +174,7 @@ public class MainViewController implements Initializable {
     }
 
     @FXML
-    void onTabOneSaveClicked(ActionEvent actionEvent) {
+    void onTabOneSaveClicked(ActionEvent event) {
         int verticalLeds = -1;
         int horizontalLeds = -1;
         int totalLeds = -1;
@@ -271,7 +274,7 @@ public class MainViewController implements Initializable {
     }
 
     @FXML
-    void onTabTwoSaveClicked(ActionEvent actionEvent) {
+    void onTabTwoSaveClicked(ActionEvent event) {
         settings.setCaptureMode(T2_CMB_CaptureMode.getValue());
         //Update the view.
         updateTabTwo();
@@ -290,10 +293,13 @@ public class MainViewController implements Initializable {
 
         T3_CHK_Weighing.setSelected(settings.isWeighColor());
         T3_SLD_WeighFactor.setValue(settings.getWeighFactor());
+
+        //Bindings to disable parts of the UI if required.
+        T3_SLD_WeighFactor.disableProperty().bind(T3_CHK_Weighing.selectedProperty().not());
     }
 
     @FXML
-    void onTabThreeSaveClicked(ActionEvent actionEvent) {
+    void onTabThreeSaveClicked(ActionEvent event) {
         int weighFactor = ((int) T3_SLD_WeighFactor.getValue());
 
         //Only save settings when no errors have occurred!
@@ -339,10 +345,21 @@ public class MainViewController implements Initializable {
         T4_TXT_GreyThreshold.setText(settings.getGreyDetectionThreshold() + "");
         T4_TXT_ScaleUp.setText(settings.getScaleUpValue() + "");
         T4_TXT_ScaleDown.setText(settings.getScaleDownValue() + "");
+
+        //Bindings to disable parts of the UI if required.
+        T4_TXT_EnhancementValue.disableProperty().bind(T4_CHK_EnhanceColors.selectedProperty().not());
+        T4_CHK_EnhancePerChannel.disableProperty().bind(T4_CHK_EnhanceColors.selectedProperty().not());
+        T4_TXT_ChannelRed.disableProperty().bind(T4_CHK_EnhanceColors.selectedProperty().not());
+        T4_TXT_ChannelGreen.disableProperty().bind(T4_CHK_EnhanceColors.selectedProperty().not());
+        T4_TXT_ChannelBlue.disableProperty().bind(T4_CHK_EnhanceColors.selectedProperty().not());
+
+        T4_TXT_GreyThreshold.disableProperty().bind(T4_CHK_CorrectIntensity.selectedProperty().not());
+        T4_TXT_ScaleUp.disableProperty().bind(T4_CHK_CorrectIntensity.selectedProperty().not());
+        T4_TXT_ScaleDown.disableProperty().bind(T4_CHK_CorrectIntensity.selectedProperty().not());
     }
 
     @FXML
-    void onTabFourSaveClicked(ActionEvent actionEvent) {
+    void onTabFourSaveClicked(ActionEvent event) {
         try {
             //Only update when enabled!
             if(T4_CHK_EnhanceColors.isSelected()) {
@@ -451,7 +468,7 @@ public class MainViewController implements Initializable {
     }
 
     @FXML
-    void onTabFiveSaveClicked(ActionEvent actionEvent) {
+    void onTabFiveSaveClicked(ActionEvent event) {
         settings.setPort(T5_CMB_CommChannel.getSelectionModel().getSelectedItem());
         settings.setAutoConnect(T5_CHK_AutoConnect.selectedProperty().getValue());
 
@@ -477,14 +494,24 @@ public class MainViewController implements Initializable {
     }
 
     @FXML
-    void onOpenDebugLog(ActionEvent actionEvent) {
+    void onOpenDebugLog(ActionEvent event) {
         StageFactory.StageFactoryResult<LogViewController> result = StageFactory.getInstance().createStage("logView.fxml", "JambiLight log view", new Dimension(1150, 650));
         result.getController().loadLog(LOGGER.getInstance().getCurrentLogFile());
     }
 
     @FXML
-    void onOpenRawInputView(ActionEvent actionEvent) {
+    void onOpenRawInputView(ActionEvent event) {
         eventBus.post(new VisualDebugEvent(true));
+    }
+
+    @FXML
+    void onOpenWebsiteClicked(ActionEvent event) {
+        openWebsite("http://www.jambilight.tv");
+    }
+
+    @FXML
+    void onOpenLicenseSiteClicked(ActionEvent event) {
+        openWebsite("http://creativecommons.org/licenses/by-nc/4.0/legalcode");
     }
 
     //#########################################
@@ -506,6 +533,14 @@ public class MainViewController implements Initializable {
                 child.setOpacity(1);
                 break;
             }
+        }
+    }
+
+    private void openWebsite(String url) {
+        try {
+            Desktop.getDesktop().browse(new URI(url));
+        } catch (Exception e) {
+            showErrorMessage("Error!", "Cannot open browser to go to website!");
         }
     }
 
