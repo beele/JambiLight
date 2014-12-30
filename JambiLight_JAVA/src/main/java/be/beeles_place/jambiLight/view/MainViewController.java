@@ -275,15 +275,19 @@ public class MainViewController implements Initializable {
             T2_CMB_CaptureMode.getSelectionModel().select(settings.getCaptureMode());
         }
 
+        //Bindings to disable parts of the UI if required.
         T2_CMB_DirectShowDevices.disableProperty().bind(T2_CMB_CaptureMode.getSelectionModel().selectedItemProperty().isNotEqualTo(ScreenCapperStrategy.DIRECT_SHOW));
 
-        //Get devices and make them into a list.
-        List<String> devices = new ArrayList<>();
-        devices.addAll(DirectShowEnumerator.enumerateDirectShowDevices().values().stream().collect(Collectors.toList()));
+        //Only enumerate DirectShow devices when the option has been selected!
+        if(!T2_CMB_DirectShowDevices.disabledProperty().getValue()) {
+            //Get devices and make them into a list.
+            List<String> devices = new ArrayList<>();
+            devices.addAll(DirectShowEnumerator.enumerateDirectShowDevices().values().stream().collect(Collectors.toList()));
 
-        T2_CMB_DirectShowDevices.setItems(FXCollections.observableArrayList(devices));
-        if(settings.getDirectShowDeviceName() != null) {
-            T2_CMB_DirectShowDevices.getSelectionModel().select(settings.getDirectShowDeviceName());
+            T2_CMB_DirectShowDevices.setItems(FXCollections.observableArrayList(devices));
+            if(settings.getDirectShowDeviceName() != null) {
+                T2_CMB_DirectShowDevices.getSelectionModel().select(settings.getDirectShowDeviceName());
+            }
         }
     }
 
@@ -292,7 +296,12 @@ public class MainViewController implements Initializable {
         settings.setCaptureMode(T2_CMB_CaptureMode.getValue());
 
         if(!T2_CMB_DirectShowDevices.disabledProperty().getValue()) {
-            settings.setDirectShowDeviceName(T2_CMB_DirectShowDevices.getValue());
+            String device = T2_CMB_DirectShowDevices.getValue();
+            if(device != null && !device.trim().isEmpty()) {
+                settings.setDirectShowDeviceName(T2_CMB_DirectShowDevices.getValue());
+            } else {
+                showErrorMessage("No device!", "Please select a device or a different capture mode!");
+            }
         }
 
         //Update the view.
