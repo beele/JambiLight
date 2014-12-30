@@ -52,7 +52,7 @@ def init():
 
     #### Set up the xbmc rendercapture object.
     CAPT = xbmc.RenderCapture()
-    CAPT.capture(720, 576, xbmc.CAPTURE_FLAG_CONTINUOUS)
+    CAPT.capture(720, 480, xbmc.CAPTURE_FLAG_CONTINUOUS)
 
 
 def connectToSocket():

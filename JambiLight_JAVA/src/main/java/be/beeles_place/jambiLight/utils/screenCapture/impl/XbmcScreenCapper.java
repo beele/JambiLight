@@ -42,7 +42,7 @@ public class XbmcScreenCapper implements IScreenCapper {
 
         port = 1337;
         width = 720;
-        height = 576;
+        height = 480;
 
         //XBMC sends the pixel data as BGRA (4 bytes per pixel).
         totalPixels = width * height;
@@ -116,7 +116,7 @@ public class XbmcScreenCapper implements IScreenCapper {
                 //TODO: Temp fix for KODI issues on OSX => Causes horizontal scrolling of input source for now, but it keeps working!
                 if(totalBytes - size < 100 && totalBytes - size > 0) {
                     int missingBytes = totalBytes - size;
-                    System.out.println("=========> Stall override: missing " + missingBytes + " bytes!");
+                    logger.ERROR("- NON FATAL ERROR - Stall override: missing " + missingBytes + " bytes!");
 
                     read = in.read(data, previousMissingBytes, size);
 
