@@ -15,23 +15,31 @@ public class DirectShowEnumerator {
      * Enumerates all the connected DirectShow (or OSX equivalent) devices in a map.
      * The key is the device id, the value the name of the device.
      *
-     * @return A map with the enumerated devices.
+     * @return A map with the enumerated devices, an empty map if an error occurs.
      */
     public static Map<Integer, String> enumerateDirectShowDevices() {
         LOGGER logger = LOGGER.getInstance();
-        logger.DEBUG("DirectShowEnumerator ==> Enumerating devices:");
+        try {
+            logger.DEBUG("DirectShowEnumerator ==> Enumerating devices:");
 
-        Map<Integer, String> devices = new HashMap<>();
+            Map<Integer, String> devices = new HashMap<>();
 
-        int deviceCount = videoInputLib.videoInput.listDevices();
-        for (int i = 0; i < deviceCount; i++) {
-            String name = videoInputLib.videoInput.getDeviceName(i).getString();
-            logger.DEBUG("DirectShowEnumerator ==> Input device: " + name + ", device index is " + i);
+            int deviceCount = videoInputLib.videoInput.listDevices();
+            for (int i = 0; i < deviceCount; i++) {
+                String name = videoInputLib.videoInput.getDeviceName(i).getString();
+                logger.DEBUG("DirectShowEnumerator ==> Input device: " + name + ", device index is " + i);
 
-            devices.put(i, name);
+                devices.put(i, name);
+            }
+
+            return devices;
+        } catch (Exception e) {
+            logger.ERROR("DirectShowEnumerator ==> Fatal error in JAVACV: " + e.getMessage());
+            return new HashMap<>();
+        } catch (Error e) {
+            logger.ERROR("DirectShowEnumerator ==> Fatal error in JAVACV: " + e.getMessage());
+            return new HashMap<>();
         }
-
-        return devices;
     }
 
     /**
@@ -41,20 +49,31 @@ public class DirectShowEnumerator {
      * If multiple matches are available, the first one is returned.
      *
      * @param name Name of the device to find the id for.
-     * @return The id of the device, -1 if input is faulty or no match was found.
+     * @return The id of the device, -1 if input is faulty, no match was found or an error occurred!
      */
     public static int findDeviceIdForName(String name) {
-        if(name == null || name.trim().isEmpty()) {
+        LOGGER logger = LOGGER.getInstance();
+        try {
+            if(name == null || name.trim().isEmpty()) {
+                return -1;
+            }
+
+            Map<Integer, String> directShowDevices = enumerateDirectShowDevices();
+            for (Map.Entry<Integer, String> entry : directShowDevices.entrySet()) {
+                if(name.equals(entry.getValue())) {
+                    logger.DEBUG("DirectShowEnumerator => Match found => Device: " + entry.getValue() + " id: " + entry.getKey());
+                    return entry.getKey();
+                }
+            }
+
+            //If no match was found!
+            return -1;
+        } catch (Exception e) {
+            logger.ERROR("DirectShowEnumerator ==> Fatal error in JAVACV: " + e.getMessage());
+            return -1;
+        } catch (Error e) {
+            logger.ERROR("DirectShowEnumerator ==> Fatal error in JAVACV: " + e.getMessage());
             return -1;
         }
-
-        Map<Integer, String> directShowDevices = enumerateDirectShowDevices();
-        for (Map.Entry<Integer, String> entry : directShowDevices.entrySet()) {
-            if(name.equals(entry.getValue())) {
-                LOGGER.getInstance().DEBUG("DirectShowEnumerator => Match found => Device: " + entry.getValue() + " id: " + entry.getKey());
-                return entry.getKey();
-            }
-        }
-        return -1;
     }
 }

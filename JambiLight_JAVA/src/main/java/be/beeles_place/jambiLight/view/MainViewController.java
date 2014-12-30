@@ -293,20 +293,24 @@ public class MainViewController implements Initializable {
 
     @FXML
     void onTabTwoSaveClicked(ActionEvent event) {
-        settings.setCaptureMode(T2_CMB_CaptureMode.getValue());
+        try {
+            settings.setCaptureMode(T2_CMB_CaptureMode.getValue());
 
-        if(!T2_CMB_DirectShowDevices.disabledProperty().getValue()) {
-            String device = T2_CMB_DirectShowDevices.getValue();
-            if(device != null && !device.trim().isEmpty()) {
-                settings.setDirectShowDeviceName(T2_CMB_DirectShowDevices.getValue());
-            } else {
-                showErrorMessage("No device!", "Please select a device or a different capture mode!");
+            if(!T2_CMB_DirectShowDevices.disabledProperty().getValue()) {
+                String device = T2_CMB_DirectShowDevices.getValue();
+                if(device != null && !device.trim().isEmpty()) {
+                    settings.setDirectShowDeviceName(T2_CMB_DirectShowDevices.getValue());
+                } else {
+                    throw new Exception("Please select a device or a different capture mode!");
+                }
             }
-        }
 
-        //Update the view.
-        updateTabTwo();
-        eventBus.post(new SettingsUpdatedEvent());
+            //Update the view.
+            updateTabTwo();
+            eventBus.post(new SettingsUpdatedEvent());
+        } catch (Exception e) {
+            showErrorMessage("Error saving settings!", e.getMessage());
+        }
     }
 
     @FXML

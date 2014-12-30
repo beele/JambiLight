@@ -43,6 +43,12 @@ KODI:
 - Select the KODI screen capture method in the advanced tab.
 - XBMC is also supported. (KODI is the newer version of XBMC)
 
+DirectShow:
+- JambiLight uses JavaCV (Java implementation of OpenCV) to allow for DirectShow device input.
+- On Windows machines any DirectShow device can be used as input for JambiLight.
+- This mode can still be buggy at times, so use with caution.
+- This mode does not work on any other OSes (for the time being).
+
 RXTX:
 - RXTX is now deprecated, and will no longer be maintained!
 - Please use the JSSC serial communication implementation! Using the RXTX way can be tricky to get working correctly!
@@ -59,10 +65,11 @@ Uses the following libraries and resources:
 Libraries:
 - Guava (more information here => http://code.google.com/p/guava-libraries/)
 - ControlsFX (more information here => http://fxexperience.com/controlsfx/)
+- JavaCV (more information here => https://github.com/bytedeco/javacv)
 - JSSC (more information here => https://code.google.com/p/java-simple-serial-connector/wiki/jSSC_examples)
 - RXTX (more information here => http://rxtx.qbang.org/wiki/index.php/Main_Page)
 
-	The lib folder included in the java source code only contains the dependencies not found on a maven repository. The build scripts will place those libraries as dependencies in your local m2 storage!
+	The lib folder included in the Java source code only contains the dependencies not found on a maven repository. The build scripts will place those libraries as dependencies in your local m2 storage!
 
 	JSSC:  
 	No special steps have to be taken to get the JSSC serial communication working.
@@ -78,6 +85,6 @@ License
 -----------------------------------------------------------
 JambiLight is available under the Creative Commons Attribution-NonCommercial 4.0 International Public License
 Please consult LICENSE.MD for the full license text.
-The readme and license can be changed at any time, without any notice and the license change will work with retrospective effect.
+The read me and license can be changed at any time, without any notice and the license change will work with retrospective effect.
 
 All Libraries can have their own license, all rights belong to their respective owners.
