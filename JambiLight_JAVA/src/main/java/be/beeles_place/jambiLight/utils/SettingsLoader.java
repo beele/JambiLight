@@ -89,6 +89,7 @@ public class SettingsLoader {
 
             //Set the default screen capture method to JAVA_SCREENSHOT
             settings.setCaptureMode(ScreenCapperStrategy.JAVA_SCREENSHOT);
+            settings.setDirectShowDeviceName(null);
 
             //Save the new settings to disk!
             saveSettingsModel(settings);

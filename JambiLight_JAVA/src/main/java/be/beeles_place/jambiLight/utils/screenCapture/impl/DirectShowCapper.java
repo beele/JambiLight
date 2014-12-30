@@ -2,6 +2,7 @@ package be.beeles_place.jambiLight.utils.screenCapture.impl;
 
 import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
+import be.beeles_place.jambiLight.utils.screenCapture.DirectShowEnumerator;
 import be.beeles_place.jambiLight.utils.screenCapture.IScreenCapper;
 import org.bytedeco.javacpp.videoInputLib;
 
@@ -11,6 +12,8 @@ import java.awt.image.DataBufferByte;
 
 import static org.bytedeco.javacpp.opencv_core.Mat;
 import static org.bytedeco.javacpp.opencv_highgui.CV_CAP_PROP_FPS;
+import static org.bytedeco.javacpp.opencv_highgui.CV_CAP_PROP_FRAME_WIDTH;
+import static org.bytedeco.javacpp.opencv_highgui.CV_CAP_PROP_FRAME_HEIGHT;
 import static org.bytedeco.javacpp.opencv_highgui.VideoCapture;
 
 public class DirectShowCapper implements IScreenCapper {
@@ -39,18 +42,10 @@ public class DirectShowCapper implements IScreenCapper {
 
         //Widescreen PAL format.
         width = 720;
-        height = 576;
+        height = 480;
 
         pixels = new int[width * height];
         dimensions = new Dimension(width,height);
-
-        //TODO: Split up into separate method!
-        logger.DEBUG("IScreenCapper => Listing available input devices...");
-        int devices = videoInputLib.videoInput.listDevices();
-        for (int i = 0; i < devices; i++) {
-            String info = videoInputLib.videoInput.getDeviceName(i).getString();
-            logger.DEBUG("IScreenCapper ==> Input device: " + info + ", device index is " + i);
-        }
     }
 
     @Override
@@ -66,51 +61,62 @@ public class DirectShowCapper implements IScreenCapper {
     private void init() {
         logger.INFO("IScreenCapper => Running INIT for DirectShow capture");
 
-        //TODO: Get the device ID from the settings!
-        vc = new VideoCapture(0);
-        //vc.set(CV_CAP_PROP_FRAME_WIDTH,720);
-        //vc.set(CV_CAP_PROP_FRAME_HEIGHT,480);
-        vc.set(CV_CAP_PROP_FPS ,25);
-        videoInputSurface = new Mat();
+        try {
+            int deviceId = DirectShowEnumerator.findDeviceIdForName(settings.getDirectShowDeviceName());
+            if(deviceId > -1) {
+                vc = new VideoCapture(deviceId);
+                vc.set(CV_CAP_PROP_FRAME_WIDTH,720);
+                vc.set(CV_CAP_PROP_FRAME_HEIGHT,480);
+                vc.set(CV_CAP_PROP_FPS ,25);
+                videoInputSurface = new Mat();
 
-        initDone = true;
+                initDone = true;
+            } else {
+                logger.ERROR("IScreenCapper => No device id to connect to!");
+            }
+        } catch (Exception e) {
+            logger.ERROR("IScreenCapper => Cannot initialize DirectShow capture: " + e.getMessage());
+        }
     }
 
     @Override
     public int[] capture() {
-        //Do the init if required.
-        if(initDone == false){
-            init();
-        }
-
-        //Read the next frame, if true this means that it was read.
-        if(vc.read(videoInputSurface)) {
-            BufferedImage img = videoInputSurface.getBufferedImage();
-
-            //Adjust capture dimensions if required.
-            if(img.getWidth() != width || img.getHeight() != height) {
-                width = img.getWidth();
-                height = img.getHeight();
-                dimensions = new Dimension(width,height);
-
-                pixels = new int[width * height];
+        try {
+            //Do the init if required.
+            if(!initDone){
+                init();
             }
 
-            //Convert BGR component to a single pixel integer value.
-            byte[] temp = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
-            for (int i = 0 ; i < pixels.length; i++) {
-                //Convert from RGB bytes to pixel integer!
-                pixels[i] = (( temp[i*3+2] &0x0ff)<<16)|(( temp[i*3+1] &0x0ff)<<8)|( temp[i*3] &0x0ff);
-            }
+            //Read the next frame, if true this means that it was read.
+            if(vc.read(videoInputSurface)) {
+                BufferedImage img = videoInputSurface.getBufferedImage();
 
-            //Clean up.
-            img.flush();
-            img = null;
-            temp = null;
-            return pixels;
-        } else {
-            logger.INFO("IScreenCapper => No data was captured, returning black frame!");
-            return new int[width * height];
+                //Adjust capture dimensions if required.
+                if(img.getWidth() != width || img.getHeight() != height) {
+                    width = img.getWidth();
+                    height = img.getHeight();
+                    dimensions = new Dimension(width,height);
+
+                    pixels = new int[width * height];
+                }
+
+                //Convert BGR component to a single pixel integer value.
+                byte[] temp = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
+                for (int i = 0 ; i < pixels.length; i++) {
+                    //Convert from RGB bytes to pixel integer!
+                    pixels[i] = (( temp[i*3+2] &0x0ff)<<16)|(( temp[i*3+1] &0x0ff)<<8)|( temp[i*3] &0x0ff);
+                }
+
+                //Clean up.
+                img.flush();
+                return pixels;
+            } else {
+                logger.INFO("IScreenCapper => No data was captured, returning black frame!");
+                return new int[width * height];
+            }
+        } catch (Exception e) {
+            logger.ERROR("IScreenCapper => Error during capture: " + e.getMessage());
+            return null;
         }
     }
 

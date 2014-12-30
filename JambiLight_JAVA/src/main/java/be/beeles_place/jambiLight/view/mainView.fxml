@@ -125,16 +125,6 @@
                            </padding>
                         </HBox>
                      </top>
-                     <left>
-                        <HBox prefWidth="200.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <ComboBox fx:id="T2_CMB_CaptureMode" minWidth="250.0" prefHeight="26.0" prefWidth="250.0" promptText="Select a capture mode" />
-                           </children>
-                           <padding>
-                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                           </padding>
-                        </HBox>
-                     </left>
                      <right>
                         <VBox maxHeight="500.0" minHeight="500.0" prefWidth="500.0" BorderPane.alignment="CENTER">
                            <children>
@@ -173,6 +163,19 @@
                            </padding>
                         </VBox>
                      </right>
+                     <left>
+                        <VBox spacing="5.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <ComboBox fx:id="T2_CMB_CaptureMode" minWidth="250.0" prefWidth="250.0" promptText="Select a capture mode" />
+                              <Region maxHeight="20.0" minHeight="20.0" prefHeight="20.0" />
+                              <Label text="DirectShow devices:" />
+                              <ComboBox fx:id="T2_CMB_DirectShowDevices" prefWidth="250.0" promptText="Select a DirectShow device" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </VBox>
+                     </left>
                   </BorderPane>
                   <BorderPane fx:id="T3_Settings" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
                      <bottom>
@@ -450,8 +453,8 @@
                      <bottom>
                         <HBox alignment="BOTTOM_RIGHT" spacing="5.0" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="T7_BTN_OpenLicense" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Open license" onAction="#onOpenLicenseSiteClicked"/>
-                              <Button fx:id="T7_BTN_OpenWebsite" mnemonicParsing="false" styleClass="flatButton" stylesheets="@css/master.css" text="Open website" onAction="#onOpenWebsiteClicked"/>
+                              <Button fx:id="T7_BTN_OpenLicense" mnemonicParsing="false" onAction="#onOpenLicenseSiteClicked" styleClass="flatButton" stylesheets="@css/master.css" text="Open license" />
+                              <Button fx:id="T7_BTN_OpenWebsite" mnemonicParsing="false" onAction="#onOpenWebsiteClicked" styleClass="flatButton" stylesheets="@css/master.css" text="Open website" />
                            </children>
                            <padding>
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

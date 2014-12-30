@@ -55,20 +55,22 @@
             <version>8.20.8</version>
         </dependency>
 
-        <!-- Experimental -->
+        <!-- JavaCV -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>javacv</artifactId>
-            <version>0.9</version>
+            <version>0.10</version>
         </dependency>
 
         <!-- Custom dependencies -->
+		<!-- RXTX Custom -->
 		<dependency>
 			<groupId>com.google.code</groupId>
 			<artifactId>RXTX</artifactId>
 			<version>2.2</version>
 		</dependency>
-		
+
+		<!-- JNI DLL -->
 		<dependency>
 			<groupId>be.beeles_place.code</groupId>
 			<artifactId>JNIscreenCapMock</artifactId>

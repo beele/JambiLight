@@ -10,6 +10,7 @@ import be.beeles_place.jambiLight.utils.ArduinoCode;
 import be.beeles_place.jambiLight.utils.EventbusWrapper;
 import be.beeles_place.jambiLight.utils.StageFactory;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
+import be.beeles_place.jambiLight.utils.screenCapture.DirectShowEnumerator;
 import be.beeles_place.jambiLight.utils.screenCapture.ScreenCapperStrategy;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -37,9 +38,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MainViewController implements Initializable {
 
@@ -265,17 +266,35 @@ public class MainViewController implements Initializable {
 
     @FXML
     private ComboBox<ScreenCapperStrategy> T2_CMB_CaptureMode;
+    @FXML
+    private ComboBox<String> T2_CMB_DirectShowDevices;
 
     private void updateTabTwo() {
         T2_CMB_CaptureMode.setItems(FXCollections.observableArrayList(new ArrayList<ScreenCapperStrategy>(Arrays.asList(ScreenCapperStrategy.values()))));
         if(settings.getCaptureMode() != null) {
             T2_CMB_CaptureMode.getSelectionModel().select(settings.getCaptureMode());
         }
+
+        T2_CMB_DirectShowDevices.disableProperty().bind(T2_CMB_CaptureMode.getSelectionModel().selectedItemProperty().isNotEqualTo(ScreenCapperStrategy.DIRECT_SHOW));
+
+        //Get devices and make them into a list.
+        List<String> devices = new ArrayList<>();
+        devices.addAll(DirectShowEnumerator.enumerateDirectShowDevices().values().stream().collect(Collectors.toList()));
+
+        T2_CMB_DirectShowDevices.setItems(FXCollections.observableArrayList(devices));
+        if(settings.getDirectShowDeviceName() != null) {
+            T2_CMB_DirectShowDevices.getSelectionModel().select(settings.getDirectShowDeviceName());
+        }
     }
 
     @FXML
     void onTabTwoSaveClicked(ActionEvent event) {
         settings.setCaptureMode(T2_CMB_CaptureMode.getValue());
+
+        if(!T2_CMB_DirectShowDevices.disabledProperty().getValue()) {
+            settings.setDirectShowDeviceName(T2_CMB_DirectShowDevices.getValue());
+        }
+
         //Update the view.
         updateTabTwo();
         eventBus.post(new SettingsUpdatedEvent());

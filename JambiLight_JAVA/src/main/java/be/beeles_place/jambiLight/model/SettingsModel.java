@@ -46,6 +46,7 @@ public class SettingsModel {
     private boolean autoConnect;                    //True or false.
 
     private ScreenCapperStrategy captureMode;       //Enum value of type ScreenCapperMode, containing the active capture strategy.
+    private String directShowDeviceName;            //String that contains the device name used for DirectShow capture.
 
     /**
      * Constructor.
@@ -269,6 +270,15 @@ public class SettingsModel {
     @XmlElement
     public void setCaptureMode(ScreenCapperStrategy captureMode) {
         this.captureMode = captureMode;
+    }
+
+    public String getDirectShowDeviceName() {
+        return directShowDeviceName;
+    }
+
+    @XmlElement
+    public void setDirectShowDeviceName(String directShowDeviceName) {
+        this.directShowDeviceName = directShowDeviceName;
     }
 
     //Getters & setters for fields not in xml
