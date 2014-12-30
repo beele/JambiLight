@@ -278,16 +278,13 @@ public class MainViewController implements Initializable {
         //Bindings to disable parts of the UI if required.
         T2_CMB_DirectShowDevices.disableProperty().bind(T2_CMB_CaptureMode.getSelectionModel().selectedItemProperty().isNotEqualTo(ScreenCapperStrategy.DIRECT_SHOW));
 
-        //Only enumerate DirectShow devices when the option has been selected!
-        if(!T2_CMB_DirectShowDevices.disabledProperty().getValue()) {
-            //Get devices and make them into a list.
-            List<String> devices = new ArrayList<>();
-            devices.addAll(DirectShowEnumerator.enumerateDirectShowDevices().values().stream().collect(Collectors.toList()));
+        //Get devices and make them into a list.
+        List<String> devices = new ArrayList<>();
+        devices.addAll(DirectShowEnumerator.enumerateDirectShowDevices().values().stream().collect(Collectors.toList()));
 
-            T2_CMB_DirectShowDevices.setItems(FXCollections.observableArrayList(devices));
-            if(settings.getDirectShowDeviceName() != null) {
-                T2_CMB_DirectShowDevices.getSelectionModel().select(settings.getDirectShowDeviceName());
-            }
+        T2_CMB_DirectShowDevices.setItems(FXCollections.observableArrayList(devices));
+        if(settings.getDirectShowDeviceName() != null) {
+            T2_CMB_DirectShowDevices.getSelectionModel().select(settings.getDirectShowDeviceName());
         }
     }
 
