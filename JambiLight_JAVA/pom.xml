@@ -6,7 +6,7 @@
 	<groupId>be.beeles_place</groupId>
 	<artifactId>JambiLight</artifactId>
 	<packaging>jar</packaging>
-	<version>0.91-Beta</version>
+	<version>1.0-RC1</version>
 	<name>JambiLight</name>
 	
 	<url>https://github.com/beele/JambiLight</url>
