@@ -197,7 +197,7 @@ public class MainViewController implements Initializable {
 
                 //Check to see if either vertical or horizontal are filled.
                 if(vertical != null && !vertical.trim().isEmpty()) {
-                    verticalLeds = Integer.parseInt(vertical) * 2;
+                    verticalLeds = Integer.parseInt(vertical) * 2 + 4;
                     horizontalLeds = totalLeds - verticalLeds;
                 }
                 if(horizontal != null && !horizontal.trim().isEmpty()) {
@@ -221,8 +221,9 @@ public class MainViewController implements Initializable {
             } else {
                 //Check to see if both vertical and horizontal are filled.
                 if(vertical != null && !vertical.trim().isEmpty() && horizontal != null && !horizontal.trim().isEmpty()) {
-                    verticalLeds = Integer.parseInt(vertical) * 2;
+                    verticalLeds = Integer.parseInt(vertical) * 2 + 4;
                     horizontalLeds = Integer.parseInt(horizontal) * 2;
+                    totalLeds = verticalLeds + horizontalLeds;
 
                     //Check for even number of LEDs
                     if((verticalLeds + horizontalLeds) % 2 != 0) {
@@ -471,7 +472,12 @@ public class MainViewController implements Initializable {
 
     @FXML
     void onConnectClicked(ActionEvent event) {
-        eventBus.post(new ConnectoArduinoEvent());
+        if(T5_CMB_CommChannel.getValue() != null && !T5_CMB_CommChannel.getValue().trim().isEmpty()) {
+            settings.setPort(T5_CMB_CommChannel.getSelectionModel().getSelectedItem());
+            eventBus.post(new ConnectoArduinoEvent());
+        } else {
+            showErrorMessage("No port selected!", "Please select a comm port from the list before connecting!");
+        }
     }
 
     @FXML
