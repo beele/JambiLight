@@ -32,6 +32,7 @@ public class AmbilightStrategy extends AbstractColorStrategy {
                     capper = ScreenCapperStrategy.JAVA_SCREENSHOT.getCaptureStrategy();
                 }
             }
+            capper.setSettings(settings);
             core = new AmbiLightCore(settings, model, capper);
         } catch (Exception e) {
             logger.ERROR("MODE => Error during init! Aborting!");

@@ -4,10 +4,22 @@ import be.beeles_place.jambiLight.events.ColorModelUpdatedEvent;
 import be.beeles_place.jambiLight.utils.EventbusWrapper;
 import com.google.common.eventbus.EventBus;
 
+import java.awt.*;
+
 /**
  * This class contains data for the application.
  */
 public class ColorModel {
+
+    private Dimension screenDimensions;
+    private int memUsed;
+    private int memAvailable;
+    private int memTotal;
+    private int framerate;
+
+    private int[] rawImageData;
+    private int rawWidth;
+    private int rawHeight;
 
     private int[][] currentColors;
     private long actionDuration;
@@ -34,6 +46,70 @@ public class ColorModel {
     }
 
     //Getters & setters.
+    public Dimension getScreenDimensions() {
+        return screenDimensions;
+    }
+
+    public void setScreenDimensions(Dimension screenDimensions) {
+        this.screenDimensions = screenDimensions;
+    }
+
+    public int getMemUsed() {
+        return memUsed;
+    }
+
+    public void setMemUsed(int memUsed) {
+        this.memUsed = memUsed;
+    }
+
+    public int getMemAvailable() {
+        return memAvailable;
+    }
+
+    public void setMemAvailable(int memAvailable) {
+        this.memAvailable = memAvailable;
+    }
+
+    public int getMemTotal() {
+        return memTotal;
+    }
+
+    public void setMemTotal(int memTotal) {
+        this.memTotal = memTotal;
+    }
+
+    public int getFramerate() {
+        return framerate;
+    }
+
+    public void setFramerate(int framerate) {
+        this.framerate = framerate;
+    }
+
+    public int[] getRawImageData() {
+        return rawImageData;
+    }
+
+    public void setRawImageData(int[] rawImageData) {
+        this.rawImageData = rawImageData;
+    }
+
+    public int getRawWidth() {
+        return rawWidth;
+    }
+
+    public void setRawWidth(int rawWidth) {
+        this.rawWidth = rawWidth;
+    }
+
+    public int getRawHeight() {
+        return rawHeight;
+    }
+
+    public void setRawHeight(int rawHeight) {
+        this.rawHeight = rawHeight;
+    }
+
     /**
      * Returns the colors on the model.
      * Colors are formatted as int[][] where the outer array is the number of consolidated pixels and the inner

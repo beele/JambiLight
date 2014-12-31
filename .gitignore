@@ -223,3 +223,4 @@ run.bat
 /JambiLight_JAVA/ScreenCapper.dll
 settings.xml
 JambiLight_JNI/ScreenCapper/ScreenCapper/ReadMe.txt
+JambiLight_JAVA/lib/javacv-bin/

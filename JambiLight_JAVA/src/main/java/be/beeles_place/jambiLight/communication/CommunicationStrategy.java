@@ -4,7 +4,6 @@ import be.beeles_place.jambiLight.communication.impl.SerialCommJSSC;
 import be.beeles_place.jambiLight.communication.impl.SerialCommMock;
 import be.beeles_place.jambiLight.communication.impl.SerialCommRXTX;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
-import com.sun.java_cup.internal.runtime.virtual_parse_stack;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;

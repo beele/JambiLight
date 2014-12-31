@@ -28,9 +28,8 @@ public class AmbiLightCore {
     private IntensityCorrector corrector;
     private ColorModel model;
 
-    private final int width;
-    private final int height;
-    private int tempPixelValue;
+    private int width;
+    private int height;
 
     private int[][][] regions;
     private float regionWidth;
@@ -44,6 +43,7 @@ public class AmbiLightCore {
      *
      * @param settings   The SettingsModel instance.
      * @param colorModel The ColorModel instance.
+     * @param screenCapper The IScreenCapper instance that will facilitate the capture of input data.
      */
     public AmbiLightCore(SettingsModel settings, ColorModel colorModel, IScreenCapper screenCapper) {
         model = colorModel;
@@ -54,25 +54,16 @@ public class AmbiLightCore {
         enhanceColors = settings.isEnhanceColor();
         doCorrection = settings.isCorrectIntensity();
 
-        //Get the screen size and calculate the number of pixels required!
-        Dimension size = capper.getScreenDimensions();
-        width = (int) size.getWidth();
-        height = (int) size.getHeight();
-
-        //Initialize the regions.
         horizontalRegionSize = settings.getHorizontalRegions();
         verticalRegionSize = settings.getVerticalRegions();
-        //There are (n x m) regions, made by the n and m dimensions. The last dimension of 3 is to store r/g/b/#pixels separately.
-        regions = new int[this.horizontalRegionSize][this.verticalRegionSize][4];
-        regionWidth = (float) width / this.horizontalRegionSize;
-        regionHeight = (float) height / this.verticalRegionSize;
+
+        //Update size of regions
+        checkDimensionsAndRegionSize();
 
         //Create the required instances.
-        enhancer = new ColorEnhancer(settings.getEnhanceValue());
-        corrector = new IntensityCorrector(settings.getGreyDetectionThreshold(), settings.getScaleUpValue(), settings.getScaleDownValue());
-        consolidator = new RegionConsolidator( this.horizontalRegionSize, this.verticalRegionSize,
-                                                settings.getHorizontalMargin(), settings.getVerticalMargin(),
-                                                settings.isWeighColor(), settings.getWeighFactor());
+        enhancer = new ColorEnhancer(settings);
+        corrector = new IntensityCorrector(settings);
+        consolidator = new RegionConsolidator(settings);
 
         //Get the logger instance only once.
         logger = LOGGER.getInstance();
@@ -88,7 +79,7 @@ public class AmbiLightCore {
     /**
      * Will capture the screen and split it up into the predefined region count.
      * Afterwards it will consolidate the regions into the (to be mapped) pixel regions.
-     * (Each consolidated region will be mapped to a pixel.)
+     * (Each consolidated region will be mapped to a single LED.)
      */
     public void calculate() {
         long startTime = new Date().getTime();
@@ -96,8 +87,10 @@ public class AmbiLightCore {
         //Make a screen capture.
         //Disabling aero themes in windows can easily double or triple performance!
         int[] pixels = capper.capture();
+        checkDimensionsAndRegionSize();
+        model.setRawImageData(pixels.clone());
 
-        for (int i = 0; i < pixels.length; i += stepSize) {
+        /*for (int i = 0; i < pixels.length; i += stepSize) {
             //The pixels in the image are in one long array, we need to get the x and y values of the pixel.
             y = (i / width);        //This is the row the pixel is at.
             x = i - (y * width);    //This is the column the pixel is at.
@@ -113,6 +106,15 @@ public class AmbiLightCore {
             colors[1] += (tempPixelValue >>> 8) & 0xFF;
             colors[2] += tempPixelValue & 0xFF;
             colors[3] += 1;
+        }*/
+
+        int redactedLength = pixels.length / 4;
+        int offset = redactedLength - 1;
+        for (int i = 0; i < redactedLength; i += stepSize) {
+            pixelCalc(regions, i, pixels[i]);
+            pixelCalc(regions, i + offset, pixels[i + offset]);
+            pixelCalc(regions, i + offset * 2, pixels[i + offset * 2]);
+            pixelCalc(regions, i + offset * 3, pixels[i + offset * 3]);
         }
 
         //Go over all the regions and calculate the average color.
@@ -127,20 +129,13 @@ public class AmbiLightCore {
                 colors[3] = 0;
 
                 //Only process regions that are not ignored or completely black!
-                if (colors[0] != 0 || colors[1] != 0 || colors[2] != 0) {
-                    if (enhanceColors) {
-                        regions[n][m] = enhancer.processColor(colors[0], colors[1], colors[2]);
-                    } else {
-                        //Safety check for color channel values.
-                        colors[0] = colors[0] < 256 ? colors[0] : 255;
-                        colors[1] = colors[1] < 256 ? colors[1] : 255;
-                        colors[2] = colors[2] < 256 ? colors[2] : 255;
-                    }
+                if (enhanceColors && (colors[0] != 0 || colors[1] != 0 || colors[2] != 0)) {
+                    regions[n][m] = enhancer.processColor(colors[0], colors[1], colors[2]);
                 }
             }
         }
-        //Set the consolidated regions with colors on the model.
 
+        //Set the consolidated regions with colors on the model.
         int[][] cRegions = consolidator.consolidateRegions(regions);
         //Correct the intensity if enabled.
         if(doCorrection) {
@@ -150,8 +145,7 @@ public class AmbiLightCore {
 
         //It's all about tai-ming (not the vases)
         long endTime = new Date().getTime();
-        long difference = endTime - startTime;
-        model.setActionDuration(difference);
+        model.setActionDuration(endTime - startTime);
         LOGGER.getInstance().INFO("AMBILIGHT-CORE => Pixel processing completed in : " + model.getActionDuration() + "ms");
 
         //Everything has been updated!
@@ -159,6 +153,49 @@ public class AmbiLightCore {
         
         cRegions = null;
         pixels = null;
+    }
+
+    private void pixelCalc(int[][][] regions, int i, int pixel) {
+        //The pixels in the image are in one long array, we need to get the x and y values of the pixel.
+        y = (i / width);        //This is the row the pixel is at.
+        x = i - (y * width);    //This is the column the pixel is at.
+
+        //Calculate the correct region for the given x and y coordinate.
+        regionX = (int) (x / regionWidth);
+        regionY = (int) (y / regionHeight);
+
+        //Add the R/G/B to the current region.
+        int[] colors = regions[regionX][regionY];
+        colors[0] += (pixel >>> 16) & 0xFF;
+        colors[1] += (pixel >>> 8) & 0xFF;
+        colors[2] += pixel & 0xFF;
+        colors[3] += 1;
+    }
+
+    /**
+     * This method checks if the dimensions of the captured area have changed, if so the required changes are made.
+     * In principle this will allow each captured frame to have different dimensions and still be used for the core logic.
+     */
+    private void checkDimensionsAndRegionSize() {
+        //Fix for null pointer exception that could occur when restarting the app (after settings have changed).
+        if(capper == null) {
+            return;
+        }
+
+        Dimension size = capper.getScreenDimensions();
+
+        if(width != size.getWidth() || height != size.getHeight()) {
+            //Get the screen size and calculate the number of pixels required!
+            width = (int) size.getWidth();
+            height = (int) size.getHeight();
+            model.setRawWidth(width);
+            model.setRawHeight(height);
+
+            //There are (n x m) regions, made by the n and m dimensions. The last dimension of 3 is to store r/g/b/#pixels separately.
+            regions = new int[this.horizontalRegionSize][this.verticalRegionSize][4];
+            regionWidth = (float) width / this.horizontalRegionSize;
+            regionHeight = (float) height / this.verticalRegionSize;
+        }
     }
 
     /**

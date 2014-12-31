@@ -24,7 +24,11 @@ public class SettingsModel {
 
     //Color enhancement settings.
     private boolean enhanceColor;                   //True or false.
-    private float enhanceValue;                     //Between 1 and MAX_FLOAT (please lower than 10).
+    private float enhanceValue;                     //Between 1f and MAX_FLOAT (please lower than 10.0f).
+    private boolean enhancePerChannel;              //True or false.
+    private float enhanceValueR;                    //Between 0.0f and MAX_FLOAT (please lower than 10.0f).
+    private float enhanceValueG;                    //Between 0.0f and MAX_FLOAT (please lower than 10.0f).
+    private float enhanceValueB;                    //Between 0.0f and MAX_FLOAT (please lower than 10.0f).
 
     //Region consolidation settings.
     private boolean weighColor;                     //True or false
@@ -42,6 +46,7 @@ public class SettingsModel {
     private boolean autoConnect;                    //True or false.
 
     private ScreenCapperStrategy captureMode;       //Enum value of type ScreenCapperMode, containing the active capture strategy.
+    private String directShowDeviceName;            //String that contains the device name used for DirectShow capture.
 
     /**
      * Constructor.
@@ -51,6 +56,10 @@ public class SettingsModel {
     }
 
     //Getters & setters.
+    /**
+     * The number of horizontal regions.
+     * @return The number of horizontal regions.
+     */
     public int getHorizontalRegions() {
         return horizontalRegions;
     }
@@ -60,6 +69,10 @@ public class SettingsModel {
         this.horizontalRegions = horizontalRegions;
     }
 
+    /**
+     * The number of vertical regions.
+     * @return The number of vertical regions.
+     */
     public int getVerticalRegions() {
         return verticalRegions;
     }
@@ -69,6 +82,10 @@ public class SettingsModel {
         this.verticalRegions = verticalRegions;
     }
 
+    /**
+     * An int representing the horizontal margin.
+     * @return An int representing the horizontal margin.
+     */
     public int getHorizontalMargin() {
         return horizontalMargin;
     }
@@ -78,6 +95,10 @@ public class SettingsModel {
         this.horizontalMargin = horizontalMargin;
     }
 
+    /**
+     * An int representing the vertical margin.
+     * @return An int representing the vertical margin.
+     */
     public int getVerticalMargin() {
         return verticalMargin;
     }
@@ -114,6 +135,42 @@ public class SettingsModel {
         this.enhanceValue = enhanceValue;
     }
 
+    public boolean isEnhancePerChannel() {
+        return enhancePerChannel;
+    }
+
+    @XmlElement
+    public void setEnhancePerChannel(boolean enhancePerChannel) {
+        this.enhancePerChannel = enhancePerChannel;
+    }
+
+    public float getEnhanceValueR() {
+        return enhanceValueR;
+    }
+
+    @XmlElement
+    public void setEnhanceValueR(float enhanceValueR) {
+        this.enhanceValueR = enhanceValueR;
+    }
+
+    public float getEnhanceValueG() {
+        return enhanceValueG;
+    }
+
+    @XmlElement
+    public void setEnhanceValueG(float enhanceValueG) {
+        this.enhanceValueG = enhanceValueG;
+    }
+
+    public float getEnhanceValueB() {
+        return enhanceValueB;
+    }
+
+    @XmlElement
+    public void setEnhanceValueB(float enhanceValueB) {
+        this.enhanceValueB = enhanceValueB;
+    }
+
     public boolean isCorrectIntensity() {
         return correctIntensity;
     }
@@ -123,6 +180,10 @@ public class SettingsModel {
         this.correctIntensity = correctIntensity;
     }
 
+    /**
+     * A boolean indicating if the colors need to be weighed or not.
+     * @return A boolean indicating if the colors need to be weighed or not.
+     */
     public boolean isWeighColor() {
         return weighColor;
     }
@@ -132,6 +193,10 @@ public class SettingsModel {
         this.weighColor = weighColor;
     }
 
+    /**
+     * The factor which the weight is calculated with. A higher number will result in bigger weight steps.
+     * @return The factor which the weight is calculated with. A higher number will result in bigger weight steps.
+     */
     public int getWeighFactor() {
         return weighFactor;
     }
@@ -141,6 +206,10 @@ public class SettingsModel {
         this.weighFactor = weighFactor;
     }
 
+    /**
+     * The value that is used to detect white/grey/black colors. (R=G=B +/- threshold)
+     * @return The value that is used to detect white/grey/black colors. (R=G=B +/- threshold)
+     */
     public int getGreyDetectionThreshold() {
         return greyDetectionThreshold;
     }
@@ -150,6 +219,10 @@ public class SettingsModel {
         this.greyDetectionThreshold = greyDetectionThreshold;
     }
 
+    /**
+     * The value that is used to increase the intensity.
+     * @return The value that is used to increase the intensity.
+     */
     public float getScaleUpValue() {
         return scaleUpValue;
     }
@@ -159,6 +232,10 @@ public class SettingsModel {
         this.scaleUpValue = scaleUpValue;
     }
 
+    /**
+     * The value that is used to decrease the intensity.
+     * @return The value that is used to decrease the intensity.
+     */
     public float getScaleDownValue() {
         return scaleDownValue;
     }
@@ -193,6 +270,15 @@ public class SettingsModel {
     @XmlElement
     public void setCaptureMode(ScreenCapperStrategy captureMode) {
         this.captureMode = captureMode;
+    }
+
+    public String getDirectShowDeviceName() {
+        return directShowDeviceName;
+    }
+
+    @XmlElement
+    public void setDirectShowDeviceName(String directShowDeviceName) {
+        this.directShowDeviceName = directShowDeviceName;
     }
 
     //Getters & setters for fields not in xml

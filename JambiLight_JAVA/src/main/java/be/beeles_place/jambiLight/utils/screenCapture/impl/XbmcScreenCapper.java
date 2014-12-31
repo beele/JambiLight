@@ -4,7 +4,9 @@ import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.utils.screenCapture.IScreenCapper;
 
 import java.awt.*;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -19,9 +21,11 @@ public class XbmcScreenCapper implements IScreenCapper {
     private ServerSocket server;
     private Socket client;
     private InputStream in;
+    private OutputStream out;
 
     private byte[] data;
     private int[] pixels;
+    private int[] staticPixels;
 
     private final int totalPixels;
     private final int width;
@@ -46,8 +50,15 @@ public class XbmcScreenCapper implements IScreenCapper {
 
         data = new byte[totalBytes];
         pixels = new int[totalPixels];
-        dimensions = new Dimension(width,height);
+        dimensions = new Dimension(width, height);
+
+        staticPixels = new int[width * height];
+        for (int i = 0; i < staticPixels.length; i++) {
+            staticPixels[i] = 6729727;
+        }
     }
+
+    private int writeCounter = 0;
 
     @Override
     public Dimension getScreenDimensions() {
@@ -66,14 +77,31 @@ public class XbmcScreenCapper implements IScreenCapper {
             }
         }
 
+        int previousMissingBytes = 0;
+
         //Try to receive data.
         int read = 0;
         boolean run = true;
         while(run) {
             try {
+                Thread.sleep(20);
+                //Check to see if the socket is still open!
+                writeCounter = 0;
+                try {
+                    out.write(0);
+                    out.flush();
+                } catch (IOException ioe) {
+                    //Reset init state.
+                    logger.DEBUG("IScreenCapper => Killing inactive XBMC socket connection!");
+                    socketCleanup();
+                    initDone = false;
+                    return staticPixels;
+                }
+
                 //If enough data is in the buffer, read it out.
-                if(in.available() == totalBytes) {
-                    read += in.read(data, read, in.available());
+                int size = in.available();
+                if(size >= totalBytes) {
+                    read = in.read(data, previousMissingBytes, totalBytes);
 
                     while(read < totalBytes) {
                         int toRead = totalBytes - read;
@@ -81,19 +109,43 @@ public class XbmcScreenCapper implements IScreenCapper {
                             read += in.read(data, read, toRead);
                         }
                     }
+
+                    previousMissingBytes = 0;
                 }
+
+                //TODO: Temp fix for KODI issues on OSX => Causes horizontal scrolling of input source for now, but it keeps working!
+                if(totalBytes - size < 100 && totalBytes - size > 0) {
+                    int missingBytes = totalBytes - size;
+                    logger.ERROR("- NON FATAL ERROR - Stall override: missing " + missingBytes + " bytes!");
+
+                    read = in.read(data, previousMissingBytes, size);
+
+                    while(read < totalBytes - missingBytes) {
+                        int toRead = totalBytes - missingBytes - read;
+                        if(toRead > 0) {
+                            read += in.read(data, read, toRead);
+                        }
+                    }
+
+                    for(int i = missingBytes; i > 0 ; i--) {
+                        //Fill missing pixels data in with black!
+                        data[data.length - i] = (byte) 0;
+                    }
+
+                    read += missingBytes;
+                    previousMissingBytes = missingBytes;
+                }
+                //TODO: End of temp fix!
 
                 //Only continue when the correct amount of pixels has been read!
                 if(read == totalBytes) {
                     //Process the data and return the pixels.
                     processData();
                     return pixels;
-                } else {
-                    //Saves CPU, waits for the next loop to see if all the data has been received.
-                    Thread.sleep(1);
                 }
             } catch (Exception e) {
                 logger.ERROR("IScreenCapper => XBMC connection error: " +  e.getMessage());
+                e.printStackTrace();
                 return null;
             }
         }
@@ -118,6 +170,7 @@ public class XbmcScreenCapper implements IScreenCapper {
 
         //Get the inputstream.
         in = client.getInputStream();
+        out = client.getOutputStream();
 
         initDone = true;
     }
@@ -142,10 +195,13 @@ public class XbmcScreenCapper implements IScreenCapper {
         }
     }
 
-    public void dispose() {
+    private void socketCleanup() {
         try {
             if(in != null) {
                 in.close();
+            }
+            if(out != null) {
+                out.close();
             }
             if(client != null) {
                 client.close();
@@ -154,8 +210,17 @@ public class XbmcScreenCapper implements IScreenCapper {
                 server.close();
             }
             in = null;
+            out = null;
             client = null;
             server = null;
+        } catch (Exception e) {
+            //TODO: Log
+        }
+    }
+
+    public void dispose() {
+        try {
+            socketCleanup();
             
             data = null;
             pixels = null;
