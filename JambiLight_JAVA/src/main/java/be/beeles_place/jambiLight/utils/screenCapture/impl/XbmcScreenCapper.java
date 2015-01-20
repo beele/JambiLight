@@ -68,7 +68,7 @@ public class XbmcScreenCapper implements IScreenCapper {
     @Override
     public int[] capture() {
         //Perform startup, this should only be done once, hence the if statement!
-        if(initDone == false) {
+        if (!initDone) {
             try {
                 init();
             } catch (Exception e) {
@@ -76,82 +76,38 @@ public class XbmcScreenCapper implements IScreenCapper {
                 return null;
             }
         }
-
-        int previousMissingBytes = 0;
-
         //Try to receive data.
         int read = 0;
-        boolean run = true;
-        while(run) {
-            try {
-                Thread.sleep(20);
-                //Check to see if the socket is still open!
-                writeCounter = 0;
-                try {
-                    out.write(0);
-                    out.flush();
-                } catch (IOException ioe) {
-                    //Reset init state.
-                    logger.DEBUG("IScreenCapper => Killing inactive XBMC socket connection!");
-                    socketCleanup();
-                    initDone = false;
-                    return staticPixels;
+
+        try {
+            //Collect all the bytes!
+            while (read != totalBytes) {
+                int av = in.available();
+                av = av < totalBytes ? av : totalBytes;
+                av = av - read < 0 ? 0 : av - read;
+                System.out.println("READ : " + read);
+                System.out.println("TOREAD: : " + av);
+                System.out.println("TOTAL : " + (read + av) + " (MAX : " + totalBytes + ")");
+                int r = in.read(data, read, av);
+                if (r > 0) {
+                    read += r;
                 }
-
-                //If enough data is in the buffer, read it out.
-                int size = in.available();
-                if(size >= totalBytes) {
-                    read = in.read(data, previousMissingBytes, totalBytes);
-
-                    while(read < totalBytes) {
-                        int toRead = totalBytes - read;
-                        if(toRead > 0) {
-                            read += in.read(data, read, toRead);
-                        }
-                    }
-
-                    previousMissingBytes = 0;
-                }
-
-                //TODO: Temp fix for KODI issues on OSX => Causes horizontal scrolling of input source for now, but it keeps working!
-                if(totalBytes - size < 100 && totalBytes - size > 0) {
-                    int missingBytes = totalBytes - size;
-                    logger.ERROR("- NON FATAL ERROR - Stall override: missing " + missingBytes + " bytes!");
-
-                    read = in.read(data, previousMissingBytes, size);
-
-                    while(read < totalBytes - missingBytes) {
-                        int toRead = totalBytes - missingBytes - read;
-                        if(toRead > 0) {
-                            read += in.read(data, read, toRead);
-                        }
-                    }
-
-                    for(int i = missingBytes; i > 0 ; i--) {
-                        //Fill missing pixels data in with black!
-                        data[data.length - i] = (byte) 0;
-                    }
-
-                    read += missingBytes;
-                    previousMissingBytes = missingBytes;
-                }
-                //TODO: End of temp fix!
-
-                //Only continue when the correct amount of pixels has been read!
-                if(read == totalBytes) {
-                    //Process the data and return the pixels.
-                    processData();
-                    return pixels;
-                }
-            } catch (Exception e) {
-                logger.ERROR("IScreenCapper => XBMC connection error: " +  e.getMessage());
-                e.printStackTrace();
-                return null;
+                Thread.sleep(1);
             }
-        }
 
-        //If you get here, something went wrong!
-        return null;
+            //No more bytes to receive, send keep alive signal.
+            out.write(1337);
+            out.flush();
+
+            //Process and return the data we received.
+            processData();
+            return pixels;
+
+        } catch (Exception e) {
+            logger.ERROR("IScreenCapper => XBMC connection error: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -159,7 +115,7 @@ public class XbmcScreenCapper implements IScreenCapper {
      *
      * @throws Exception When the socket cannot be started!
      */
-    private void init() throws Exception{
+    private void init() throws Exception {
         server = new ServerSocket(port);
         server.setReceiveBufferSize(totalBytes);
 
@@ -182,9 +138,9 @@ public class XbmcScreenCapper implements IScreenCapper {
     private void processData() {
         //Convert bytes to integer values!
         int pixelCounter = 0;
-        for(int i = 0; i < data.length ; i+=4) {
-            int r = data[i+2];
-            int g = data[i+1];
+        for (int i = 0; i < data.length; i += 4) {
+            int r = data[i + 2];
+            int g = data[i + 1];
             int b = data[i];
 
             r = (r << 16) & 0x00FF0000;
@@ -197,16 +153,16 @@ public class XbmcScreenCapper implements IScreenCapper {
 
     private void socketCleanup() {
         try {
-            if(in != null) {
+            if (in != null) {
                 in.close();
             }
-            if(out != null) {
+            if (out != null) {
                 out.close();
             }
-            if(client != null) {
+            if (client != null) {
                 client.close();
             }
-            if(server != null) {
+            if (server != null) {
                 server.close();
             }
             in = null;
@@ -221,7 +177,7 @@ public class XbmcScreenCapper implements IScreenCapper {
     public void dispose() {
         try {
             socketCleanup();
-            
+
             data = null;
             pixels = null;
             dimensions = null;

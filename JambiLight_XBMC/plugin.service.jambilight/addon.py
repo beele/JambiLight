@@ -79,7 +79,6 @@ def sendData():
     if CAPT.getCaptureState() == xbmc.CAPTURE_STATE_DONE:
         # Get frame data and send it.
         pixels = CAPT.getImage()
-        SOCK.recv(1024)
         SOCK.send(pixels)
 
 
@@ -102,6 +101,11 @@ while LIVE:
             connectToSocket()
         elif CONNECT is True and CONNECTED is True:
             sendData()
+            KEEP_ALIVE = 0
+            COUNT = 0
+            #while KEEP_ALIVE != "9" and COUNT < 100:
+            #    KEEP_ALIVE = SOCK.recv(1024)
+            #    COUNT += 1
         elif CONNECT is False and CONNECTED is True:
             closeSocket()
 
