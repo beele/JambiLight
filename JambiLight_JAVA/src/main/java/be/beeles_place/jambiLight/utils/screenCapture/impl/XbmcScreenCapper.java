@@ -58,8 +58,6 @@ public class XbmcScreenCapper implements IScreenCapper {
         }
     }
 
-    private int writeCounter = 0;
-
     @Override
     public Dimension getScreenDimensions() {
         return dimensions;
@@ -85,9 +83,11 @@ public class XbmcScreenCapper implements IScreenCapper {
                 int av = in.available();
                 av = av < totalBytes ? av : totalBytes;
                 av = av - read < 0 ? 0 : av - read;
-                System.out.println("READ : " + read);
+
+                /*System.out.println("READ : " + read);
                 System.out.println("TOREAD: : " + av);
-                System.out.println("TOTAL : " + (read + av) + " (MAX : " + totalBytes + ")");
+                System.out.println("TOTAL : " + (read + av) + " (MAX : " + totalBytes + ")");*/
+
                 int r = in.read(data, read, av);
                 if (r > 0) {
                     read += r;
@@ -106,6 +106,9 @@ public class XbmcScreenCapper implements IScreenCapper {
         } catch (Exception e) {
             logger.ERROR("IScreenCapper => XBMC connection error: " + e.getMessage());
             e.printStackTrace();
+
+            socketCleanup();
+
             return null;
         }
     }
@@ -117,7 +120,7 @@ public class XbmcScreenCapper implements IScreenCapper {
      */
     private void init() throws Exception {
         server = new ServerSocket(port);
-        server.setReceiveBufferSize(totalBytes);
+        server.setReceiveBufferSize(totalBytes * 10);
 
         logger.INFO("IScreenCapper => Waiting for XBMC connection on port " + port + "!");
         //This call is blocking and stops code execution until the connection has been made!
