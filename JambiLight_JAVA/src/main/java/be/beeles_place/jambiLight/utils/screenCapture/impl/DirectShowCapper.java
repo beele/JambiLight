@@ -43,6 +43,7 @@ public class DirectShowCapper implements IScreenCapper {
         //Widescreen PAL format.
         width = 720;
         height = 480;
+        logger.INFO("SCREENCAPPER => DirectShow source resolution: width => " + width + " height => " + height);
 
         pixels = new int[width * height];
         dimensions = new Dimension(width,height);

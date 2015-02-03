@@ -28,7 +28,9 @@ public class ScreenCapperJNI implements IScreenCapper {
     }
 
     /**
-     * Constructor.
+     * Creates a new ScreenCapperJNI instance.
+     * The JNI mock will return a full green image if the JNI call succeeds.
+     * It will return a full red image if the JNI call fails.
      */
     public ScreenCapperJNI() {
         logger = LOGGER.getInstance();
@@ -36,6 +38,7 @@ public class ScreenCapperJNI implements IScreenCapper {
 
         int width = Screen.getMainScreen().getWidth();
         int height = Screen.getMainScreen().getHeight();
+        logger.INFO("SCREENCAPPER => JNI screen resolution: width => " + width + " height => " + height);
         size = new Dimension(width,height);
     }
 

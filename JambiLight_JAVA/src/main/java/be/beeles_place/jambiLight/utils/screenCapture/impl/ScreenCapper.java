@@ -42,6 +42,7 @@ public class ScreenCapper implements IScreenCapper {
                 logger.INFO("SCREENCAPPER => Cannot create capture robot: " + e.getMessage());
             }
         }
+        logger.INFO("SCREENCAPPER => Java screen resolution: width => " + size.getWidth() + " height => " + size.getHeight());
     }
 
     public Dimension getScreenDimensions() {
@@ -52,13 +53,11 @@ public class ScreenCapper implements IScreenCapper {
         if(useBackupRobot){
             Pixels pixelsColl = backupRobot.getScreenCapture(0, 0, size.width, size.height);
             pixels = (int[]) pixelsColl.getPixels().array();
-            pixelsColl = null;
             return pixels;
         } else {
             BufferedImage img = robot.createScreenCapture(captureField);
             pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
             img.flush();
-            img = null;
             return pixels;
         }
     }

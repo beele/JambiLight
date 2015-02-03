@@ -128,7 +128,13 @@ public class ApplicationController {
         model = model == null ? new ColorModel() : model;
         //Calculate the new amount of regions.
         model.setNumberOfConsolidatedRegions((settings.getHorizontalRegions() * 2) + (settings.getVerticalRegions() * 2) - 4);
-        model.setScreenDimensions(Toolkit.getDefaultToolkit().getScreenSize());
+
+        try {
+            model.setScreenDimensions(Toolkit.getDefaultToolkit().getScreenSize());
+        } catch (Exception e) {
+            logger.ERROR("INIT => Cannot get screen size, setting default => width 720 height => 480");
+            model.setScreenDimensions(new Dimension(720, 480));
+        }
 
         //Create and set up the communication controller.
         serialCommunicator = new CommunicationController(model, settings);

@@ -43,6 +43,7 @@ public class XbmcScreenCapper implements IScreenCapper {
         port = 1337;
         width = 720;
         height = 480;
+        logger.INFO("SCREENCAPPER => XBMC/KODI resolution: width => " + width + " height => " + height);
 
         //XBMC sends the pixel data as BGRA (4 bytes per pixel).
         totalPixels = width * height;
@@ -84,10 +85,6 @@ public class XbmcScreenCapper implements IScreenCapper {
                 av = av < totalBytes ? av : totalBytes;
                 av = av - read < 0 ? 0 : av - read;
 
-                /*System.out.println("READ : " + read);
-                System.out.println("TOREAD: : " + av);
-                System.out.println("TOTAL : " + (read + av) + " (MAX : " + totalBytes + ")");*/
-
                 int r = in.read(data, read, av);
                 if (r > 0) {
                     read += r;
@@ -105,10 +102,9 @@ public class XbmcScreenCapper implements IScreenCapper {
 
         } catch (Exception e) {
             logger.ERROR("IScreenCapper => XBMC connection error: " + e.getMessage());
-            e.printStackTrace();
+            //e.printStackTrace();
 
             socketCleanup();
-
             return null;
         }
     }
@@ -173,7 +169,7 @@ public class XbmcScreenCapper implements IScreenCapper {
             client = null;
             server = null;
         } catch (Exception e) {
-            //TODO: Log
+            logger.ERROR("IScreenCapper => Error during socket cleanup => " + e.getMessage());
         }
     }
 
