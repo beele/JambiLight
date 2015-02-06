@@ -101,7 +101,6 @@ while LIVE:
             connectToSocket()
         elif CONNECT is True and CONNECTED is True:
             sendData()
-            #SOCK.recv(1024)
         elif CONNECT is False and CONNECTED is True:
             closeSocket()
 

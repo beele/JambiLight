@@ -89,12 +89,12 @@ public class XbmcScreenCapper implements IScreenCapper {
                 if (r > 0) {
                     read += r;
                 }
+
+                //Attempt to write to the socket, if this fails, the socket has most likely been closed from the python side!
+                out.write(0);
+                out.flush();
                 Thread.sleep(1);
             }
-
-            //No more bytes to receive, send keep alive signal.
-            out.write(1337);
-            out.flush();
 
             //Process and return the data we received.
             processData();
@@ -102,10 +102,12 @@ public class XbmcScreenCapper implements IScreenCapper {
 
         } catch (Exception e) {
             logger.ERROR("IScreenCapper => XBMC connection error: " + e.getMessage());
+            logger.INFO("IScreenCapper => XBMC logic will be reset!");
             //e.printStackTrace();
 
             socketCleanup();
-            return null;
+            initDone = false;
+            return staticPixels;
         }
     }
 
