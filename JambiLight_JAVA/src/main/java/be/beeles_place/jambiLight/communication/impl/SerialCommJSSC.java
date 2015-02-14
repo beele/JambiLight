@@ -35,7 +35,7 @@ public class SerialCommJSSC extends AbstractSerialCommStrategy {
 
             port = new SerialPort(portName);
             port.openPort();
-            port.setParams( 100000,
+            port.setParams( 115200,
                     SerialPort.DATABITS_8,
                     SerialPort.STOPBITS_1,
                     SerialPort.PARITY_NONE);
@@ -52,7 +52,7 @@ public class SerialCommJSSC extends AbstractSerialCommStrategy {
             canSendNext = true;
 
         } catch (Exception e) {
-            logger.ERROR("COMM => Cannot open com port with name: " + portName);
+            logger.ERROR("COMM => Cannot open comport with name: " + portName);
         }
     }
 
@@ -79,17 +79,16 @@ public class SerialCommJSSC extends AbstractSerialCommStrategy {
             }
 
             if(port.getInputBufferBytesCount() > 0) {
-                logger.DEBUG("COMM => Arduino answered!");
-                //When the magic continue number has been received from the Arduino!
+                //When the magic continue number has been received from the arduino!
                 if(port.readIntArray(1)[0] == 50) {
                     port.purgePort(SerialPort.PURGE_TXCLEAR);
                     port.purgePort(SerialPort.PURGE_RXCLEAR);
                     canSendNext = true;
-                    logger.DEBUG("COMM => Can send new colors to Arduino!");
+                    //logger.DEBUG("COMM => New colors to send!");
                 }
             } else if(canSendNext == false) {
-                //As long as nu input has been received from the Arduino sleep for 1ms.
-                logger.DEBUG("COMM => No new colors to send!");
+                //As long as nu input has been received from the arduino sleep for 1ms.
+                //logger.DEBUG("COMM => No new colors to send!");
                 Thread.sleep(1);
                 return;
             }
@@ -97,12 +96,12 @@ public class SerialCommJSSC extends AbstractSerialCommStrategy {
             if(canSendNext) {
                 if(currentStep >= steps || colors == null) {
                     if(model.areNewColorsForCommAvailable()) {
-                        //New colors are available and we can send the next series of colors to the Arduino.
+                        //New colors are available and we can send the next series of colors to the arduino.
                         //Get the new colors and reset the currentStep counter.
                         colors = model.getCurrentColorsForComm();
                         currentStep = 0;
                     } else {
-                        //No new colors are available to be transmitted to the Arduino.
+                        //No new colors are available to be transmitted to the arduino.
                         //Save cpu time by not letting this run without a small sleep!
                         Thread.sleep(5);
                         return;
