@@ -1,11 +1,11 @@
 package be.beeles_place.jambiLight.controllers;
 
 import be.beeles_place.jambiLight.communication.CommunicationStrategy;
-import be.beeles_place.jambiLight.events.*;
+import be.beeles_place.jambiLight.utils.commanding.events.*;
 import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.modes.ColorStrategy;
-import be.beeles_place.jambiLight.utils.EventbusWrapper;
+import be.beeles_place.jambiLight.utils.commanding.EventbusWrapper;
 import be.beeles_place.jambiLight.utils.SettingsLoader;
 import be.beeles_place.jambiLight.utils.StageFactory;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;

@@ -1,13 +1,13 @@
 package be.beeles_place.jambiLight.view;
 
-import be.beeles_place.jambiLight.events.ConnectoArduinoEvent;
-import be.beeles_place.jambiLight.events.SettingsUpdatedEvent;
-import be.beeles_place.jambiLight.events.UpdateUserInterfaceEvent;
-import be.beeles_place.jambiLight.events.VisualDebugEvent;
+import be.beeles_place.jambiLight.utils.commanding.events.ConnectoArduinoEvent;
+import be.beeles_place.jambiLight.utils.commanding.events.SettingsUpdatedEvent;
+import be.beeles_place.jambiLight.utils.commanding.events.UpdateUserInterfaceEvent;
+import be.beeles_place.jambiLight.utils.commanding.events.VisualDebugEvent;
 import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.utils.ArduinoCode;
-import be.beeles_place.jambiLight.utils.EventbusWrapper;
+import be.beeles_place.jambiLight.utils.commanding.EventbusWrapper;
 import be.beeles_place.jambiLight.utils.StageFactory;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.utils.screenCapture.DirectShowEnumerator;
@@ -34,9 +34,7 @@ import org.controlsfx.dialog.Dialogs;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 import java.util.List;

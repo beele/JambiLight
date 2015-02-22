@@ -1,11 +1,11 @@
 package be.beeles_place.jambiLight.view.old;
 
-import be.beeles_place.jambiLight.events.SettingsUpdatedEvent;
-import be.beeles_place.jambiLight.events.ShutdownEvent;
-import be.beeles_place.jambiLight.events.VisualDebugEvent;
+import be.beeles_place.jambiLight.utils.commanding.events.SettingsUpdatedEvent;
+import be.beeles_place.jambiLight.utils.commanding.events.ShutdownEvent;
+import be.beeles_place.jambiLight.utils.commanding.events.VisualDebugEvent;
 import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.model.SettingsModel;
-import be.beeles_place.jambiLight.utils.EventbusWrapper;
+import be.beeles_place.jambiLight.utils.commanding.EventbusWrapper;
 import be.beeles_place.jambiLight.utils.screenCapture.ScreenCapperStrategy;
 import com.google.common.eventbus.EventBus;
 import javafx.collections.FXCollections;

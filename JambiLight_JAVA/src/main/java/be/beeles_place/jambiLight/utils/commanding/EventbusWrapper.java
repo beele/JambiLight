@@ -1,4 +1,4 @@
-package be.beeles_place.jambiLight.utils;
+package be.beeles_place.jambiLight.utils.commanding;
 
 import com.google.common.eventbus.EventBus;
 
