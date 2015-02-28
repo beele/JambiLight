@@ -8,6 +8,7 @@ import be.beeles_place.jambiLight.utils.commanding.events.BaseEvent;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,6 +90,7 @@ public class CommandMapper {
         eventBus = EventbusWrapper.getInstance();
         eventBus.register(this);
         commandMap = new HashMap<>();
+        persistentCommands = new ArrayList<>();
     }
 
     /**
@@ -167,6 +169,13 @@ public class CommandMapper {
             if (eventClass.equals(event.getClass())) {
                 Class commandClass = commandMap.get(eventClass);
                 ICommand command;
+
+                if(commandClass != null) {
+                    System.out.println("Command for event found => " + commandClass.toString());
+                } else {
+                    System.out.println("No matching command found!");
+                    return;
+                }
 
                 try {
                     //If the commandClass has a superclass it means it extends from the PersistentCommand!
