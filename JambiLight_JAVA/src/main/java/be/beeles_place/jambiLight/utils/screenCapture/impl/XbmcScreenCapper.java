@@ -123,6 +123,7 @@ public class XbmcScreenCapper implements IScreenCapper {
         logger.INFO("IScreenCapper => Waiting for XBMC connection on port " + port + "!");
         //This call is blocking and stops code execution until the connection has been made!
         client = server.accept();
+        client.setSendBufferSize(1);
         logger.INFO("IScreenCapper => XBMC client connected on port " + port + "!");
 
         //Get the inputstream.

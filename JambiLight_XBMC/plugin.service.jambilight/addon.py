@@ -79,6 +79,7 @@ def sendData():
     if CAPT.getCaptureState() == xbmc.CAPTURE_STATE_DONE:
         # Get frame data and send it.
         pixels = CAPT.getImage()
+        SOCK.recv(1024)
         SOCK.send(pixels)
 
 
