@@ -48,7 +48,7 @@ public class ArduinoCode {
             "\n" +
             "void setup() {\n" +
             "    //Start serial communication.\n" +
-            "    Serial.begin(100000);\n" +
+            "    Serial.begin(115200);\n" +
             "  \n" +
             "    //Start up the LED strip\n" +
             "    strip.begin();\n" +
