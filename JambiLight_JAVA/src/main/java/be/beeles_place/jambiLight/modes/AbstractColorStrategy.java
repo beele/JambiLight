@@ -34,7 +34,7 @@ public abstract class AbstractColorStrategy implements IColorMode, Runnable {
             try {
                 start();
             } catch (Exception e) {
-                logger.ERROR("MODE => Unexpected error! => " + e.getMessage());
+                logger.ERROR("MODE => Unexpected error! => " + e.toString());
                 stop();
             }
         }

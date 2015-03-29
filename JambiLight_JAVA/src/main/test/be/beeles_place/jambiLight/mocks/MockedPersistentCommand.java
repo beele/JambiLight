@@ -1,4 +1,4 @@
-package be.beeles_place.jambiLight;
+package be.beeles_place.jambiLight.mocks;
 
 import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.model.SettingsModel;

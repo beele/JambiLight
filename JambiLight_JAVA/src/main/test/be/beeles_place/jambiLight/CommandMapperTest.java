@@ -1,5 +1,8 @@
 package be.beeles_place.jambiLight;
 
+import be.beeles_place.jambiLight.mocks.MockedCommand;
+import be.beeles_place.jambiLight.mocks.MockedPayload;
+import be.beeles_place.jambiLight.mocks.MockedPersistentCommand;
 import be.beeles_place.jambiLight.utils.commanding.CommandMapper;
 import be.beeles_place.jambiLight.utils.commanding.CommandMapperException;
 import be.beeles_place.jambiLight.utils.commanding.commands.ICommand;

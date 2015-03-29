@@ -86,11 +86,21 @@ public class AmbiLightCore {
 
         //Make a screen capture.
         //Disabling aero themes in windows can easily double or triple performance!
-        int[] pixels = capper.capture();
+        final int[] pixels = capper.capture();
+
+        logger.DEBUG("Pixel capture took: " + (new Date().getTime() - startTime));
+
         checkDimensionsAndRegionSize();
+
+        logger.DEBUG("Dimension check took: " + (new Date().getTime() - startTime));
+
+        //TODO: Only set raw image data when the debug view is open!
         model.setRawImageData(pixels.clone());
 
-        /*for (int i = 0; i < pixels.length; i += stepSize) {
+        logger.DEBUG("Raw clone took: " + (new Date().getTime() - startTime));
+
+        //TODO: Multi threading?
+        for (int i = 0; i < pixels.length; i += stepSize) {
             //The pixels in the image are in one long array, we need to get the x and y values of the pixel.
             y = (i / width);        //This is the row the pixel is at.
             x = i - (y * width);    //This is the column the pixel is at.
@@ -99,23 +109,16 @@ public class AmbiLightCore {
             regionX = (int) (x / regionWidth);
             regionY = (int) (y / regionHeight);
 
-            tempPixelValue = pixels[i];
+            int tempPixelValue = pixels[i];
             //Add the R/G/B to the current region.
             int[] colors = regions[regionX][regionY];
             colors[0] += (tempPixelValue >>> 16) & 0xFF;
             colors[1] += (tempPixelValue >>> 8) & 0xFF;
             colors[2] += tempPixelValue & 0xFF;
             colors[3] += 1;
-        }*/
-
-        int redactedLength = pixels.length / 4;
-        int offset = redactedLength - 1;
-        for (int i = 0; i < redactedLength; i += stepSize) {
-            pixelCalc(regions, i, pixels[i]);
-            pixelCalc(regions, i + offset, pixels[i + offset]);
-            pixelCalc(regions, i + offset * 2, pixels[i + offset * 2]);
-            pixelCalc(regions, i + offset * 3, pixels[i + offset * 3]);
         }
+
+        logger.DEBUG("Pixel calc took: " + (new Date().getTime() - startTime));
 
         //Go over all the regions and calculate the average color.
         for (int m = 0; m < verticalRegionSize; m++) {
@@ -135,12 +138,12 @@ public class AmbiLightCore {
             }
         }
 
+        logger.DEBUG("Averaging regions took: " + (new Date().getTime() - startTime));
+
         //Set the consolidated regions with colors on the model.
         int[][] cRegions = consolidator.consolidateRegions(regions);
         //Correct the intensity if enabled.
-        if(doCorrection) {
-            cRegions = corrector.correctIntensity(cRegions);
-        }
+        cRegions = doCorrection ? corrector.correctIntensity(cRegions) : cRegions;
         model.setCurrentColors(cRegions);
 
         //It's all about tai-ming (not the vases)
@@ -150,26 +153,6 @@ public class AmbiLightCore {
 
         //Everything has been updated!
         model.publishModelUpdate();
-        
-        cRegions = null;
-        pixels = null;
-    }
-
-    private void pixelCalc(int[][][] regions, int i, int pixel) {
-        //The pixels in the image are in one long array, we need to get the x and y values of the pixel.
-        y = (i / width);        //This is the row the pixel is at.
-        x = i - (y * width);    //This is the column the pixel is at.
-
-        //Calculate the correct region for the given x and y coordinate.
-        regionX = (int) (x / regionWidth);
-        regionY = (int) (y / regionHeight);
-
-        //Add the R/G/B to the current region.
-        int[] colors = regions[regionX][regionY];
-        colors[0] += (pixel >>> 16) & 0xFF;
-        colors[1] += (pixel >>> 8) & 0xFF;
-        colors[2] += pixel & 0xFF;
-        colors[3] += 1;
     }
 
     /**

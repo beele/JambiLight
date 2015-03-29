@@ -1,4 +1,4 @@
-package be.beeles_place.jambiLight;
+package be.beeles_place.jambiLight.mocks;
 
 public class MockedPayload {
 
