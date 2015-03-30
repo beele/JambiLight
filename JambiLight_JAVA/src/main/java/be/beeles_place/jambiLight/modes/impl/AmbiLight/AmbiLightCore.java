@@ -38,6 +38,9 @@ public class AmbiLightCore {
     private int x, y;
     private int regionX, regionY;
 
+    int britThreshold = 30;
+    float factor = 0.5f;
+
     /**
      * Creates a new AmbiLightCore instance.
      *
@@ -100,6 +103,7 @@ public class AmbiLightCore {
         logger.DEBUG("Raw clone took: " + (new Date().getTime() - startTime));
 
         //TODO: Multi threading?
+        //TODO: Next to the actual screen capture itself, this is the slowest part of the ambilight core logic!
         for (int i = 0; i < pixels.length; i += stepSize) {
             //The pixels in the image are in one long array, we need to get the x and y values of the pixel.
             y = (i / width);        //This is the row the pixel is at.
@@ -144,6 +148,40 @@ public class AmbiLightCore {
         int[][] cRegions = consolidator.consolidateRegions(regions);
         //Correct the intensity if enabled.
         cRegions = doCorrection ? corrector.correctIntensity(cRegions) : cRegions;
+
+
+        //TODO: TESTING
+        if(model.getPreviousColors() != null) {
+            int prevBrit = calculateTotalBrightness(model.getPreviousColors());
+            int currBrit = calculateTotalBrightness(cRegions);
+
+            int diff = currBrit - prevBrit;
+
+            //Calculate intermediary colors only in the difference between the two frames is too big.
+            //TODO: Enable/disable by setting.
+            if(diff > britThreshold || diff < -britThreshold) {
+                float antiFactor = 1 - factor;
+
+                for(int i = 0 ; i < cRegions.length ; i++) {
+                    int[] currentColors = cRegions[i];
+                    int[] prevColors = model.getPreviousColors()[i];
+
+                    currentColors[0] = (int)(prevColors[0] * antiFactor + currentColors[0] * factor);
+                    currentColors[1] = (int)(prevColors[1] * antiFactor + currentColors[1] * factor);
+                    currentColors[2] = (int)(prevColors[2] * antiFactor + currentColors[2] * factor);
+
+                    cRegions[i] = currentColors;
+                }
+
+                model.setPreviousColors(cRegions);
+                //TODO: Make sure colors are sent to the rest of the application!
+            }
+        } else {
+            model.setPreviousColors(cRegions);
+        }
+
+        logger.DEBUG("Interpolating colors took: " + (new Date().getTime() - startTime));
+
         model.setCurrentColors(cRegions);
 
         //It's all about tai-ming (not the vases)
@@ -153,6 +191,19 @@ public class AmbiLightCore {
 
         //Everything has been updated!
         model.publishModelUpdate();
+    }
+
+    public int calculateTotalBrightness(int[][] consolidatedRegions) {
+        int totalBrightness = 0;
+
+        for(int i = 0; i < consolidatedRegions.length ; i++) {
+            int[] colors = consolidatedRegions[i];
+            //Perceived brightness is not just adding R/G/B components!
+            int brightness = (int)Math.sqrt(0.241 * Math.pow(colors[0], 2) + 0.691 * Math.pow(colors[1], 2) + 0.068 * Math.pow(colors[2], 2));
+            totalBrightness += brightness;
+        }
+
+        return totalBrightness / consolidatedRegions.length;
     }
 
     /**

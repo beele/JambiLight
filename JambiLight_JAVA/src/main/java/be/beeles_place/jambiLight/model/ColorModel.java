@@ -22,6 +22,7 @@ public class ColorModel {
     private int rawHeight;
 
     private int[][] currentColors;
+    private int[][] previousColors;
     private long actionDuration;
     private boolean colorsAreNew;
 
@@ -145,6 +146,14 @@ public class ColorModel {
     public void setCurrentColors(int[][] currentColors) {
         this.currentColors = currentColors;
         colorsAreNew = true;
+    }
+
+    public int[][] getPreviousColors() {
+        return previousColors;
+    }
+
+    public void setPreviousColors(int[][] previousColors) {
+        this.previousColors = previousColors;
     }
 
     public long getActionDuration() {
