@@ -1,17 +1,22 @@
 package be.beeles_place.jambiLight.view;
 
-import be.beeles_place.jambiLight.utils.commanding.events.ConnectoArduinoEvent;
-import be.beeles_place.jambiLight.utils.commanding.events.SettingsUpdatedEvent;
-import be.beeles_place.jambiLight.utils.commanding.events.UpdateUserInterfaceEvent;
-import be.beeles_place.jambiLight.utils.commanding.events.VisualDebugEvent;
+import be.beeles_place.jambiLight.commanding.CommandMapper;
+import be.beeles_place.jambiLight.commanding.events.impl.TabFourSaveEvent;
+import be.beeles_place.jambiLight.commanding.events.impl.TabOneSaveEvent;
+import be.beeles_place.jambiLight.commanding.events.impl.TabThreeSaveEvent;
+import be.beeles_place.jambiLight.commanding.events.impl.TabTwoSaveEvent;
+import be.beeles_place.jambiLight.commanding.events.ConnectoArduinoEvent;
+import be.beeles_place.jambiLight.commanding.events.SettingsUpdatedEvent;
+import be.beeles_place.jambiLight.commanding.events.UpdateUserInterfaceEvent;
+import be.beeles_place.jambiLight.commanding.events.VisualDebugEvent;
 import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.utils.ArduinoCode;
-import be.beeles_place.jambiLight.utils.commanding.EventbusWrapper;
+import be.beeles_place.jambiLight.commanding.EventbusWrapper;
 import be.beeles_place.jambiLight.utils.StageFactory;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
-import be.beeles_place.jambiLight.utils.screenCapture.DirectShowEnumerator;
-import be.beeles_place.jambiLight.utils.screenCapture.ScreenCapperStrategy;
+import be.beeles_place.jambiLight.modes.impl.AmbiLight.screenCapture.DirectShowEnumerator;
+import be.beeles_place.jambiLight.modes.impl.AmbiLight.screenCapture.ScreenCapperStrategy;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import javafx.collections.FXCollections;
@@ -174,92 +179,20 @@ public class MainViewController implements Initializable {
 
     @FXML
     void onTabOneSaveClicked(ActionEvent event) {
-        int verticalLeds = -1;
-        int horizontalLeds = -1;
-        int totalLeds = -1;
-
-        //TODO: What should be done when there are values already? This will block most of the logic below!
-
         try {
-            String total = T1_TXT_TotalLeds.getText();
-            String vertical = T1_TXT_VerticalLeds.getText();
-            String horizontal = T1_TXT_HorizontalLeds.getText();
+            TabOneSaveEvent evt = new TabOneSaveEvent();
+            evt.T1_TXT_VerticalLeds = T1_TXT_VerticalLeds;
+            evt.T1_TXT_HorizontalLeds = T1_TXT_HorizontalLeds;
+            evt.T1_TXT_TotalLeds = T1_TXT_TotalLeds;
+            evt.T1_SLD_VerticalMarg = T1_SLD_VerticalMarg;
+            evt.T1_SLD_HorizontalMarg = T1_SLD_HorizontalMarg;
 
-            if(total != null && !total.trim().isEmpty()) {
-                totalLeds = Integer.parseInt(total) + 4;
+            evt.setCallback(this::updateTabOne);
+            evt.setErrorCallback((errorMessage) -> showErrorMessage("Error saving settings!", errorMessage));
 
-                //Check for even number of LEDs
-                if(totalLeds % 2 != 0) {
-                    throw new Exception("The total number of LEDs should be even!");
-                }
-
-                //Check to see if either vertical or horizontal are filled.
-                if(vertical != null && !vertical.trim().isEmpty()) {
-                    verticalLeds = Integer.parseInt(vertical) * 2 + 4;
-                    horizontalLeds = totalLeds - verticalLeds;
-                }
-                if(horizontal != null && !horizontal.trim().isEmpty()) {
-                    horizontalLeds = Integer.parseInt(horizontal) * 2;
-                    verticalLeds = totalLeds - horizontalLeds;
-                }
-
-                if(verticalLeds == -1 && horizontalLeds == -1) {
-                    //Calculate the optimal H/V ratio for the LEDs based on total LEDs and screen resolution.
-                    double ratio = model.getScreenDimensions().getWidth() / model.getScreenDimensions().getHeight();
-
-                    if(ratio == 1f) {
-                        horizontalLeds = totalLeds / 2;
-                        verticalLeds = horizontalLeds;
-                    } else {
-                        horizontalLeds = (int)Math.floor(totalLeds * ratio / (1 + ratio));
-                        verticalLeds = totalLeds - horizontalLeds;
-                    }
-                }
-
-            } else {
-                //Check to see if both vertical and horizontal are filled.
-                if(vertical != null && !vertical.trim().isEmpty() && horizontal != null && !horizontal.trim().isEmpty()) {
-                    verticalLeds = Integer.parseInt(vertical) * 2 + 4;
-                    horizontalLeds = Integer.parseInt(horizontal) * 2;
-                    totalLeds = verticalLeds + horizontalLeds;
-
-                    //Check for even number of LEDs
-                    if((verticalLeds + horizontalLeds) % 2 != 0) {
-                        throw new Exception("The total number of LEDs should be even!");
-                    }
-
-                } else {
-                    throw new Exception("Either horizontal and vertical, total, or total and either horizontal and vertical must be filled!");
-                }
-            }
-
-            //Calculate the region sizes based on the number of LEDs
-            //Also correct for problematic uneven LED counts.
-            if(verticalLeds % 2 != 0 || horizontalLeds % 2 != 0) {
-                verticalLeds += 1;
-                horizontalLeds -= 1;
-            }
-
-            //TODO: Adjust these numbers! Test what is the actual minimum.
-            if(horizontalLeds < 5 || verticalLeds < 5 || totalLeds < 20) {
-                throw new Exception("Amount of LEDs is too small. At least 20 in total required!");
-            }
-
-            int verticalRegions = ((verticalLeds) / 2);
-            int horizontalRegions = (horizontalLeds / 2);
-
-            settings.setVerticalRegions(verticalRegions);
-            settings.setHorizontalRegions(horizontalRegions);
-            settings.setVerticalMargin((int)T1_SLD_VerticalMarg.getValue());
-            settings.setHorizontalMargin((int)T1_SLD_HorizontalMarg.getValue());
-
-            //Notify the application about the updated settings.
-            eventBus.post(new SettingsUpdatedEvent());
-            //Update the view.
-            updateTabOne();
-
+            CommandMapper.getInstance().dispatchEvent(evt);
         } catch (Exception e) {
-            showErrorMessage("Error saving settings!", e.getMessage());
+            showErrorMessage("General error", e.getMessage());
         }
     }
 
@@ -290,22 +223,16 @@ public class MainViewController implements Initializable {
     @FXML
     void onTabTwoSaveClicked(ActionEvent event) {
         try {
-            settings.setCaptureMode(T2_CMB_CaptureMode.getValue());
+            TabTwoSaveEvent evt = new TabTwoSaveEvent();
+            evt.T2_CMB_CaptureMode = T2_CMB_CaptureMode;
+            evt.T2_CMB_DirectShowDevices = T2_CMB_DirectShowDevices;
 
-            if(!T2_CMB_DirectShowDevices.disabledProperty().getValue()) {
-                String device = T2_CMB_DirectShowDevices.getValue();
-                if(device != null && !device.trim().isEmpty()) {
-                    settings.setDirectShowDeviceName(T2_CMB_DirectShowDevices.getValue());
-                } else {
-                    throw new Exception("Please select a device or a different capture mode!");
-                }
-            }
+            evt.setCallback(this::updateTabTwo);
+            evt.setErrorCallback((errorMessage) -> showErrorMessage("Error saving settings!", errorMessage));
 
-            //Update the view.
-            updateTabTwo();
-            eventBus.post(new SettingsUpdatedEvent());
+            CommandMapper.getInstance().dispatchEvent(evt);
         } catch (Exception e) {
-            showErrorMessage("Error saving settings!", e.getMessage());
+            showErrorMessage("General error", e.getMessage());
         }
     }
 
@@ -315,6 +242,10 @@ public class MainViewController implements Initializable {
     private CheckBox T3_CHK_Weighing;
     @FXML
     private Slider T3_SLD_WeighFactor;
+    @FXML
+    private CheckBox T3_CHK_Interpolation;
+    @FXML
+    private Slider T3_SLD_Interpolation;
     
     private void updateTabThree() {
         T3_SLD_PixelStepSize.setValue(settings.getPixelIteratorStepSize());
@@ -322,21 +253,31 @@ public class MainViewController implements Initializable {
         T3_CHK_Weighing.setSelected(settings.isWeighColor());
         T3_SLD_WeighFactor.setValue(settings.getWeighFactor());
 
+        T3_CHK_Interpolation.setSelected(settings.isInterpolated());
+        T3_SLD_Interpolation.setValue(settings.getInterpolation());
+
         //Bindings to disable parts of the UI if required.
         T3_SLD_WeighFactor.disableProperty().bind(T3_CHK_Weighing.selectedProperty().not());
+        T3_SLD_Interpolation.disableProperty().bind(T3_CHK_Interpolation.selectedProperty().not());
     }
 
     @FXML
     void onTabThreeSaveClicked(ActionEvent event) {
-        int weighFactor = ((int) T3_SLD_WeighFactor.getValue());
+        try {
+            TabThreeSaveEvent evt = new TabThreeSaveEvent();
+            evt.T3_SLD_PixelStepSize = T3_SLD_PixelStepSize;
+            evt.T3_CHK_Weighing = T3_CHK_Weighing;
+            evt.T3_SLD_WeighFactor = T3_SLD_WeighFactor;
+            evt.T3_CHK_Interpolation = T3_CHK_Interpolation;
+            evt.T3_SLD_Interpolation = T3_SLD_Interpolation;
 
-        //Only save settings when no errors have occurred!
-        settings.setWeighColor(T3_CHK_Weighing.selectedProperty().getValue());
-        settings.setWeighFactor(weighFactor);
+            evt.setCallback(this::updateTabThree);
+            evt.setErrorCallback((errorMessage) -> showErrorMessage("Error saving settings!", errorMessage));
 
-        //Update the view.
-        updateTabThree();
-        eventBus.post(new SettingsUpdatedEvent());
+            CommandMapper.getInstance().dispatchEvent(evt);
+        } catch (Exception e) {
+            showErrorMessage("General error", e.getMessage());
+        }
     }
 
     @FXML
@@ -389,62 +330,25 @@ public class MainViewController implements Initializable {
     @FXML
     void onTabFourSaveClicked(ActionEvent event) {
         try {
-            //Only update when enabled!
-            if(T4_CHK_EnhanceColors.isSelected()) {
-                float enhanceValue = Float.parseFloat(T4_TXT_EnhancementValue.getText());
+            TabFourSaveEvent evt = new TabFourSaveEvent();
+            evt.T4_CHK_EnhanceColors = T4_CHK_EnhanceColors;
+            evt.T4_TXT_EnhancementValue = T4_TXT_EnhancementValue;
+            evt.T4_CHK_EnhancePerChannel = T4_CHK_EnhancePerChannel;
+            evt.T4_TXT_ChannelRed = T4_TXT_ChannelRed;
+            evt.T4_TXT_ChannelGreen = T4_TXT_ChannelGreen;
+            evt.T4_TXT_ChannelBlue = T4_TXT_ChannelBlue;
+            evt.T4_CHK_CorrectIntensity = T4_CHK_CorrectIntensity;
+            evt.T4_TXT_GreyThreshold = T4_TXT_GreyThreshold;
+            evt.T4_TXT_ScaleUp = T4_TXT_ScaleUp;
+            evt.T4_TXT_ScaleDown = T4_TXT_ScaleDown;
 
-                if(enhanceValue < 1f || enhanceValue > 10f) {
-                    throw new Exception("Color enhance value should be in range of [1 , 10]");
-                }
+            evt.setCallback(this::updateTabFour);
+            evt.setErrorCallback((errorMessage) -> showErrorMessage("Error saving settings!", errorMessage));
 
-                settings.setEnhanceValue(enhanceValue);
-
-                if(T4_CHK_EnhancePerChannel.isSelected()) {
-                    float enhanceValueR = Float.parseFloat(T4_TXT_ChannelRed.getText());
-                    float enhanceValueG = Float.parseFloat(T4_TXT_ChannelGreen.getText());
-                    float enhanceValueB = Float.parseFloat(T4_TXT_ChannelBlue.getText());
-
-                    if(enhanceValueR < 0f || enhanceValueR > 10f) {
-                        throw new Exception("Red enhancement value should be in range of [0, 10]");
-                    }
-                    if(enhanceValueG < 0f || enhanceValueG > 10f) {
-                        throw new Exception("Red enhancement value should be in range of [0, 10]");
-                    }
-                    if(enhanceValueB < 0f || enhanceValueB > 10f) {
-                        throw new Exception("Red enhancement value should be in range of [0, 10]");
-                    }
-
-                    settings.setEnhanceValueR(enhanceValueR);
-                    settings.setEnhanceValueG(enhanceValueG);
-                    settings.setEnhanceValueB(enhanceValueB);
-                }
-            }
-            settings.setEnhanceColor(T4_CHK_EnhanceColors.isSelected());
-            settings.setEnhancePerChannel(T4_CHK_EnhancePerChannel.isSelected());
-
-            //Only update when enabled!
-            if(T4_CHK_CorrectIntensity.isSelected()) {
-                int gThreshold = Integer.parseInt(T4_TXT_GreyThreshold.getText());
-                float scaleUp = Float.parseFloat(T4_TXT_ScaleUp.getText());
-                float scaleDown = Float.parseFloat(T4_TXT_ScaleDown.getText());
-
-                if(gThreshold < 0 || scaleUp < 0 || scaleDown < 0) {
-                    throw new Exception("Threshold, scale-up and scale-down should be greater than 0!");
-                }
-
-                settings.setGreyDetectionThreshold(gThreshold);
-                settings.setScaleUpValue(scaleUp);
-                settings.setScaleDownValue(scaleDown);
-            }
-            settings.setCorrectIntensity(T4_CHK_CorrectIntensity.isSelected());
+            CommandMapper.getInstance().dispatchEvent(evt);
         } catch (Exception e) {
-            showErrorMessage("Cannot save settings!", e.getMessage());
-            return;
+            showErrorMessage("General error", e.getMessage());
         }
-
-        //Update the view.
-        updateTabFour();
-        eventBus.post(new SettingsUpdatedEvent());
     }
 
     @FXML

@@ -1,7 +1,7 @@
 package be.beeles_place.jambiLight;
 
 import be.beeles_place.jambiLight.model.SettingsModel;
-import be.beeles_place.jambiLight.utils.colorTools.RegionConsolidator;
+import be.beeles_place.jambiLight.modes.impl.AmbiLight.colorTools.RegionConsolidator;
 import org.junit.Before;
 import org.junit.Test;
 

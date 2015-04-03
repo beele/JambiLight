@@ -210,6 +210,12 @@
                               <Label text="Pixel stepping size:" underline="true" />
                               <Slider fx:id="T3_SLD_PixelStepSize" blockIncrement="1.0" majorTickUnit="2.0" max="10.0" minorTickCount="1" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
                               <Label text="The higer the pixel stepping value the less data is taken into account during the calculations." wrapText="true" />
+                              <Region maxHeight="20.0" minHeight="20.0" prefHeight="20.0" VBox.vgrow="NEVER" />
+                              <Label text="Interpolation:" underline="true" />
+                              <CheckBox fx:id="T3_CHK_Interpolation" mnemonicParsing="false" text="Enable interpolation" />
+                              <Slider fx:id="T3_SLD_Interpolation" blockIncrement="0.1" majorTickUnit="0.2" max="0.9" min="0.1" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+                              <Label text="Interpolation enables the system to blend between old and new frames over a time. This makes the ambilight effect easier on the eyes." wrapText="true" />
+                              <Label text="A lower value will display changes more quickly and do less blending over time. A high value will blend over several frames, this will also flatten out high intensity light changes." textAlignment="JUSTIFY" wrapText="true" />
                            </children>
                            <padding>
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

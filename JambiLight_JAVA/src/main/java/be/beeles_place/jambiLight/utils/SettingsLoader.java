@@ -2,7 +2,7 @@ package be.beeles_place.jambiLight.utils;
 
 import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
-import be.beeles_place.jambiLight.utils.screenCapture.ScreenCapperStrategy;
+import be.beeles_place.jambiLight.modes.impl.AmbiLight.screenCapture.ScreenCapperStrategy;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -80,6 +80,10 @@ public class SettingsLoader {
             //Colors should be weighed, as it gives a much nicer result.
             settings.setWeighColor(true);
             settings.setWeighFactor(2);
+
+            //Interpolation should be enabled by default.
+            settings.setInterpolated(true);
+            settings.setInterpolation(0.5f);
 
             //Intensity correction is enabled by default.
             settings.setCorrectIntensity(true);

@@ -1,8 +1,8 @@
 package be.beeles_place.jambiLight;
 
 import be.beeles_place.jambiLight.controllers.ApplicationController;
-import be.beeles_place.jambiLight.utils.commanding.events.ShutdownEvent;
-import be.beeles_place.jambiLight.utils.commanding.EventbusWrapper;
+import be.beeles_place.jambiLight.commanding.events.ShutdownEvent;
+import be.beeles_place.jambiLight.commanding.EventbusWrapper;
 import be.beeles_place.jambiLight.utils.StageFactory;
 import be.beeles_place.jambiLight.view.MainViewController;
 import com.google.common.eventbus.EventBus;

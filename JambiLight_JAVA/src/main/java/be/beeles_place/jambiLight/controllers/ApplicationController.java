@@ -1,11 +1,21 @@
 package be.beeles_place.jambiLight.controllers;
 
+import be.beeles_place.jambiLight.commanding.CommandMapper;
+import be.beeles_place.jambiLight.commanding.CommandMapperException;
+import be.beeles_place.jambiLight.commanding.commands.impl.TabFourSaveCommand;
+import be.beeles_place.jambiLight.commanding.commands.impl.TabOneSaveCommand;
+import be.beeles_place.jambiLight.commanding.commands.impl.TabThreeSaveCommand;
+import be.beeles_place.jambiLight.commanding.commands.impl.TabTwoSaveCommand;
+import be.beeles_place.jambiLight.commanding.events.impl.TabFourSaveEvent;
+import be.beeles_place.jambiLight.commanding.events.impl.TabOneSaveEvent;
+import be.beeles_place.jambiLight.commanding.events.impl.TabThreeSaveEvent;
+import be.beeles_place.jambiLight.commanding.events.impl.TabTwoSaveEvent;
 import be.beeles_place.jambiLight.communication.CommunicationStrategy;
-import be.beeles_place.jambiLight.utils.commanding.events.*;
+import be.beeles_place.jambiLight.commanding.events.*;
 import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.modes.ColorStrategy;
-import be.beeles_place.jambiLight.utils.commanding.EventbusWrapper;
+import be.beeles_place.jambiLight.commanding.EventbusWrapper;
 import be.beeles_place.jambiLight.utils.SettingsLoader;
 import be.beeles_place.jambiLight.utils.StageFactory;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
@@ -136,6 +146,8 @@ public class ApplicationController {
             model.setScreenDimensions(new Dimension(720, 480));
         }
 
+        mapCommands();
+
         //Create and set up the communication controller.
         serialCommunicator = new CommunicationController(model, settings);
         serialCommunicator.init(CommunicationStrategy.JSSC, false);
@@ -144,6 +156,20 @@ public class ApplicationController {
         //Create and set up the color controller.
         colorController = new ColorController(settings, model);
         colorController.startColorStrategy(ColorStrategy.AMBILIGHT);
+    }
+
+    private void mapCommands() {
+        try {
+            CommandMapper mapper = CommandMapper.init(settings, model);
+            mapper.mapCommand(TabOneSaveCommand.class, TabOneSaveEvent.class);
+            mapper.mapCommand(TabTwoSaveCommand.class, TabTwoSaveEvent.class);
+            mapper.mapCommand(TabThreeSaveCommand.class, TabThreeSaveEvent.class);
+            mapper.mapCommand(TabFourSaveCommand.class, TabFourSaveEvent.class);
+
+        } catch (CommandMapperException e) {
+            logger.ERROR("ERROR => Cannot map commands correctly!");
+            shutdown();
+        }
     }
 
     /**
@@ -198,7 +224,6 @@ public class ApplicationController {
         if(enableUI) {
             //Signal UI for update!
             Platform.runLater(() -> {
-                //TODO: Maybe use a queue for the raw input view? Right now anything above 720P causes extreme lag!
                 if(debugViewController != null) {
                     debugViewController.paint();
                 }

@@ -3,8 +3,8 @@ package be.beeles_place.jambiLight.modes.impl.AmbiLight;
 import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.modes.AbstractColorStrategy;
-import be.beeles_place.jambiLight.utils.screenCapture.IScreenCapper;
-import be.beeles_place.jambiLight.utils.screenCapture.ScreenCapperStrategy;
+import be.beeles_place.jambiLight.modes.impl.AmbiLight.screenCapture.IScreenCapper;
+import be.beeles_place.jambiLight.modes.impl.AmbiLight.screenCapture.ScreenCapperStrategy;
 
 import java.awt.*;
 

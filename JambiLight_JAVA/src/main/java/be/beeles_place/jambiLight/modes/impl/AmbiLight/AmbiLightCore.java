@@ -2,11 +2,11 @@ package be.beeles_place.jambiLight.modes.impl.AmbiLight;
 
 import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.model.SettingsModel;
-import be.beeles_place.jambiLight.utils.colorTools.ColorEnhancer;
-import be.beeles_place.jambiLight.utils.colorTools.IntensityCorrector;
-import be.beeles_place.jambiLight.utils.colorTools.RegionConsolidator;
+import be.beeles_place.jambiLight.modes.impl.AmbiLight.colorTools.ColorEnhancer;
+import be.beeles_place.jambiLight.modes.impl.AmbiLight.colorTools.IntensityCorrector;
+import be.beeles_place.jambiLight.modes.impl.AmbiLight.colorTools.RegionConsolidator;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
-import be.beeles_place.jambiLight.utils.screenCapture.IScreenCapper;
+import be.beeles_place.jambiLight.modes.impl.AmbiLight.screenCapture.IScreenCapper;
 
 import java.awt.*;
 import java.util.Date;
@@ -38,8 +38,9 @@ public class AmbiLightCore {
     private int x, y;
     private int regionX, regionY;
 
-    int britThreshold = 30;
-    float factor = 0.5f;
+    private boolean doInterpolation;
+    private float factor;
+    private float antiFactor;
 
     /**
      * Creates a new AmbiLightCore instance.
@@ -67,6 +68,11 @@ public class AmbiLightCore {
         enhancer = new ColorEnhancer(settings);
         corrector = new IntensityCorrector(settings);
         consolidator = new RegionConsolidator(settings);
+
+        //Calculate antiFactor for interpolation.
+        doInterpolation = settings.isInterpolated();
+        factor = settings.getInterpolation();
+        antiFactor = 1 - factor;
 
         //Get the logger instance only once.
         logger = LOGGER.getInstance();
@@ -149,36 +155,20 @@ public class AmbiLightCore {
         //Correct the intensity if enabled.
         cRegions = doCorrection ? corrector.correctIntensity(cRegions) : cRegions;
 
+        if(doInterpolation && model.getPreviousColors() != null) {
+            for(int i = 0 ; i < cRegions.length ; i++) {
+                int[] currentColors = cRegions[i];
+                int[] prevColors = model.getPreviousColors()[i];
 
-        //TODO: TESTING
-        if(model.getPreviousColors() != null) {
-            int prevBrit = calculateTotalBrightness(model.getPreviousColors());
-            int currBrit = calculateTotalBrightness(cRegions);
+                currentColors[0] = (int)(prevColors[0] * antiFactor + currentColors[0] * factor);
+                currentColors[1] = (int)(prevColors[1] * antiFactor + currentColors[1] * factor);
+                currentColors[2] = (int)(prevColors[2] * antiFactor + currentColors[2] * factor);
 
-            int diff = currBrit - prevBrit;
-
-            //Calculate intermediary colors only in the difference between the two frames is too big.
-            //TODO: Enable/disable by setting.
-            if(diff > britThreshold || diff < -britThreshold) {
-                float antiFactor = 1 - factor;
-
-                for(int i = 0 ; i < cRegions.length ; i++) {
-                    int[] currentColors = cRegions[i];
-                    int[] prevColors = model.getPreviousColors()[i];
-
-                    currentColors[0] = (int)(prevColors[0] * antiFactor + currentColors[0] * factor);
-                    currentColors[1] = (int)(prevColors[1] * antiFactor + currentColors[1] * factor);
-                    currentColors[2] = (int)(prevColors[2] * antiFactor + currentColors[2] * factor);
-
-                    cRegions[i] = currentColors;
-                }
-
-                model.setPreviousColors(cRegions);
-                //TODO: Make sure colors are sent to the rest of the application!
+                cRegions[i] = currentColors;
             }
-        } else {
-            model.setPreviousColors(cRegions);
         }
+
+        model.setPreviousColors(cRegions);
 
         logger.DEBUG("Interpolating colors took: " + (new Date().getTime() - startTime));
 
@@ -191,19 +181,6 @@ public class AmbiLightCore {
 
         //Everything has been updated!
         model.publishModelUpdate();
-    }
-
-    public int calculateTotalBrightness(int[][] consolidatedRegions) {
-        int totalBrightness = 0;
-
-        for(int i = 0; i < consolidatedRegions.length ; i++) {
-            int[] colors = consolidatedRegions[i];
-            //Perceived brightness is not just adding R/G/B components!
-            int brightness = (int)Math.sqrt(0.241 * Math.pow(colors[0], 2) + 0.691 * Math.pow(colors[1], 2) + 0.068 * Math.pow(colors[2], 2));
-            totalBrightness += brightness;
-        }
-
-        return totalBrightness / consolidatedRegions.length;
     }
 
     /**

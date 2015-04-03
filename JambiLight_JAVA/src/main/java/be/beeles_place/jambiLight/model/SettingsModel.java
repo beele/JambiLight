@@ -1,6 +1,6 @@
 package be.beeles_place.jambiLight.model;
 
-import be.beeles_place.jambiLight.utils.screenCapture.ScreenCapperStrategy;
+import be.beeles_place.jambiLight.modes.impl.AmbiLight.screenCapture.ScreenCapperStrategy;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -31,8 +31,12 @@ public class SettingsModel {
     private float enhanceValueB;                    //Between 0.0f and MAX_FLOAT (please lower than 10.0f).
 
     //Region consolidation settings.
-    private boolean weighColor;                     //True or false
+    private boolean weighColor;                     //True or false.
     private int weighFactor;                        //Between 1 and 5.
+
+    //Interpolation settings.
+    private boolean isInterpolated;                 //True or false.
+    private float interpolation;                    //Between 0.1f and 0.9f.
 
     //Color correction settings.
     private boolean correctIntensity;               //True or false.
@@ -204,6 +208,32 @@ public class SettingsModel {
     @XmlElement
     public void setWeighFactor(int weighFactor) {
         this.weighFactor = weighFactor;
+    }
+
+    /**
+     * Value that is true when interpolation is enabled, false if not.
+     * @return true when interpolation is enabled, false if not.
+     */
+    public boolean isInterpolated() {
+        return isInterpolated;
+    }
+
+    @XmlElement
+    public void setInterpolated(boolean isInterpolated) {
+        this.isInterpolated = isInterpolated;
+    }
+
+    /**
+     * The value that is used to determine how fast the changes from old to new should haven with the interpolation.
+     * @return The value that is used to determine how fast the changes from old to new should haven with the interpolation.
+     */
+    public float getInterpolation() {
+        return interpolation;
+    }
+
+    @XmlElement
+    public void setInterpolation(float interpolation) {
+        this.interpolation = interpolation;
     }
 
     /**
