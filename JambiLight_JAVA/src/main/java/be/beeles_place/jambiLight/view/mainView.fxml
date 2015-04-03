@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.beeles_place.jambiLight.view.MainViewController">
+   <children>
+      <VBox alignment="CENTER" prefHeight="592.0" prefWidth="136.0" spacing="23.0" style="-fx-background-color: #808080;">
+         <children>
+            <Button id="btnSideScreen" fx:id="SIDE_BTN_Screen" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" onAction="#onSideButtonClicked" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
+            <Button id="btnSideMode" fx:id="SIDE_BTN_Function" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" onAction="#onSideButtonClicked" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
+            <Button id="btnSideSettings" fx:id="SIDE_BTN_Settings" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" onAction="#onSideButtonClicked" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
+            <Button id="btnSideAdvancedSettings" fx:id="SIDE_BTN_Advanced" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" onAction="#onSideButtonClicked" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
+            <Button id="btnSideArduino" fx:id="SIDE_BTN_Arduino" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" onAction="#onSideButtonClicked" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
+            <Button id="btnSideDebug" fx:id="SIDE_BTN_Debug" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" onAction="#onSideButtonClicked" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
+            <Button id="btnSideInfo" fx:id="SIDE_BTN_Info" maxHeight="60.0" maxWidth="100.0" minHeight="60.0" minWidth="100.0" mnemonicParsing="false" onAction="#onSideButtonClicked" prefHeight="60.0" prefWidth="100.0" styleClass="flatButton" stylesheets="@css/master.css" />
+         </children>
+      </VBox>
+      <Separator orientation="VERTICAL" prefHeight="200.0" style="-fx-background-color: #808080;" />
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+         <children>
+            <StackPane fx:id="STCK_TabContainer" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <BorderPane fx:id="T1_Screen" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
+                     <top>
+                        <HBox style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label text="Please set the correct amount of horizontal and vertical LEDs. Additionaly you can set a margin to remove black borders." HBox.hgrow="ALWAYS">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font></Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                     </top>
+                     <bottom>
+                        <HBox alignment="CENTER_LEFT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label text="Either fill: A) horizontal + vertical     B) total     C) total and either horizontal or vertical!" />
+                              <Region maxHeight="26.0" minHeight="26.0" prefHeight="26.0" HBox.hgrow="ALWAYS" />
+                              <Button fx:id="T1_BTN_SaveSettings" mnemonicParsing="false" onAction="#onTabOneSaveClicked" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                     </bottom>
+                     <center>
+                        <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <Region prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #C0C0C0;" HBox.hgrow="ALWAYS" />
+                              <VBox prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <Region prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #C0C0C0;" VBox.vgrow="ALWAYS" />
+                                    <AnchorPane style="-fx-background-color: #C0C0C0;">
+                                       <children>
+                                          <ImageView fitHeight="405.0" fitWidth="448.0" layoutX="86.0" layoutY="44.0">
+                                             <image>
+                                                <Image url="@img/image_tv.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label layoutX="258.0" layoutY="86.0" text="Horizontal margin" />
+                                          <Label layoutX="425.0" layoutY="171.0" rotate="270.0" text="Vertical margin" />
+                                          <Slider fx:id="T1_SLD_VerticalMarg" blockIncrement="1.0" layoutX="488.0" layoutY="70.0" majorTickUnit="2.0" max="5.0" minorTickCount="1" orientation="VERTICAL" prefHeight="217.0" prefWidth="16.0" showTickMarks="true" snapToTicks="true" />
+                                          <Slider fx:id="T1_SLD_HorizontalMarg" blockIncrement="4.0" layoutX="115.0" layoutY="69.0" majorTickUnit="2.0" max="5.0" minorTickCount="1" nodeOrientation="LEFT_TO_RIGHT" prefHeight="16.0" prefWidth="386.0" showTickMarks="true" snapToTicks="true" />
+                                          <HBox alignment="CENTER" layoutX="197.0" maxHeight="26.0" minHeight="26.0" prefHeight="26.0" spacing="5.0">
+                                             <children>
+                                                <Label text="Horizontal LEDs: " />
+                                                <TextField fx:id="T1_TXT_HorizontalLeds" maxWidth="100.0" minWidth="120.0" prefWidth="100.0" promptText="Horizontal LEDs" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER" layoutX="194.0" layoutY="391.0" maxHeight="26.0" minHeight="26.0" prefHeight="26.0" spacing="5.0">
+                                             <children>
+                                                <Label text="Total Leds:" />
+                                                <TextField fx:id="T1_TXT_TotalLeds" promptText="Total LEDs" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER" layoutX="461.0" layoutY="166.0" maxHeight="26.0" minHeight="26.0" prefHeight="26.0" rotate="270.0" spacing="5.0">
+                                             <children>
+                                                <Label text="Vertical Leds: " />
+                                                <TextField fx:id="T1_TXT_VerticalLeds" maxWidth="100.0" minWidth="120.0" prefWidth="100.0" promptText="Vertical LEDs" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </AnchorPane>
+                                    <Region prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #C0C0C0;" VBox.vgrow="ALWAYS" />
+                                 </children>
+                              </VBox>
+                              <Region prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #C0C0C0;" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                     </center>
+                  </BorderPane>
+                  <BorderPane fx:id="T2_Function" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
+                     <bottom>
+                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Button fx:id="T2_BTN_SaveSettings" mnemonicParsing="false" onAction="#onTabTwoSaveClicked" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                     </bottom>
+                     <top>
+                        <HBox style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label text="Please select the desired input capture mehtod below:" HBox.hgrow="ALWAYS">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font></Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                     </top>
+                     <right>
+                        <VBox maxHeight="500.0" minHeight="500.0" prefWidth="500.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label text="## Java screenshot ##">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font></Label>
+                              <Label text="This mode uses the standard java robot implementation to take continues screenshots of the main display. This mode should work on all OSes but can result in lower performance!" textAlignment="JUSTIFY" wrapText="true" />
+                              <Region maxHeight="20.0" minHeight="20.0" prefHeight="20.0" />
+                              <Label text="## KODI screenshot ##">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font></Label>
+                              <Label text="This mode works together with the KODI plugin for JambiLight and allows for faster and better capture of the screen through KODI. This mode should work on Windows/OSX with at least XBMC 12 or newer (or KODI)." textAlignment="JUSTIFY" wrapText="true" />
+                              <Region maxHeight="20.0" minHeight="20.0" prefHeight="20.0" />
+                              <Label text="## Directshow ##">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font></Label>
+                              <Label text="This mode uses JavaCV to enumerate directshow devices and use them as input for JambiLight. This mode only works on Windows (for now)!" textAlignment="JUSTIFY" wrapText="true" />
+                              <Region maxHeight="20.0" minHeight="20.0" prefHeight="20.0" />
+                              <Label text="## Mock rainbow ##">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font></Label>
+                              <Label text="This mode can be used for testing. It will cycle through the colors of the rainbow.This mode works on all OSes." textAlignment="JUSTIFY" wrapText="true" />
+                              <Region maxHeight="20.0" minHeight="20.0" prefHeight="20.0" />
+                              <Label text="## Mock jni ##">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font></Label>
+                              <Label text="This Mode is currently used for testing native JNI interfacting. This mode only works on Windows (for now)!" wrapText="true" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </VBox>
+                     </right>
+                     <left>
+                        <VBox spacing="5.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <ComboBox fx:id="T2_CMB_CaptureMode" minWidth="250.0" prefWidth="250.0" promptText="Select a capture mode" />
+                              <Region maxHeight="20.0" minHeight="20.0" prefHeight="20.0" />
+                              <Label text="DirectShow devices:" />
+                              <ComboBox fx:id="T2_CMB_DirectShowDevices" prefWidth="250.0" promptText="Select a DirectShow device" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </VBox>
+                     </left>
+                  </BorderPane>
+                  <BorderPane fx:id="T3_Settings" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
+                     <bottom>
+                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Button fx:id="T3_BTN_SaveSettings" mnemonicParsing="false" onAction="#onTabThreeSaveClicked" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                     </bottom>
+                     <top>
+                        <HBox style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label text="Please set the desired settings to their correct values here. The default values should be fine for most people though!" HBox.hgrow="ALWAYS">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font></Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                     </top>
+                     <left>
+                        <VBox minWidth="400.0" prefWidth="400.0" spacing="20.0" BorderPane.alignment="CENTER">
+                           <BorderPane.margin>
+                              <Insets />
+                           </BorderPane.margin>
+                           <children>
+                              <Label text="Pixel stepping size:" underline="true" />
+                              <Slider fx:id="T3_SLD_PixelStepSize" blockIncrement="1.0" majorTickUnit="2.0" max="10.0" minorTickCount="1" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+                              <Label text="The higer the pixel stepping value the less data is taken into account during the calculations." wrapText="true" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </VBox>
+                     </left>
+                     <right>
+                        <VBox minWidth="400.0" prefWidth="400.0" spacing="20.0" BorderPane.alignment="CENTER">
+                           <BorderPane.margin>
+                              <Insets />
+                           </BorderPane.margin>
+                           <children>
+                              <Label text="Color weighing:" underline="true" />
+                              <CheckBox fx:id="T3_CHK_Weighing" mnemonicParsing="false" text="Enable weighing" />
+                              <HBox alignment="CENTER_LEFT" maxHeight="26.0" minHeight="26.0" prefHeight="26.0">
+                                 <children>
+                                    <Label text="Weigh factor:" />
+                                 </children>
+                              </HBox>
+                              <Slider fx:id="T3_SLD_WeighFactor" blockIncrement="1.0" majorTickUnit="1.0" max="5.0" minorTickCount="1" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+                              <Label text="When color weighing is enabled the system will assign regions closer to the edge of the screen a higher multiplier than regions closer to the center of the screen. This creates a better viewing experience." textAlignment="JUSTIFY" wrapText="true" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </VBox>
+                     </right>
+                     <center>
+                        <Separator orientation="VERTICAL" prefHeight="200.0" BorderPane.alignment="CENTER" />
+                     </center>
+                  </BorderPane>
+                  <BorderPane fx:id="T4_Advanced" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
+                     <bottom>
+                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Button fx:id="T4_BTN_SaveSettings" mnemonicParsing="false" onAction="#onTabFourSaveClicked" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                     </bottom>
+                     <top>
+                        <HBox style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label text="Please set the advanced settings with the desired values. Expert users only!" HBox.hgrow="ALWAYS">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                     </top>
+                     <left>
+                        <VBox maxWidth="400.0" minWidth="400.0" prefWidth="400.0" spacing="20.0" BorderPane.alignment="CENTER">
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                           <children>
+                              <Label text="Color enhancement:" underline="true" />
+                              <CheckBox fx:id="T4_CHK_EnhanceColors" mnemonicParsing="false" text="Enhance colors" />
+                              <HBox alignment="CENTER_LEFT" maxHeight="26.0" minHeight="26.0" prefHeight="26.0" spacing="5.0">
+                                 <children>
+                                    <Label text="Value: " />
+                                    <TextField fx:id="T4_TXT_EnhancementValue" promptText="Enhancement value" />
+                                 </children>
+                              </HBox>
+                              <Label text="Enabeling color enhancement makes colors more pronounced. It detects 6 basic colors: Red, green, blue, yellow, cyan and purple and scales the color to be more pronounced." textAlignment="JUSTIFY" wrapText="true" />
+                              <Label text="Per channel enhancement:" underline="true" />
+                              <CheckBox fx:id="T4_CHK_EnhancePerChannel" mnemonicParsing="false" text="Enable per channel" />
+                              <HBox alignment="CENTER_LEFT" maxHeight="26.0" minHeight="26.0" prefHeight="26.0" spacing="5.0">
+                                 <children>
+                                    <Label text="R: " />
+                                    <TextField fx:id="T4_TXT_ChannelRed" promptText="Red value" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" maxHeight="26.0" minHeight="26.0" prefHeight="26.0" spacing="5.0">
+                                 <children>
+                                    <Label text="G: " />
+                                    <TextField fx:id="T4_TXT_ChannelGreen" promptText="Green value" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" maxHeight="26.0" minHeight="26.0" prefHeight="26.0" spacing="5.0">
+                                 <children>
+                                    <Label text="B: " />
+                                    <TextField fx:id="T4_TXT_ChannelBlue" promptText="Blue value" />
+                                 </children>
+                              </HBox>
+                              <Label text="Per channel enhancement multiplies the color per channel." wrapText="true" />
+                           </children>
+                        </VBox>
+                     </left>
+                     <right>
+                        <VBox maxWidth="400.0" minWidth="400.0" prefWidth="400.0" spacing="20.0" BorderPane.alignment="CENTER">
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                           <children>
+                              <Label text="Color intensity correction:" underline="true" />
+                              <CheckBox fx:id="T4_CHK_CorrectIntensity" mnemonicParsing="false" text="Correct intensity colors" />
+                              <HBox alignment="CENTER_LEFT" maxHeight="26.0" minHeight="26.0" prefHeight="26.0" spacing="22.0">
+                                 <children>
+                                    <Label text="Grey threshold:" />
+                                    <TextField fx:id="T4_TXT_GreyThreshold" promptText="Grey threshold" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" maxHeight="26.0" minHeight="26.0" prefHeight="26.0" spacing="22.0">
+                                 <children>
+                                    <Label text="Scale up value:" />
+                                    <TextField fx:id="T4_TXT_ScaleUp" promptText="Color scale up" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" maxHeight="26.0" minHeight="26.0" prefHeight="26.0" spacing="5.0">
+                                 <children>
+                                    <Label text="Scale down value:" />
+                                    <TextField fx:id="T4_TXT_ScaleDown" promptText="White scale down" />
+                                 </children>
+                              </HBox>
+                              <Label text="As a LED strip has three LEDs (one per channel: R/G/B).    The color white is always much brighter than the other colors (all colors that use 2 or 3 of the RGB components). Enabeling the color intensity correction fixes this problem by toning down white/grey and scaling up other colors." textAlignment="JUSTIFY" wrapText="true" />
+                           </children>
+                        </VBox>
+                     </right>
+                     <center>
+                        <Separator orientation="VERTICAL" prefHeight="200.0" BorderPane.alignment="CENTER" />
+                     </center>
+                  </BorderPane>
+                  <BorderPane fx:id="T5_Arduino" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
+                     <bottom>
+                        <HBox alignment="BOTTOM_RIGHT" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Button fx:id="T5_BTN_SaveSettings" mnemonicParsing="false" onAction="#onTabFiveSaveClicked" styleClass="flatButton" stylesheets="@css/master.css" text="Save changes" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                     </bottom>
+                     <top>
+                        <HBox style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label text="Please select the comm port on which the arduino is listening." HBox.hgrow="ALWAYS">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font></Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                     </top>
+                     <center>
+                        <Separator orientation="VERTICAL" prefHeight="200.0" BorderPane.alignment="CENTER" />
+                     </center>
+                     <left>
+                        <VBox maxWidth="400.0" minWidth="400.0" prefWidth="400.0" spacing="20.0" BorderPane.alignment="CENTER">
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                           <children>
+                              <Label text="Arduino comm channel:" underline="true" />
+                              <ComboBox fx:id="T5_CMB_CommChannel" prefHeight="26.0" prefWidth="250.0" promptText="Please select a comm port" />
+                              <CheckBox fx:id="T5_CHK_AutoConnect" mnemonicParsing="false" text="Autoconnect on startup/save" />
+                              <Button fx:id="T5_BTN_Connect" mnemonicParsing="false" onAction="#onConnectClicked" text="Connect to arduino" />
+                           </children>
+                        </VBox>
+                     </left>
+                     <right>
+                        <VBox maxWidth="400.0" minWidth="400.0" prefWidth="400.0" spacing="20.0" BorderPane.alignment="CENTER">
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                           <children>
+                              <Label text="Generate arduino code:" underline="true" />
+                              <HBox alignment="CENTER_LEFT" maxHeight="26.0" minHeight="26.0" prefHeight="26.0" spacing="5.0">
+                                 <children>
+                                    <Label text="Clock pin: " />
+                                    <TextField fx:id="T5_TXT_ClockPin" promptText="Clock pin" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" maxHeight="26.0" minHeight="26.0" prefHeight="26.0" spacing="12.0">
+                                 <children>
+                                    <Label text="Data pin: " />
+                                    <TextField fx:id="T5_TXT_DataPin" promptText="Data pin" />
+                                 </children>
+                              </HBox>
+                              <ComboBox fx:id="T5_CMB_LedType" prefHeight="26.0" prefWidth="232.0" promptText="LED strip type" />
+                              <Button fx:id="T5_BTN_GenerateCode" mnemonicParsing="false" onAction="#onGenerateCodeClicked" text="Generate code" />
+                           </children>
+                        </VBox>
+                     </right>
+                  </BorderPane>
+                  <BorderPane fx:id="T6_Debug" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
+                     <bottom>
+                        <HBox alignment="CENTER_LEFT" spacing="5.0" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label fx:id="T6_LBL_StatusInfo" text="Jambilight running at ##FPS - Using ###MB RAM" />
+                              <Region prefHeight="26.0" HBox.hgrow="ALWAYS" />
+                              <Button fx:id="T6_BTN_OpenLog" mnemonicParsing="false" onAction="#onOpenDebugLog" text="Open log" />
+                              <Button fx:id="T6_BTN_OpenRawView" mnemonicParsing="false" onAction="#onOpenRawInputView" styleClass="flatButton" stylesheets="@css/master.css" text="Open input view" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                     </bottom>
+                     <top>
+                        <HBox style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label text="This screen provides status and debug information." HBox.hgrow="ALWAYS">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                           <BorderPane.margin>
+                              <Insets />
+                           </BorderPane.margin>
+                        </HBox>
+                     </top>
+                     <center>
+                        <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER_LEFT">
+                           <children>
+                              <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                              <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Canvas fx:id="T6_LedCanvas" height="500.0" width="700.0" />
+                                 </children>
+                              </VBox>
+                              <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                     </center>
+                  </BorderPane>
+                  <BorderPane fx:id="T7_Info" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #C0C0C0;">
+                     <bottom>
+                        <HBox alignment="BOTTOM_RIGHT" spacing="5.0" style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Button fx:id="T7_BTN_OpenLicense" mnemonicParsing="false" onAction="#onOpenLicenseSiteClicked" styleClass="flatButton" stylesheets="@css/master.css" text="Open license" />
+                              <Button fx:id="T7_BTN_OpenWebsite" mnemonicParsing="false" onAction="#onOpenWebsiteClicked" styleClass="flatButton" stylesheets="@css/master.css" text="Open website" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                     </bottom>
+                     <top>
+                        <HBox style="-fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label text="JambiLight Info &amp; credits" HBox.hgrow="ALWAYS">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font></Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                     </top>
+                     <center>
+                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0" BorderPane.alignment="CENTER">
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                           <children>
+                              <Label text="About JambiLight:">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label text="JambiLight is a free and open source Java based ambilight implementation." wrapText="true" />
+                              <Label text="Visit the website for more information." />
+                              <Region maxHeight="20.0" minHeight="20.0" prefHeight="20.0" />
+                              <Label text="Used libraries and resources:">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label text="JambiLight uses the following libraries and resources:" wrapText="true" />
+                              <Label text="Java: Google Guava, Scream3r JSSC, RXTX, ControlsFX, bytedeco JavaCV" />
+                              <Label text="Images: Flickr (solarbotics), www.linhpham.me, www.danilodemarco.com and google image search with copyright settings set to reuse." />
+                              <Region maxHeight="20.0" minHeight="20.0" prefHeight="20.0" />
+                              <Label text="Copyrights and trademarks:">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label text="JambiLight is available under the Attribution-NonCommercial 4.0 International license." wrapText="true" />
+                              <Label text="All Libraries can have their own license, all rights belong to their respective owners." />
+                              <Region maxHeight="20.0" minHeight="20.0" prefHeight="20.0" />
+                           </children>
+                        </VBox>
+                     </center>
+                  </BorderPane>
+               </children>
+            </StackPane>
+         </children>
+      </AnchorPane>
+   </children>
+</HBox>

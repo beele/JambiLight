@@ -35,7 +35,7 @@ public class SerialCommJSSC extends AbstractSerialCommStrategy {
 
             port = new SerialPort(portName);
             port.openPort();
-            port.setParams( 100000,
+            port.setParams( 115200,
                     SerialPort.DATABITS_8,
                     SerialPort.STOPBITS_1,
                     SerialPort.PARITY_NONE);

@@ -6,7 +6,7 @@
 	<groupId>be.beeles_place</groupId>
 	<artifactId>JambiLight</artifactId>
 	<packaging>jar</packaging>
-	<version>0.91-Beta</version>
+	<version>1.0-RC1</version>
 	<name>JambiLight</name>
 	
 	<url>https://github.com/beele/JambiLight</url>
@@ -52,23 +52,33 @@
         <dependency>
             <groupId>org.controlsfx</groupId>
             <artifactId>controlsfx</artifactId>
-            <version>8.0.6</version>
+            <version>8.20.8</version>
+        </dependency>
+
+        <!-- JavaCV -->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacv</artifactId>
+            <version>0.10</version>
         </dependency>
 
         <!-- Custom dependencies -->
+		<!-- RXTX Custom -->
 		<dependency>
 			<groupId>com.google.code</groupId>
 			<artifactId>RXTX</artifactId>
 			<version>2.2</version>
 		</dependency>
-		
+
+		<!-- JNI DLL -->
 		<dependency>
 			<groupId>be.beeles_place.code</groupId>
 			<artifactId>JNIscreenCapMock</artifactId>
 			<version>1.0</version>
 			<type>dll</type>
 		</dependency>
-		
+
+        <!-- Testing -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -140,7 +150,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -156,20 +166,11 @@
 								<!-- list all your dependencies here-->
 								dependency/jfxrt.jar
 							</JavaFX-Class-Path>
-							<!-- The artifactId (name) of the jfxrt.jar ... see dependency system scope-->
-							<Class-Path>
-								dependency/javafx-${javafx.version}.jar
-                                dependency/jfxrt.jar
-                                dependency/guava-16.0.1.jar
-                                dependency/jssc-2.8.0.jar
-                                dependency/RXTX-2.2.jar
-                                dependency/hamcrest-core-1.3.jar
-                                dependency/junit-4.11.jar
-                                dependency/controlsfx-8.0.6.jar
-							</Class-Path>
 						</manifestEntries>
 						<manifest>
 							<addClasspath>true</addClasspath>
+                            <!-- All dependencies are outside the jar file and are located in the dependency folder -->
+                            <classpathPrefix>dependency/</classpathPrefix>
 						</manifest>
 					</archive>
 				</configuration>

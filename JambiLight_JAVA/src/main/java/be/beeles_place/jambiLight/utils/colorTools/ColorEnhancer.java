@@ -1,16 +1,28 @@
 package be.beeles_place.jambiLight.utils.colorTools;
 
+import be.beeles_place.jambiLight.model.SettingsModel;
+
 public class ColorEnhancer {
 
     private float enhanceValue = 1f;
 
+    private boolean enhancePerChannel = false;
+    private float enhanceValueR = 1f;
+    private float enhanceValueG = 1f;
+    private float enhanceValueB = 1f;
+
     /**
      * Creates a new ColorEnhancer instance.
      *
-     * @param enhanceValue A float representing the amount of enhancement to apply.
+     * @param settings The SettingsModel object containing all the application settings.
      */
-    public ColorEnhancer(float enhanceValue) {
-        this.enhanceValue = enhanceValue;
+    public ColorEnhancer(SettingsModel settings) {
+        this.enhanceValue = settings.getEnhanceValue();
+
+        this.enhancePerChannel = settings.isEnhancePerChannel();
+        this.enhanceValueR = settings.getEnhanceValueR();
+        this.enhanceValueG = settings.getEnhanceValueG();
+        this.enhanceValueB = settings.getEnhanceValueB();
     }
 
     /**
@@ -69,6 +81,13 @@ public class ColorEnhancer {
             r += (int) (r * ratioR * enhanceValue);
             g += (int) (g * ratioG * enhanceValue);
             b += (int) (b * ratioB * enhanceValue);
+        }
+
+        //Global enhancement independent of detected color.
+        if(enhancePerChannel) {
+            r = (int) (r * enhanceValueR);
+            g = (int) (g * enhanceValueG);
+            b = (int) (b * enhanceValueB);
         }
 
         //For safety, values that were amplified too much will be toned down again!

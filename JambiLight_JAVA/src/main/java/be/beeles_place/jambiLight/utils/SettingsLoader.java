@@ -60,7 +60,7 @@ public class SettingsLoader {
 
             //By default a 16/9 aspect ratio is used (perfect for fullHD)
             settings.setHorizontalRegions(16);
-            settings.setVerticalRegions(9);
+            settings.setVerticalRegions(11);
 
             //Pixel iterator is 2 by default, thus only have the screen's pixels are used.
             settings.setPixelIteratorStepSize(2);
@@ -72,6 +72,10 @@ public class SettingsLoader {
             //Color enhancement is disabled by default.
             settings.setEnhanceColor(false);
             settings.setEnhanceValue(2.5f);
+            settings.setEnhancePerChannel(false);
+            settings.setEnhanceValueR(1f);
+            settings.setEnhanceValueG(1f);
+            settings.setEnhanceValueB(1f);
 
             //Colors should be weighed, as it gives a much nicer result.
             settings.setWeighColor(true);
@@ -85,6 +89,7 @@ public class SettingsLoader {
 
             //Set the default screen capture method to JAVA_SCREENSHOT
             settings.setCaptureMode(ScreenCapperStrategy.JAVA_SCREENSHOT);
+            settings.setDirectShowDeviceName(null);
 
             //Save the new settings to disk!
             saveSettingsModel(settings);

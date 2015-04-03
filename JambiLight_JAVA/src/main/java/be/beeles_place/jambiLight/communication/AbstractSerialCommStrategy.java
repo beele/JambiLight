@@ -28,14 +28,12 @@ public abstract class AbstractSerialCommStrategy implements ISerialComm, Runnabl
     @Override
     public void run() {
         forceQuit = false;
-        logger.INFO("MODE => Communication strategy started.");
+        logger.INFO("COMM => Communication strategy started.");
 
         while (!forceQuit) {
             start();
         }
-        if(forceQuit) {
-            stop();
-        }
+        stop();
     }
 
     @Override

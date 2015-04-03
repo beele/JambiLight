@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.canvas.*?>
+<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="1082.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.beeles_place.jambiLight.view.MainViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="1082.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.beeles_place.jambiLight.view.old.MainViewController">
     <children>
         <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
@@ -20,9 +19,9 @@
                                 </Menu>
                             </menus>
                         </MenuBar>
-                        <AnchorPane fx:id="canvasWrapper" minWidth="200" minHeight="200" VBox.vgrow="ALWAYS">
+                        <AnchorPane fx:id="canvasWrapper" minHeight="200" minWidth="200" VBox.vgrow="ALWAYS">
                              <children>
-                                <Canvas fx:id="ledCanvas" width="200" height="200"/>
+                                <Canvas fx:id="ledCanvas" height="200" width="200" />
                              </children>
                         </AnchorPane>
                     </children>
@@ -105,6 +104,7 @@
                                         <Line endX="190.0" layoutX="115.0" layoutY="449.0" startX="-100.0" />
                                         <Label layoutX="32.0048828125" layoutY="47.5" text="Capture strategy:" />
                                         <Label layoutX="14.0" layoutY="14.0" prefHeight="17.0" prefWidth="265.0" text="Active capture strategy" />
+                                        <Button fx:id="btnVisualDebug" layoutX="112.0" layoutY="245.0" mnemonicParsing="false" text="Start debug" onAction="#onShowDebugClicked"/>
                                     </children>
                                 </AnchorPane>
                             </content>

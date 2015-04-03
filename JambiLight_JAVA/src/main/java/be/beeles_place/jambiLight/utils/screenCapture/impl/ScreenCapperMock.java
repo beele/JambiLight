@@ -19,9 +19,11 @@ public class ScreenCapperMock implements IScreenCapper {
     private int rbCount = 0;
 
     private int delay = 0;
+    private int[] pixels;
 
     /**
-     * Constructor.
+     * Creates a new ScreenCapper mock instance.
+     * This will loop through the colors of the rainbow continuously.
      */
     public ScreenCapperMock() {
         this(20);
@@ -29,18 +31,22 @@ public class ScreenCapperMock implements IScreenCapper {
 
     /**
      * Creates a new ScreenCapper mock instance.
-     * The JNI mock will return a full green image if the JNI call succeeds.
-     * It will return a full red image if the JNI call fails.
+     * This will loop through the colors of the rainbow continuously.
+     *
+     * @param delay Optional delay in milliseconds (default is 20)
      */
     public ScreenCapperMock(int delay) {
         logger = LOGGER.getInstance();
         logger.INFO("SCREENCAPPER => Starting mock screen capture. (RAINBOW)");
 
         this.delay = delay;
+        //Static 480P size.
+        int width = 720;
+        int height = 480;
+        logger.INFO("SCREENCAPPER => Mock screen resolution: width => " + width + " height => " + height);
 
-        int width = Screen.getMainScreen().getWidth();
-        int height = Screen.getMainScreen().getHeight();
-        size = new Dimension(width,height);
+        size = new Dimension(width ,height);
+        pixels = new int[(int)(size.getWidth() * size.getHeight())];
     }
 
     @Override
@@ -50,8 +56,6 @@ public class ScreenCapperMock implements IScreenCapper {
 
     @Override
     public int[] capture() {
-        int[] pixels = new int[(int)(size.getWidth() * size.getHeight())];
-
         //Rainbows!
         r = (int)(Math.sin(frequency * rbCount + 0) * 127 + 128);
         g = (int)(Math.sin(frequency * rbCount + 2) * 127 + 128);
