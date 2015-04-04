@@ -6,11 +6,9 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 import javafx.stage.Stage;
 
-import java.util.function.Consumer;
+public class TabThreeUpdateEvent extends BaseEvent {
 
-public class TabThreeSaveEvent extends BaseEvent {
-
-    public TabThreeSaveEvent(Stage stage) {
+    public TabThreeUpdateEvent(Stage stage) {
         Scene scene = stage.getScene();
 
         T3_SLD_PixelStepSize = (Slider) scene.lookup("#T3_SLD_PixelStepSize");

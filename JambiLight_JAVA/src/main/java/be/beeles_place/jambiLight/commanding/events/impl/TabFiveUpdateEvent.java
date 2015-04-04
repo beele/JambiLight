@@ -7,17 +7,21 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class TabFiveGenerateCodeEvent extends BaseEvent {
+public class TabFiveUpdateEvent extends BaseEvent {
 
-    public TabFiveGenerateCodeEvent(Stage stage) {
+    public TabFiveUpdateEvent(Stage stage) {
         Scene scene = stage.getScene();
 
+        T5_CHK_AutoConnect = (CheckBox) scene.lookup("#T5_CHK_AutoConnect");
+        T5_CMB_CommChannel = (ComboBox<String>) scene.lookup("#T5_CMB_CommChannel");
         T5_TXT_ClockPin = (TextField) scene.lookup("#T5_TXT_ClockPin");
         T5_TXT_DataPin = (TextField) scene.lookup("#T5_TXT_DataPin");
         T5_CMB_LedType = (ComboBox<String>) scene.lookup("#T5_CMB_LedType");
     }
 
     //Content:
+    public CheckBox T5_CHK_AutoConnect;
+    public ComboBox<String> T5_CMB_CommChannel;
     public TextField T5_TXT_ClockPin;
     public TextField T5_TXT_DataPin;
     public ComboBox<String> T5_CMB_LedType;

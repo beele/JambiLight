@@ -6,11 +6,9 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.util.function.Consumer;
+public class TabFourUpdateEvent extends BaseEvent {
 
-public class TabFourSaveEvent extends BaseEvent {
-
-    public TabFourSaveEvent(Stage stage) {
+    public TabFourUpdateEvent(Stage stage) {
         Scene scene = stage.getScene();
 
         T4_CHK_EnhanceColors = (CheckBox) scene.lookup("#T4_CHK_EnhanceColors");

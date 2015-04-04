@@ -59,16 +59,19 @@ public class Main extends Application {
         eventBus = EventbusWrapper.getInstance();
         eventBus.register(this);
 
-        //Make a new application controller.
-        appController = new ApplicationController(enableDebug);
-
         StageFactory.StageFactoryResult<MainViewController> result = StageFactory.getInstance().createStage("mainView.fxml", "JambiLight RC1", new Dimension(1150, 650));
+        //Get the stage and set the shutdown action.
         stage = result.getStage();
-        //Set the stage shutdown action.
         stage.setOnCloseRequest(event -> eventBus.post(new ShutdownEvent()));
 
+        //Get the controller and set the stage.
+        MainViewController controller = result.getController();
+        controller.setStage(stage);
+
+        //Make a new application controller.
         //Init the application controller, giving it the stage and the view controller.
-        appController.init(stage, result.getController());
+        appController = new ApplicationController(enableDebug);
+        appController.init(stage, controller);
     }
 
     /**
@@ -76,8 +79,8 @@ public class Main extends Application {
      */
     public void startNoUI() {
         //Make a new application controller.
-        appController = new ApplicationController(enableDebug);
         //Init the application controller, giving it the stage and the view controller.
+        appController = new ApplicationController(enableDebug);
         appController.init();
     }
 }

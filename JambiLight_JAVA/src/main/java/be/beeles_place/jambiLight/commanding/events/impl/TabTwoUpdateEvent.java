@@ -4,14 +4,11 @@ import be.beeles_place.jambiLight.commanding.events.BaseEvent;
 import be.beeles_place.jambiLight.modes.impl.AmbiLight.screenCapture.ScreenCapperStrategy;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.util.function.Consumer;
+public class TabTwoUpdateEvent extends BaseEvent {
 
-public class TabTwoSaveEvent extends BaseEvent {
-
-    public TabTwoSaveEvent(Stage stage) {
+    public TabTwoUpdateEvent(Stage stage) {
         Scene scene = stage.getScene();
 
         T2_CMB_CaptureMode = (ComboBox<ScreenCapperStrategy>) scene.lookup("#T2_CMB_CaptureMode");

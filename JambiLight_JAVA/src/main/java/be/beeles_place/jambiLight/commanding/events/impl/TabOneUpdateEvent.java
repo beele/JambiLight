@@ -6,11 +6,9 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.util.function.Consumer;
+public class TabOneUpdateEvent extends BaseEvent {
 
-public class TabOneSaveEvent extends BaseEvent {
-
-    public TabOneSaveEvent(Stage stage) {
+    public TabOneUpdateEvent(Stage stage) {
         Scene scene = stage.getScene();
 
         T1_TXT_VerticalLeds = (TextField) scene.lookup("#T1_TXT_VerticalLeds");

@@ -156,14 +156,23 @@ public class ApplicationController {
         try {
             CommandMapper mapper = CommandMapper.init(settings, model);
             mapper.mapCommand(TabOneSaveCommand.class, TabOneSaveEvent.class);
+            mapper.mapCommand(TabOneUpdateCommand.class, TabOneUpdateEvent.class);
+
             mapper.mapCommand(TabTwoSaveCommand.class, TabTwoSaveEvent.class);
+            mapper.mapCommand(TabTwoUpdateCommand.class, TabTwoUpdateEvent.class);
+
             mapper.mapCommand(TabThreeSaveCommand.class, TabThreeSaveEvent.class);
+            mapper.mapCommand(TabThreeUpdateCommand.class, TabThreeUpdateEvent.class);
+
             mapper.mapCommand(TabFourSaveCommand.class, TabFourSaveEvent.class);
+            mapper.mapCommand(TabFourUpdateCommand.class, TabFourUpdateEvent.class);
 
             mapper.mapCommand(TabFiveSaveCommand.class, TabFiveSaveEvent.class);
+            mapper.mapCommand(TabFiveUpdateCommand.class, TabFiveUpdateEvent.class);
             mapper.mapCommand(TabFiveConnectCommand.class, TabFiveConnectEvent.class);
             mapper.mapCommand(TabFiveGenerateCodeCommand.class, TabFiveGenerateCodeEvent.class);
 
+            mapper.mapCommand(TabSixUpdateCommand.class, TabSixUpdateEvent.class);
         } catch (CommandMapperException e) {
             logger.ERROR("ERROR => Cannot map commands correctly!");
             shutdown();
