@@ -2,16 +2,10 @@ package be.beeles_place.jambiLight.controllers;
 
 import be.beeles_place.jambiLight.commanding.CommandMapper;
 import be.beeles_place.jambiLight.commanding.CommandMapperException;
-import be.beeles_place.jambiLight.commanding.commands.impl.TabFourSaveCommand;
-import be.beeles_place.jambiLight.commanding.commands.impl.TabOneSaveCommand;
-import be.beeles_place.jambiLight.commanding.commands.impl.TabThreeSaveCommand;
-import be.beeles_place.jambiLight.commanding.commands.impl.TabTwoSaveCommand;
-import be.beeles_place.jambiLight.commanding.events.impl.TabFourSaveEvent;
-import be.beeles_place.jambiLight.commanding.events.impl.TabOneSaveEvent;
-import be.beeles_place.jambiLight.commanding.events.impl.TabThreeSaveEvent;
-import be.beeles_place.jambiLight.commanding.events.impl.TabTwoSaveEvent;
+import be.beeles_place.jambiLight.commanding.commands.impl.*;
+import be.beeles_place.jambiLight.commanding.events.application.*;
+import be.beeles_place.jambiLight.commanding.events.impl.*;
 import be.beeles_place.jambiLight.communication.CommunicationStrategy;
-import be.beeles_place.jambiLight.commanding.events.*;
 import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.modes.ColorStrategy;
@@ -165,6 +159,10 @@ public class ApplicationController {
             mapper.mapCommand(TabTwoSaveCommand.class, TabTwoSaveEvent.class);
             mapper.mapCommand(TabThreeSaveCommand.class, TabThreeSaveEvent.class);
             mapper.mapCommand(TabFourSaveCommand.class, TabFourSaveEvent.class);
+
+            mapper.mapCommand(TabFiveSaveCommand.class, TabFiveSaveEvent.class);
+            mapper.mapCommand(TabFiveConnectCommand.class, TabFiveConnectEvent.class);
+            mapper.mapCommand(TabFiveGenerateCodeCommand.class, TabFiveGenerateCodeEvent.class);
 
         } catch (CommandMapperException e) {
             logger.ERROR("ERROR => Cannot map commands correctly!");

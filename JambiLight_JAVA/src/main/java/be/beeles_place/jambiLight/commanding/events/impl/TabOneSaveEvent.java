@@ -14,16 +14,4 @@ public class TabOneSaveEvent extends BaseEvent {
     public TextField T1_TXT_TotalLeds;
     public Slider T1_SLD_VerticalMarg;
     public Slider T1_SLD_HorizontalMarg;
-
-    //Fields:
-    private Consumer<String> errorCallback;
-
-    //Getters & setters:
-    public Consumer<String> getErrorCallback() {
-        return errorCallback;
-    }
-
-    public void setErrorCallback(Consumer<String> errorCallback) {
-        this.errorCallback = errorCallback;
-    }
 }

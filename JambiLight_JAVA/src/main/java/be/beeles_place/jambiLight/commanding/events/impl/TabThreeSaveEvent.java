@@ -14,16 +14,4 @@ public class TabThreeSaveEvent extends BaseEvent {
     public Slider T3_SLD_WeighFactor;
     public CheckBox T3_CHK_Interpolation;
     public Slider T3_SLD_Interpolation;
-
-    //Fields:
-    private Consumer<String> errorCallback;
-
-    //Getters & setters:
-    public Consumer<String> getErrorCallback() {
-        return errorCallback;
-    }
-
-    public void setErrorCallback(Consumer<String> errorCallback) {
-        this.errorCallback = errorCallback;
-    }
 }

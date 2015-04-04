@@ -19,16 +19,4 @@ public class TabFourSaveEvent extends BaseEvent {
     public TextField T4_TXT_GreyThreshold;
     public TextField T4_TXT_ScaleUp;
     public TextField T4_TXT_ScaleDown;
-
-    //Fields:
-    private Consumer<String> errorCallback;
-
-    //Getters & setters:
-    public Consumer<String> getErrorCallback() {
-        return errorCallback;
-    }
-
-    public void setErrorCallback(Consumer<String> errorCallback) {
-        this.errorCallback = errorCallback;
-    }
 }

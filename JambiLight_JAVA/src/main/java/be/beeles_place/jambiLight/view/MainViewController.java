@@ -1,14 +1,9 @@
 package be.beeles_place.jambiLight.view;
 
 import be.beeles_place.jambiLight.commanding.CommandMapper;
-import be.beeles_place.jambiLight.commanding.events.impl.TabFourSaveEvent;
-import be.beeles_place.jambiLight.commanding.events.impl.TabOneSaveEvent;
-import be.beeles_place.jambiLight.commanding.events.impl.TabThreeSaveEvent;
-import be.beeles_place.jambiLight.commanding.events.impl.TabTwoSaveEvent;
-import be.beeles_place.jambiLight.commanding.events.ConnectoArduinoEvent;
-import be.beeles_place.jambiLight.commanding.events.SettingsUpdatedEvent;
-import be.beeles_place.jambiLight.commanding.events.UpdateUserInterfaceEvent;
-import be.beeles_place.jambiLight.commanding.events.VisualDebugEvent;
+import be.beeles_place.jambiLight.commanding.events.impl.*;
+import be.beeles_place.jambiLight.commanding.events.application.UpdateUserInterfaceEvent;
+import be.beeles_place.jambiLight.commanding.events.application.VisualDebugEvent;
 import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.utils.ArduinoCode;
@@ -180,6 +175,9 @@ public class MainViewController implements Initializable {
     @FXML
     void onTabOneSaveClicked(ActionEvent event) {
         try {
+            //TODO: Would it not be better to pass the scene to the command and have the command get all the components by id?
+            //TODO: stage.getScene().lookup("FX_ID");
+
             TabOneSaveEvent evt = new TabOneSaveEvent();
             evt.T1_TXT_VerticalLeds = T1_TXT_VerticalLeds;
             evt.T1_TXT_HorizontalLeds = T1_TXT_HorizontalLeds;
@@ -188,7 +186,7 @@ public class MainViewController implements Initializable {
             evt.T1_SLD_HorizontalMarg = T1_SLD_HorizontalMarg;
 
             evt.setCallback(this::updateTabOne);
-            evt.setErrorCallback((errorMessage) -> showErrorMessage("Error saving settings!", errorMessage));
+            evt.setErrorCallback((errorMessages) -> showErrorMessage(errorMessages[0], errorMessages[1]));
 
             CommandMapper.getInstance().dispatchEvent(evt);
         } catch (Exception e) {
@@ -228,7 +226,7 @@ public class MainViewController implements Initializable {
             evt.T2_CMB_DirectShowDevices = T2_CMB_DirectShowDevices;
 
             evt.setCallback(this::updateTabTwo);
-            evt.setErrorCallback((errorMessage) -> showErrorMessage("Error saving settings!", errorMessage));
+            evt.setErrorCallback((errorMessages) -> showErrorMessage(errorMessages[0], errorMessages[1]));
 
             CommandMapper.getInstance().dispatchEvent(evt);
         } catch (Exception e) {
@@ -272,7 +270,7 @@ public class MainViewController implements Initializable {
             evt.T3_SLD_Interpolation = T3_SLD_Interpolation;
 
             evt.setCallback(this::updateTabThree);
-            evt.setErrorCallback((errorMessage) -> showErrorMessage("Error saving settings!", errorMessage));
+            evt.setErrorCallback((errorMessages) -> showErrorMessage(errorMessages[0], errorMessages[1]));
 
             CommandMapper.getInstance().dispatchEvent(evt);
         } catch (Exception e) {
@@ -343,7 +341,7 @@ public class MainViewController implements Initializable {
             evt.T4_TXT_ScaleDown = T4_TXT_ScaleDown;
 
             evt.setCallback(this::updateTabFour);
-            evt.setErrorCallback((errorMessage) -> showErrorMessage("Error saving settings!", errorMessage));
+            evt.setErrorCallback((errorMessages) -> showErrorMessage(errorMessages[0], errorMessages[1]));
 
             CommandMapper.getInstance().dispatchEvent(evt);
         } catch (Exception e) {
@@ -374,44 +372,48 @@ public class MainViewController implements Initializable {
 
     @FXML
     void onConnectClicked(ActionEvent event) {
-        if(T5_CMB_CommChannel.getValue() != null && !T5_CMB_CommChannel.getValue().trim().isEmpty()) {
-            settings.setPort(T5_CMB_CommChannel.getSelectionModel().getSelectedItem());
-            eventBus.post(new ConnectoArduinoEvent());
-        } else {
-            showErrorMessage("No port selected!", "Please select a comm port from the list before connecting!");
+        try {
+            TabFiveConnectEvent evt = new TabFiveConnectEvent();
+            evt.T5_CMB_CommChannel = T5_CMB_CommChannel;
+
+            evt.setErrorCallback((errorMessages) -> showErrorMessage(errorMessages[0], errorMessages[1]));
+
+            CommandMapper.getInstance().dispatchEvent(evt);
+        } catch (Exception e) {
+            showErrorMessage("General error", e.getMessage());
         }
     }
 
     @FXML
     void onGenerateCodeClicked(ActionEvent event) {
-        String clockPin = T5_TXT_ClockPin.getText();
-        String dataPin = T5_TXT_DataPin.getText();
+        try {
+            TabFiveConnectEvent evt = new TabFiveConnectEvent();
+            evt.T5_CMB_LedType = T5_CMB_LedType;
+            evt.T5_TXT_ClockPin = T5_TXT_ClockPin;
+            evt.T5_TXT_DataPin = T5_TXT_DataPin;
 
-        String stripType = T5_CMB_LedType.getSelectionModel().getSelectedItem();
+            evt.setCallback(() -> showMessage("Code copied!", "The generated code has been copied to your clipboard!"));
 
-        if(     clockPin != null && !clockPin.trim().isEmpty() &&
-                dataPin != null && !dataPin.trim().isEmpty() &&
-                stripType != null && !stripType.trim().isEmpty()) {
-
-            //Generate the code and set it on the clipboard!
-            String code = ArduinoCode.generateCode(model.getNumberOfConsolidatedRegions(), clockPin, dataPin, stripType.equals("WS2801"));
-            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            clipboard.setContents(new StringSelection(code), null);
-
-            showMessage("Code copied!", "The generated code has been copied to your clipboard!");
-        } else {
-            showErrorMessage("Error generation code!", "Please fill in clock, data pin numbers and select a LED strip type!");
+            CommandMapper.getInstance().dispatchEvent(evt);
+        } catch (Exception e) {
+            showErrorMessage("General error", e.getMessage());
         }
     }
 
     @FXML
     void onTabFiveSaveClicked(ActionEvent event) {
-        settings.setPort(T5_CMB_CommChannel.getSelectionModel().getSelectedItem());
-        settings.setAutoConnect(T5_CHK_AutoConnect.selectedProperty().getValue());
+        try {
+            TabFiveSaveEvent evt = new TabFiveSaveEvent();
+            evt.T5_CHK_AutoConnect = T5_CHK_AutoConnect;
+            evt.T5_CMB_CommChannel = T5_CMB_CommChannel;
 
-        //Update the view.
-        updateTabFive();
-        eventBus.post(new SettingsUpdatedEvent());
+            evt.setCallback(this::updateTabFive);
+            evt.setErrorCallback((errorMessages) -> showErrorMessage(errorMessages[0], errorMessages[1]));
+
+            CommandMapper.getInstance().dispatchEvent(evt);
+        } catch (Exception e) {
+            showErrorMessage("General error", e.getMessage());
+        }
     }
 
     @FXML
@@ -431,6 +433,7 @@ public class MainViewController implements Initializable {
     }
 
     @FXML
+    @SuppressWarnings("unchecked")
     void onOpenDebugLog(ActionEvent event) {
         StageFactory.StageFactoryResult<LogViewController> result = StageFactory.getInstance().createStage("logView.fxml", "JambiLight log view", new Dimension(1150, 650));
         result.getController().loadLog(LOGGER.getInstance().getCurrentLogFile());

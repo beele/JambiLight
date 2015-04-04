@@ -1,6 +1,6 @@
 package be.beeles_place.jambiLight.model;
 
-import be.beeles_place.jambiLight.commanding.events.ColorModelUpdatedEvent;
+import be.beeles_place.jambiLight.commanding.events.application.ColorModelUpdatedEvent;
 import be.beeles_place.jambiLight.commanding.EventbusWrapper;
 import com.google.common.eventbus.EventBus;
 

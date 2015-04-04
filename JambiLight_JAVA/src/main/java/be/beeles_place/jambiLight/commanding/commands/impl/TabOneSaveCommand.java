@@ -2,7 +2,7 @@ package be.beeles_place.jambiLight.commanding.commands.impl;
 
 import be.beeles_place.jambiLight.commanding.EventbusWrapper;
 import be.beeles_place.jambiLight.commanding.commands.ICommand;
-import be.beeles_place.jambiLight.commanding.events.SettingsUpdatedEvent;
+import be.beeles_place.jambiLight.commanding.events.application.SettingsUpdatedEvent;
 import be.beeles_place.jambiLight.commanding.events.impl.TabOneSaveEvent;
 import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.model.SettingsModel;
@@ -95,7 +95,7 @@ public class TabOneSaveCommand implements ICommand<TabOneSaveEvent> {
 
         } catch (Exception e) {
             if(payload.getErrorCallback() != null) {
-                payload.getErrorCallback().accept(e.getMessage());
+                payload.getErrorCallback().accept(new String[]{"No port selected!", e.getMessage()});
             }
         }
     }
