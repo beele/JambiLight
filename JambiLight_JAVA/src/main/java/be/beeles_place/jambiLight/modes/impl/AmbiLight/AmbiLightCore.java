@@ -156,6 +156,7 @@ public class AmbiLightCore {
         cRegions = doCorrection ? corrector.correctIntensity(cRegions) : cRegions;
 
         if(doInterpolation && model.getPreviousColors() != null) {
+            logger.DEBUG("Interpolation: " + antiFactor +  " old vs " + factor + " new!");
             for(int i = 0 ; i < cRegions.length ; i++) {
                 int[] currentColors = cRegions[i];
                 int[] prevColors = model.getPreviousColors()[i];

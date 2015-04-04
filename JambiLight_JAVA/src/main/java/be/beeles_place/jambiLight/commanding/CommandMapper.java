@@ -163,7 +163,7 @@ public class CommandMapper {
     @Subscribe
     @SuppressWarnings("unchecked")
     public void onEventReceived(BaseEvent event) {
-        System.out.println("Event received => " + event.getClass().toString());
+        //System.out.println("Event received => " + event.getClass().toString());
 
         for (Class eventClass : commandMap.keySet()) {
             if (eventClass.equals(event.getClass())) {
@@ -171,9 +171,9 @@ public class CommandMapper {
                 ICommand command;
 
                 if(commandClass != null) {
-                    System.out.println("Command for event found => " + commandClass.toString());
+                    //System.out.println("Command for event found => " + commandClass.toString());
                 } else {
-                    System.out.println("No matching command found!");
+                    //System.out.println("No matching command found!");
                     return;
                 }
 
