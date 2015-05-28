@@ -28,6 +28,8 @@ public class Main extends Application {
      *             Also logging level will be set to ALL and will also be output to the Standard output.
      */
     public static void main(String[] args) {
+        versionCheck();
+
         //Run through all the given parameters and use the ones we want.
         for (String arg : args) {
             if ("disableUI".equals(arg)) {
@@ -46,6 +48,37 @@ public class Main extends Application {
             Main m = new Main();
             m.startNoUI();
         }
+    }
+
+    /**
+     * Performs a version check on the installed java runtime.
+     * If the runtime is not equal or greater to 8u25 an error is thrown and the application will halt.
+     */
+    public static void versionCheck() {
+        String requiredVersion = "8";
+        String requiredUpdate = "25";
+
+        String[] javaVersionElements = System.getProperty("java.runtime.version").split("\\.|_|-b");
+        String major   = javaVersionElements[1];
+        String update  = javaVersionElements[3];
+
+        if(requiredVersion.equals(major) && requiredUpdate.equals(update)) {
+            return;
+        }
+
+        //If the version requirements are not met, throw and error that will halt program execution!
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n");
+        sb.append("\n");
+        sb.append("-------------------------------------------------------------------");
+        sb.append("\n");
+        sb.append("Java version should be at least 8u25 to run JambiLight!");
+        sb.append("\n");
+        sb.append("Download the update from: https://www.java.com/nl/download/");
+        sb.append("\n");
+        sb.append("-------------------------------------------------------------------");
+        sb.append("\n");
+        throw new Error(sb.toString());
     }
 
     /**

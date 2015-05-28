@@ -123,7 +123,7 @@ public class CommandMapper {
     }
 
     /**
-     * Removed any previously made mapping for the given commandClass.
+     * Removes any previously made mapping for the given commandClass.
      * <p>
      *     This will not stop a PersistentCommand instance that is currently running!
      *     Stop it before unmapping!
@@ -171,9 +171,9 @@ public class CommandMapper {
                 ICommand command;
 
                 if(commandClass != null) {
-                    //System.out.println("Command for event found => " + commandClass.toString());
+                    System.out.println("Command for event found => " + commandClass.toString());
                 } else {
-                    //System.out.println("No matching command found!");
+                    System.out.println("No matching command found!");
                     return;
                 }
 
