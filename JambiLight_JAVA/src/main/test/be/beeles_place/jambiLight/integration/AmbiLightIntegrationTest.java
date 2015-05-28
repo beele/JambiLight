@@ -11,8 +11,10 @@ import be.beeles_place.jambiLight.modes.ColorStrategy;
 import be.beeles_place.jambiLight.modes.impl.AmbiLight.screenCapture.ScreenCapperStrategy;
 import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.utils.logger.LoggerLevel;
+
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -20,7 +22,7 @@ import java.awt.*;
 
 import static org.junit.Assert.fail;
 
-public class AmbiLightIT {
+public class AmbiLightIntegrationTest {
 
     public SettingsModel settings;
     public ColorModel model;
@@ -38,7 +40,7 @@ public class AmbiLightIT {
         logger.setLoggerLevel(LoggerLevel.ALL);
     }
 
-    public AmbiLightIT() {
+    public AmbiLightIntegrationTest() {
         EventBus eventbus = EventbusWrapper.getInstance();
         eventbus.register(this);
     }

@@ -3,7 +3,7 @@ jdk:
   - oraclejdk8
 sudo: required
 install: true
-script: "sh build.sh"
+script: "./build.sh"
 branches:
   only:
     - master
