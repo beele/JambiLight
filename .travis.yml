@@ -1,8 +1,8 @@
 language: java
 jdk:
   - oraclejdk8
+script: "./build.sh"
 branches:
   only:
     - master
     - improved-architecture
-script: "./build.sh"
