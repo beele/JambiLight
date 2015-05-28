@@ -5,6 +5,4 @@ branches:
   only:
     - master
     - improved-architecture
-install:
-  - install-file -Dfile=./JambiLight_JAVA/lib/RXTXcomm.jar -DgroupId=com.google.code -DartifactId=RXTX -Dversion=2.2 -Dpackaging=jar
-  - install-file -Dfile=./JambiLight_JAVA/lib/ScreenCapper.dll -DgroupId=be.beeles_place.code -DartifactId=JNIscreenCapMock -Dversion=1.0 -Dpackaging=dll
+script: "./build.sh"
