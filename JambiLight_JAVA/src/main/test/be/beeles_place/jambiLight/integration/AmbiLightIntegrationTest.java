@@ -36,7 +36,7 @@ public class AmbiLightIntegrationTest {
         LOGGER logger = LOGGER.getInstance();
         logger.setLogToFile(false);
 
-        logger.setLogToSTDOUT(true);
+        logger.setLogToSTDOUT(false);
         logger.setLoggerLevel(LoggerLevel.ALL);
     }
 
@@ -47,6 +47,8 @@ public class AmbiLightIntegrationTest {
 
     @Test
     public void testBasicInstance() {
+        System.out.println("Setting up AmbiLight environment...");
+
         settings = new SettingsModel();
         settings.setAutoConnect(true);
         settings.setInterpolated(false);
@@ -79,11 +81,14 @@ public class AmbiLightIntegrationTest {
         count = 0;
         while(count < 1000) {
             try {
-                Thread.sleep(1000);
+                System.out.println("Now on iteration " + (count + 1) + " of " + 1000);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 fail();
             }
         }
+
+        System.out.println("Test completed!");
     }
 
     @Subscribe
