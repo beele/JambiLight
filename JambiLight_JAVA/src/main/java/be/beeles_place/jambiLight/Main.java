@@ -55,14 +55,14 @@ public class Main extends Application {
      * If the runtime is not equal or greater to 8u25 an error is thrown and the application will halt.
      */
     public static void versionCheck() {
-        String requiredVersion = "8";
-        String requiredUpdate = "25";
+        Integer requiredVersion = 8;
+        Integer requiredUpdate = 25;
 
         String[] javaVersionElements = System.getProperty("java.runtime.version").split("\\.|_|-b");
-        String major   = javaVersionElements[1];
-        String update  = javaVersionElements[3];
+        Integer major   = Integer.parseInt(javaVersionElements[1]);
+        Integer update  = Integer.parseInt(javaVersionElements[3]);
 
-        if(requiredVersion.equals(major) && requiredUpdate.equals(update)) {
+        if(major >= requiredVersion && update >= requiredUpdate) {
             return;
         }
 
