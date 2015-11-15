@@ -20,7 +20,7 @@ def log(msg):
 
 
 def info(title, msg):
-    xbmc.executebuiltin('Notification(%s, %s, %d)' % (title, msg, 5000))
+    xbmc.executebuiltin('Notification(%s, %s, %d)' % (title, msg, 2500))
 
 
 class PlayerWatcher(xbmc.Player):

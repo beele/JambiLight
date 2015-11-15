@@ -16,11 +16,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.controlsfx.dialog.Dialogs;
 
 import java.awt.*;
 import java.net.URI;
@@ -276,12 +276,11 @@ public class MainViewController implements Initializable {
      * @param message The message to display.
      */
     private void showMessage(String title, String message) {
-        Dialogs.create()
-                .owner(STCK_TabContainer)
-                .title(title)
-                .message(message)
-                .lightweight()
-                .showInformation();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(title);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     /**
@@ -291,12 +290,11 @@ public class MainViewController implements Initializable {
      * @param message The message to display.
      */
     private void showErrorMessage(String title, String message) {
-        Dialogs.create()
-                .owner(STCK_TabContainer)
-                .title(title)
-                .message(message)
-                .lightweight()
-                .showError();
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(title);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     private void drawDebugUI() {

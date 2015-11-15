@@ -1,8 +1,9 @@
-#include "Adafruit_WS2801.h"
-#include "LPD8806.h"
-#include "SPI.h"
+#include <Adafruit_NeoPixel.h>
+#include <Adafruit_WS2801.h>
+#include <LPD8806.h>
+#include <SPI.h>
 //Created by Kevin Van den Abeele
-//Free to use and reproduce.
+//Consult LICENSE.md for more information.
 
 //Number of RGB LEDs in strand:
 int const nLEDs = 64;
@@ -23,6 +24,16 @@ LPD8806 strip = LPD8806(nLEDs, dataPin, clockPin);
 **  ========================================**/
 /*int rgbDivFactor = 1;
 Adafruit_WS2801 strip = Adafruit_WS2801(nLEDs, dataPin, clockPin);*/
+
+/** ========================================
+**  Init block for NEOPIXEL strips 
+**  ========================================**/
+/*int rgbDivFactor = 1;
+//   NEO_KHZ800  800 KHz bitstream (most NeoPixel products w/WS2812 LEDs)
+//   NEO_KHZ400  400 KHz (classic 'v1' (not v2) FLORA pixels, WS2811 drivers)
+//   NEO_GRB     Pixels are wired for GRB bitstream (most NeoPixel products)
+//   NEO_RGB     Pixels are wired for RGB bitstream (v1 FLORA pixels, not v2)
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(nLEDs, dataPin, NEO_GRB + NEO_KHZ800);*/
 
 void setup() {
     //Start serial communication.

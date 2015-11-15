@@ -4,8 +4,7 @@ import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.modes.impl.AmbiLight.screenCapture.IScreenCapper;
 
 import java.awt.*;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -19,7 +18,7 @@ public class XbmcScreenCapper implements IScreenCapper {
     private int port;
     private ServerSocket server;
     private Socket client;
-    private InputStream in;
+    private BufferedInputStream in;
     private OutputStream out;
 
     private byte[] data;
@@ -102,7 +101,6 @@ public class XbmcScreenCapper implements IScreenCapper {
         } catch (Exception e) {
             logger.ERROR("IScreenCapper => XBMC connection error: " + e.getMessage());
             logger.INFO("IScreenCapper => XBMC logic will be reset!");
-            //e.printStackTrace();
 
             socketCleanup();
             initDone = false;
@@ -125,7 +123,8 @@ public class XbmcScreenCapper implements IScreenCapper {
         logger.INFO("IScreenCapper => XBMC client connected on port " + port + "!");
 
         //Get the inputstream.
-        in = client.getInputStream();
+        InputStream is = client.getInputStream();
+        in = new BufferedInputStream(is);
         out = client.getOutputStream();
 
         initDone = true;

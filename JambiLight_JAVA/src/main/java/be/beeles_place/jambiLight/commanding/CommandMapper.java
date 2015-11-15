@@ -5,6 +5,7 @@ import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.commanding.commands.ICommand;
 import be.beeles_place.jambiLight.commanding.commands.PersistentCommand;
 import be.beeles_place.jambiLight.commanding.events.BaseEvent;
+import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
@@ -14,9 +15,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * Util class used to wire command and events together.
  */
 public class CommandMapper {
+
+    private final LOGGER logger;
 
     //Singleton instance variable.
     private static CommandMapper instance;
@@ -84,6 +87,9 @@ public class CommandMapper {
      * @param model The ColorModel class instance to inject in the ICommand classes.
      */
     private CommandMapper(SettingsModel settings, ColorModel model) {
+        logger = LOGGER.getInstance();
+        logger.INFO("COMMANDER => Starting CommandMapper instance!");
+
         this.settings = settings;
         this.model = model;
 
@@ -171,9 +177,9 @@ public class CommandMapper {
                 ICommand command;
 
                 if(commandClass != null) {
-                    System.out.println("Command for event found => " + commandClass.toString());
+                    logger.DEBUG("Command for event found => " + commandClass.toString());
                 } else {
-                    System.out.println("No matching command found!");
+                    logger.ERROR("No matching command found!");
                     return;
                 }
 
@@ -210,7 +216,7 @@ public class CommandMapper {
                     }
                 } catch (Exception e) {
                     //TODO: Do error callback here and work with different exception types!
-                    System.out.println("Cannot create Command instance => " + e.getMessage());
+                    logger.ERROR("Cannot create Command instance => " + e.getMessage());
                 }
 
                 return;

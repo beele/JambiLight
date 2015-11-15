@@ -2,15 +2,22 @@ package be.beeles_place.jambiLight.utils;
 
 public class ArduinoCode {
 
-    public static String generateCode(int numberOfLEDs, String clockPin, String dataPin, boolean isWS2801) {
+    public static String generateCode(int numberOfLEDs, String clockPin, String dataPin, LedType ledtype) {
         String code = CODE_TEMPLATE;
 
-        if (isWS2801) {
-            code = "#include \"Adafruit_WS2801.h\"\n" + code;
-            code = code.replace("$LEDSTRIP$", WS2801);
-        } else {
-            code = "#include \"LPD8806.h\"\n" + code;
-            code = code.replace("$LEDSTRIP$", LPD8806);
+        switch (ledtype) {
+            case LPD8806:
+                code = "#include \"LPD8806.h\"\n" + code;
+                code = code.replace("$LEDSTRIP$", LPD8806);
+                break;
+            case WS2801:
+                code = "#include \"Adafruit_WS2801.h\"\n" + code;
+                code = code.replace("$LEDSTRIP$", WS2801);
+                break;
+            case NEOPIXEL_V1:
+                break;
+            case NEOPIXEL_V2:
+                break;
         }
 
         code = code.replace("$AMOUNTOFLEDS$", numberOfLEDs + "").replace("$CLOCK$", clockPin).replace("$DATA$", dataPin);

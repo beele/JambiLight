@@ -97,6 +97,7 @@ public class Main {
                 }
                 System.out.println("Info => Sending data: R: " + r + " G: " + g + " B: " + b);
                 out.write(pixels);
+                out.flush();
                 //Set to 30 FPS => 1000/30
                 Thread.sleep(33);
             }

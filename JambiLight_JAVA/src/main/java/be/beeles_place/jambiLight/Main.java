@@ -52,11 +52,12 @@ public class Main extends Application {
 
     /**
      * Performs a version check on the installed java runtime.
-     * If the runtime is not equal or greater to 8u25 an error is thrown and the application will halt.
+     * If the runtime is not equal or greater to 8u60 an error is thrown and the application will halt.
+     * JRE/JSK 8u60 adds support for HiDPI scaling on Windows systems!
      */
     public static void versionCheck() {
         Integer requiredVersion = 8;
-        Integer requiredUpdate = 25;
+        Integer requiredUpdate = 60;
 
         String[] javaVersionElements = System.getProperty("java.runtime.version").split("\\.|_|-b");
         Integer major   = Integer.parseInt(javaVersionElements[1]);

@@ -4,8 +4,10 @@ import be.beeles_place.jambiLight.commanding.commands.ICommand;
 import be.beeles_place.jambiLight.commanding.events.impl.TabFiveUpdateEvent;
 import be.beeles_place.jambiLight.model.ColorModel;
 import be.beeles_place.jambiLight.model.SettingsModel;
+import be.beeles_place.jambiLight.utils.LedType;
 import javafx.collections.FXCollections;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class TabFiveUpdateCommand implements ICommand<TabFiveUpdateEvent> {
@@ -17,6 +19,6 @@ public class TabFiveUpdateCommand implements ICommand<TabFiveUpdateEvent> {
             payload.T5_CMB_CommChannel.getSelectionModel().select(settings.getPort());
         }
         payload.T5_CHK_AutoConnect.setSelected(settings.isAutoConnect());
-        payload.T5_CMB_LedType.setItems(FXCollections.observableArrayList(Arrays.asList("WS2801", "LPD8806")));
+        payload.T5_CMB_LedType.setItems(FXCollections.observableArrayList(new ArrayList<>(Arrays.asList(LedType.values()))));
     }
 }

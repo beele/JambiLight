@@ -1,6 +1,7 @@
 package be.beeles_place.jambiLight.commanding.events.impl;
 
 import be.beeles_place.jambiLight.commanding.events.BaseEvent;
+import be.beeles_place.jambiLight.utils.LedType;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -14,11 +15,11 @@ public class TabFiveGenerateCodeEvent extends BaseEvent {
 
         T5_TXT_ClockPin = (TextField) scene.lookup("#T5_TXT_ClockPin");
         T5_TXT_DataPin = (TextField) scene.lookup("#T5_TXT_DataPin");
-        T5_CMB_LedType = (ComboBox<String>) scene.lookup("#T5_CMB_LedType");
+        T5_CMB_LedType = (ComboBox<LedType>) scene.lookup("#T5_CMB_LedType");
     }
 
     //Content:
     public TextField T5_TXT_ClockPin;
     public TextField T5_TXT_DataPin;
-    public ComboBox<String> T5_CMB_LedType;
+    public ComboBox<LedType> T5_CMB_LedType;
 }

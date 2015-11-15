@@ -83,7 +83,7 @@ public class SettingsLoader {
 
             //Interpolation should be enabled by default.
             settings.setInterpolated(true);
-            settings.setInterpolation(0.5f);
+            settings.setInterpolation(0.3f);
 
             //Intensity correction is enabled by default.
             settings.setCorrectIntensity(true);
