@@ -7,6 +7,9 @@ JambiLight can be used to supercharge your media viewing experience.
 JambiLight supports a fully dynamical region system with optional margins and various enhancements for color detection.
 Visit the website here => http://www.jambilight.tv
 
+Build:
+https://travis-ci.org/beele/JambiLight.svg?branch=improved-architecture
+
 Features:
 -----------------------------------------------------------
 - Easy to set up and use
