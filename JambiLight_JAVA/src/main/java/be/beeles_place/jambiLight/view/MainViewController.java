@@ -77,7 +77,7 @@ public class MainViewController implements Initializable {
         eventBus = EventbusWrapper.getInstance();
         eventBus.register(this);
 
-        image = new Image(getClass().getResourceAsStream("/be/beeles_place/jambiLight/view/old/assets/tv_new.png"));
+        image = new Image(getClass().getResourceAsStream("/be/beeles_place/jambiLight/view/img/image_tv.png"));
     }
 
     public void initUI(ColorModel model, SettingsModel settings) {

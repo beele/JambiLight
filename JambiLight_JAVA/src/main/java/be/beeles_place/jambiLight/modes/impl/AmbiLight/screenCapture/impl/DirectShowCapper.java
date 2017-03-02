@@ -1,19 +1,13 @@
 package be.beeles_place.jambiLight.modes.impl.AmbiLight.screenCapture.impl;
 
 import be.beeles_place.jambiLight.model.SettingsModel;
-import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.modes.impl.AmbiLight.screenCapture.DirectShowEnumerator;
 import be.beeles_place.jambiLight.modes.impl.AmbiLight.screenCapture.IScreenCapper;
+import be.beeles_place.jambiLight.utils.logger.LOGGER;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 
 import static org.bytedeco.javacpp.opencv_core.Mat;
-import static org.bytedeco.javacpp.opencv_highgui.CV_CAP_PROP_FPS;
-import static org.bytedeco.javacpp.opencv_highgui.CV_CAP_PROP_FRAME_WIDTH;
-import static org.bytedeco.javacpp.opencv_highgui.CV_CAP_PROP_FRAME_HEIGHT;
-import static org.bytedeco.javacpp.opencv_highgui.VideoCapture;
 
 public class DirectShowCapper implements IScreenCapper {
 
@@ -22,7 +16,7 @@ public class DirectShowCapper implements IScreenCapper {
     private SettingsModel settings;
     private Dimension dimensions;
 
-    private VideoCapture vc;
+    //private VideoCapture vc;
     private Mat videoInputSurface;
     private int[] pixels;
 
@@ -64,10 +58,10 @@ public class DirectShowCapper implements IScreenCapper {
         try {
             int deviceId = DirectShowEnumerator.findDeviceIdForName(settings.getDirectShowDeviceName());
             if(deviceId > -1) {
-                vc = new VideoCapture(deviceId);
+                /*vc = new VideoCapture(deviceId);
                 vc.set(CV_CAP_PROP_FRAME_WIDTH,720);
                 vc.set(CV_CAP_PROP_FRAME_HEIGHT,480);
-                vc.set(CV_CAP_PROP_FPS ,25);
+                vc.set(CV_CAP_PROP_FPS ,25);*/
                 videoInputSurface = new Mat();
 
                 initDone = true;
@@ -88,7 +82,7 @@ public class DirectShowCapper implements IScreenCapper {
             }
 
             //Read the next frame, if true this means that it was read.
-            if(vc.read(videoInputSurface)) {
+            /*if(vc.read(videoInputSurface)) {
                 BufferedImage img = videoInputSurface.getBufferedImage();
 
                 //Adjust capture dimensions if required.
@@ -113,7 +107,8 @@ public class DirectShowCapper implements IScreenCapper {
             } else {
                 logger.INFO("IScreenCapper => No data was captured, returning black frame!");
                 return new int[width * height];
-            }
+            }*/
+            return null;
         } catch (Exception e) {
             logger.ERROR("IScreenCapper => Error during capture: " + e.getMessage());
             return null;
@@ -123,9 +118,9 @@ public class DirectShowCapper implements IScreenCapper {
     @Override
     public void dispose() {
         try {
-            if(vc != null && vc.isOpened()) {
+            /*if(vc != null && vc.isOpened()) {
                 vc.release();
-            }
+            }*/
             dimensions = null;
         } catch (Exception e) {
             logger.ERROR("IScreenCapper => Cannot dispose correctly!");

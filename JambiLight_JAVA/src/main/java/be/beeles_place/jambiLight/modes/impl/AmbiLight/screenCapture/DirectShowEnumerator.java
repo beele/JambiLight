@@ -36,9 +36,6 @@ public class DirectShowEnumerator {
         } catch (Exception e) {
             logger.ERROR("DirectShowEnumerator ==> Fatal error in JAVACV: " + e.getMessage());
             return new HashMap<>();
-        } catch (Error e) {
-            logger.ERROR("DirectShowEnumerator ==> Fatal error in JAVACV: " + e.getMessage());
-            return new HashMap<>();
         }
     }
 

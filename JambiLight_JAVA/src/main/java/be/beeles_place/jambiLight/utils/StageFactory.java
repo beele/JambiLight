@@ -46,6 +46,9 @@ public class StageFactory {
 
         try {
             URL location = StageFactory.class.getResource("/be/beeles_place/jambiLight/view/" + filename);
+            if(location == null) {
+                throw new Exception("Cannot load view resource file!");
+            }
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(location);
             fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());

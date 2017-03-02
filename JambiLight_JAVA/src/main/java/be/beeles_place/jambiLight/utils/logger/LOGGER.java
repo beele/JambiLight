@@ -154,4 +154,14 @@ public class LOGGER {
     public void ERROR(String message) {
         LOG("ERROR \t=> " + message, ERROR);
     }
+
+    /**
+     * Shortcut method, logs as ERROR and prints specific exception information.
+     *
+     * @param message The message to log.
+     * @param e The Exception instance that was throw.
+     */
+    public void ERROR(String message, Exception e) {
+        LOG("ERROR \t=> " + message + "\n Message:" + e.getMessage() + "\n Cause: " + e.getCause(), ERROR);
+    }
 }

@@ -5,11 +5,10 @@ import be.beeles_place.jambiLight.model.SettingsModel;
 import be.beeles_place.jambiLight.modes.impl.AmbiLight.colorTools.ColorEnhancer;
 import be.beeles_place.jambiLight.modes.impl.AmbiLight.colorTools.IntensityCorrector;
 import be.beeles_place.jambiLight.modes.impl.AmbiLight.colorTools.RegionConsolidator;
-import be.beeles_place.jambiLight.utils.logger.LOGGER;
 import be.beeles_place.jambiLight.modes.impl.AmbiLight.screenCapture.IScreenCapper;
+import be.beeles_place.jambiLight.utils.logger.LOGGER;
 
 import java.awt.*;
-import java.util.Date;
 
 public class AmbiLightCore {
 
@@ -91,44 +90,63 @@ public class AmbiLightCore {
      * (Each consolidated region will be mapped to a single LED.)
      */
     public void calculate() {
-        long startTime = new Date().getTime();
+        long startTime = System.currentTimeMillis();
+
+        checkDimensionsAndRegionSize();
+        logger.DEBUG("After dimension check: " + (System.currentTimeMillis() - startTime));
 
         //Make a screen capture.
         //Disabling aero themes in windows can easily double or triple performance!
-        final int[] pixels = capper.capture();
+        final int[] pixels;
+        final byte[] bytes;
 
-        logger.DEBUG("Pixel capture took: " + (new Date().getTime() - startTime));
+        if(capper.capturesBytesInsteadOfPixelInts()) {
+            bytes = capper.captureBytes();
+            logger.DEBUG("After pixel capture: " + (System.currentTimeMillis() - startTime));
 
-        checkDimensionsAndRegionSize();
+            for(int i = 0; i < bytes.length - ((stepSize * 3) + 1) ; i += stepSize * 3) {
+                //The bytes in the image are in one long array, we need to get the x and y values of the pixel (3 bytes).
+                y = (i / (width * 3));              //This is the row the pixel is at.
+                x = (i - (y * width * 3)) / 3;      //This is the column the pixel is at.
 
-        logger.DEBUG("Dimension check took: " + (new Date().getTime() - startTime));
+                //Calculate the correct region for the given x and y coordinate.
+                regionX = (int) (x / regionWidth);
+                regionY = (int) (y / regionHeight);
+
+                //Add the B/G/R to the current region (R/G/B).
+                int[] colors = regions[regionX][regionY];
+                colors[0] += bytes[i + 2] & 0xff;
+                colors[1] += bytes[i + 1] & 0xff;
+                colors[2] += bytes[i] & 0xff;
+                colors[3] += 1;
+            }
+        } else {
+            pixels = capper.capture();
+            logger.DEBUG("After pixel capture: " + (System.currentTimeMillis() - startTime));
+
+            for (int i = 0; i < pixels.length; i += stepSize) {
+                //The pixels in the image are in one long array, we need to get the x and y values of the pixel.
+                y = (i / width);        //This is the row the pixel is at.
+                x = i - (y * width);    //This is the column the pixel is at.
+
+                //Calculate the correct region for the given x and y coordinate.
+                regionX = (int) (x / regionWidth);
+                regionY = (int) (y / regionHeight);
+
+                int tempPixelValue = pixels[i];
+                //Add the R/G/B to the current region.
+                int[] colors = regions[regionX][regionY];
+                colors[0] += (tempPixelValue >>> 16) & 0xFF;
+                colors[1] += (tempPixelValue >>> 8) & 0xFF;
+                colors[2] += tempPixelValue & 0xFF;
+                colors[3] += 1;
+            }
+        }
+        logger.DEBUG("After pixel calc: " + (System.currentTimeMillis() - startTime));
 
         //TODO: Only set raw image data when the debug view is open!
-        model.setRawImageData(pixels.clone());
-
-        logger.DEBUG("Raw clone took: " + (new Date().getTime() - startTime));
-
-        //TODO: Multi threading?
-        //TODO: Next to the actual screen capture itself, this is the slowest part of the ambilight core logic!
-        for (int i = 0; i < pixels.length; i += stepSize) {
-            //The pixels in the image are in one long array, we need to get the x and y values of the pixel.
-            y = (i / width);        //This is the row the pixel is at.
-            x = i - (y * width);    //This is the column the pixel is at.
-
-            //Calculate the correct region for the given x and y coordinate.
-            regionX = (int) (x / regionWidth);
-            regionY = (int) (y / regionHeight);
-
-            int tempPixelValue = pixels[i];
-            //Add the R/G/B to the current region.
-            int[] colors = regions[regionX][regionY];
-            colors[0] += (tempPixelValue >>> 16) & 0xFF;
-            colors[1] += (tempPixelValue >>> 8) & 0xFF;
-            colors[2] += tempPixelValue & 0xFF;
-            colors[3] += 1;
-        }
-
-        logger.DEBUG("Pixel calc took: " + (new Date().getTime() - startTime));
+        //model.setRawImageData(pixels.clone());
+        //logger.DEBUG("After raw clone: " + (System.currentTimeMillis() - startTime));
 
         //Go over all the regions and calculate the average color.
         for (int m = 0; m < verticalRegionSize; m++) {
@@ -148,7 +166,7 @@ public class AmbiLightCore {
             }
         }
 
-        logger.DEBUG("Averaging regions took: " + (new Date().getTime() - startTime));
+        logger.DEBUG("After averaging regions: " + (System.currentTimeMillis() - startTime));
 
         //Set the consolidated regions with colors on the model.
         int[][] cRegions = consolidator.consolidateRegions(regions);
@@ -171,13 +189,12 @@ public class AmbiLightCore {
 
         model.setPreviousColors(cRegions);
 
-        logger.DEBUG("Interpolating colors took: " + (new Date().getTime() - startTime));
+        logger.DEBUG("After interpolating colors: " + (System.currentTimeMillis() - startTime));
 
         model.setCurrentColors(cRegions);
 
         //It's all about tai-ming (not the vases)
-        long endTime = new Date().getTime();
-        model.setActionDuration(endTime - startTime);
+        model.setActionDuration(System.currentTimeMillis() - startTime);
         LOGGER.getInstance().INFO("AMBILIGHT-CORE => Pixel processing completed in : " + model.getActionDuration() + "ms");
 
         //Everything has been updated!

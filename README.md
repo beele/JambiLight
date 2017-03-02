@@ -19,7 +19,7 @@ Features:
 
 How to build & run:
 -----------------------------------------------------------
-- Have maven 3.x and the JDK/JRE 1.8u60 installed. (Make sure maven is using Java 8 ==> mvn --version)
+- Have maven 3.x and at least JDK/JRE 1.8u60 installed. (Make sure maven is using Java 8 ==> mvn --version)
 - Clone the repository to a folder on your computer.
 - Build the project using maven:
   * Windows users can build by double clicking the build.bat file.
@@ -94,4 +94,4 @@ JambiLight is available under the Creative Commons Attribution-NonCommercial 4.0
 Please consult LICENSE.MD for the full license text.
 The README.md and LICENSE.md files can be changed at any time.
 
-All Libraries can have their own license, all rights belong to their respective owners.
+Libraries can have their own specific license, all rights belong to their respective owners.

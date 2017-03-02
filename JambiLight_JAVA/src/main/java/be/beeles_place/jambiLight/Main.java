@@ -94,6 +94,9 @@ public class Main extends Application {
         eventBus.register(this);
 
         StageFactory.StageFactoryResult<MainViewController> result = StageFactory.getInstance().createStage("mainView.fxml", "JambiLight RC1", new Dimension(1150, 650));
+        if(result == null) {
+            throw new Exception("Cannot load application GUI!");
+        }
         //Get the stage and set the shutdown action.
         stage = result.getStage();
         stage.setOnCloseRequest(event -> eventBus.post(new ShutdownEvent()));
