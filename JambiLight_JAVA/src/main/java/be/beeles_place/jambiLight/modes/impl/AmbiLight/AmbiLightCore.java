@@ -27,6 +27,8 @@ public class AmbiLightCore {
     private IntensityCorrector corrector;
     private ColorModel model;
 
+    private boolean capturesBytesInsteadOfPixelInts;
+
     private int width;
     private int height;
 
@@ -73,6 +75,9 @@ public class AmbiLightCore {
         factor = settings.getInterpolation();
         antiFactor = 1 - factor;
 
+        //Determine the capture data type.
+        capturesBytesInsteadOfPixelInts = capper.capturesBytesInsteadOfPixelInts();
+
         //Get the logger instance only once.
         logger = LOGGER.getInstance();
         logger.INFO("==========================================================================");
@@ -97,10 +102,10 @@ public class AmbiLightCore {
 
         //Make a screen capture.
         //Disabling aero themes in windows can easily double or triple performance!
-        final int[] pixels;
-        final byte[] bytes;
+        int[] pixels = {};
+        byte[] bytes = {};
 
-        if(capper.capturesBytesInsteadOfPixelInts()) {
+        if(capturesBytesInsteadOfPixelInts) {
             bytes = capper.captureBytes();
             logger.DEBUG("After pixel capture: " + (System.currentTimeMillis() - startTime));
 
@@ -144,9 +149,8 @@ public class AmbiLightCore {
         }
         logger.DEBUG("After pixel calc: " + (System.currentTimeMillis() - startTime));
 
-        //TODO: Only set raw image data when the debug view is open!
-        //model.setRawImageData(pixels.clone());
-        //logger.DEBUG("After raw clone: " + (System.currentTimeMillis() - startTime));
+        model.setRawImageData(capturesBytesInsteadOfPixelInts ? bytes.clone() : pixels.clone());
+        logger.DEBUG("After raw clone: " + (System.currentTimeMillis() - startTime));
 
         //Go over all the regions and calculate the average color.
         for (int m = 0; m < verticalRegionSize; m++) {

@@ -24,9 +24,6 @@ public enum ScreenCapperStrategy {
     @XmlEnumValue("MOCK_JNI")
     MOCK_JNI(ScreenCapperJNI.class),
 
-    @XmlEnumValue("DIRECT_SHOW")
-    DIRECT_SHOW(DirectShowCapper.class),
-
     @XmlEnumValue("FFMPEG")
     FFMPEG(ScreenCapperFFmpeg.class);
 

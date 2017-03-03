@@ -17,7 +17,7 @@ public class ColorModel {
     private int memTotal;
     private int framerate;
 
-    private int[] rawImageData;
+    private Object rawImageData;
     private int rawWidth;
     private int rawHeight;
 
@@ -87,11 +87,11 @@ public class ColorModel {
         this.framerate = framerate;
     }
 
-    public int[] getRawImageData() {
+    public Object getRawImageData() {
         return rawImageData;
     }
 
-    public void setRawImageData(int[] rawImageData) {
+    public void setRawImageData(Object rawImageData) {
         this.rawImageData = rawImageData;
     }
 
