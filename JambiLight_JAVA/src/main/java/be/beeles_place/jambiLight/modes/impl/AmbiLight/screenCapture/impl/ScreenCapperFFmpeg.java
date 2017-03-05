@@ -37,11 +37,6 @@ public class ScreenCapperFFmpeg implements IScreenCapper {
         logger = LOGGER.getInstance();
         logger.INFO("SCREENCAPPER => Starting screen capture with FFmpeg");
 
-        width = Screen.getMainScreen().getWidth() / 2;
-        height = Screen.getMainScreen().getHeight() / 2;
-        size = new Dimension(width, height);
-        frameConverter = new Java2DFrameConverter();
-
         try {
             OperatingSystemDetector.OSType osType = OperatingSystemDetector.detectOperatingSystem();
 
@@ -51,24 +46,37 @@ public class ScreenCapperFFmpeg implements IScreenCapper {
                 case MacOS:
                     device = DEVICE_OSX;
                     format = FORMAT_OSX;
+
+                    width = Screen.getMainScreen().getWidth() / 2;
+                    height = Screen.getMainScreen().getHeight() / 2;
+                    grabber.setImageWidth(width);
+                    grabber.setImageHeight(height);
+
                     break;
                 case Windows:
                     device = DEVICE_WINDOWS;
                     format = FORMAT_WINDOWS;
+
+                    width = Screen.getMainScreen().getWidth();
+                    height = Screen.getMainScreen().getHeight();
+
                     break;
                 case Linux:
                     device = DEVICE_LINUX;
                     format = FORMAT_LINUX;
+
+                    //TODO: Test on linux!
+
                     break;
                 case Other:
                     throw new Exception("Could not determine the operating system, FFmpeg grabber cannot start!");
             }
+            size = new Dimension(width, height);
+            frameConverter = new Java2DFrameConverter();
 
             //TODO: Add fallback for windows!
             grabber = new FFmpegFrameGrabber(device);
             grabber.setFormat(format);
-            grabber.setImageWidth((int)size.getWidth());
-            grabber.setImageHeight((int)size.getHeight());
             grabber.setAudioBitrate(0);
             grabber.setFrameRate(30);
 
